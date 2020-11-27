@@ -1,0 +1,1 @@
+DROP ROLE responsabilidade_tecnica_ap;
