@@ -1,0 +1,34 @@
+{
+	"nome": "Gestão de Responsabilidade Técnica",
+	"sigla": "GRT",
+	"url": "http://localhost:9902/autenticacao/entradaUnica",
+	"descricao": "Módulo gestão de responsabilidade técnica",
+	"cadastrarPerfis": true,
+	"ips": "127.0.0.1,0:0:0:0:0:0:0:1",
+	"permissoes": [
+			{
+			   "codigo": "LISTAR_SOLICITACOES",
+			   "nome": "Listar Solicitações",
+			   "perfis": [
+					{
+					    "codigo": "ADMINISTRADOR",
+					    "nome": "Administrador"
+					},
+					{
+					    "codigo": "USUARIO",
+					    "nome": "Usuário"
+					}
+				]
+			},
+			{
+			   "codigo": "SOLICITAR_CADASTRO",
+			   "nome": "Solicitar cadastro",
+			   "perfis": [
+					{
+					    "codigo": "USUARIO",
+					    "nome": "Usuário"
+					}
+				]
+			}
+	]
+}
