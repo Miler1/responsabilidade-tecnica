@@ -1,0 +1,78 @@
+<template lang="pug">
+
+#header
+	v-app-bar(app, flat, tile, outlined=true)
+		v-row
+			v-col.d-flex.flex-column.align-center(cols="12", md="8")
+				h3.align-self-start Gestão de Responsáveis técnicos
+			v-col.d-flex.flex-column.align-center(cols="12", md="4")
+				div.align-self-end
+					div#div-toolbar.d-flex.flex-row.justify-center.align-center
+						v-icon.mr-2 mdi-account-circle
+						v-tooltip(bottom)
+							template(v-slot:activator="{ on, attrs }")
+								v-toolbar-title#toolbar-title.text-sm-body-2.text-center(v-bind="attrs", v-on="on")
+									//-| {{usuarioLogado && usuarioLogado.name}}
+									| Nome do usário
+							//-span {{usuarioLogado && usuarioLogado.name}}
+							span Nome do usuário
+						v-tooltip(bottom)
+							template(v-slot:activator="{ on, attrs }")
+								v-btn(icon, @click='logout', v-on="on")
+									v-icon mdi-logout
+							span Sair do sistema
+					v-toolbar-title.text-caption.text-center
+						| Usuário
+	//-hr.thin
+
+</template>
+
+<script>
+import { mapGetters } from 'vuex';
+/*
+import { USUARIO_LOGOUT } from '@/store/actions.type.js';
+import { ERROR_MESSAGES } from '@/utils/helpers/messages-utils';
+import snackbar from '@/services/snack.service';
+*/
+export default {
+
+	name: 'MenuSuperior',
+
+	methods: {
+		logout () {
+			this.$store.dispatch(USUARIO_LOGOUT)
+				.then (() => {
+					this.$router.push('/login');
+				}).catch((error) => {
+					console.error(error);
+					snackbar.alert(ERROR_MESSAGES.logout);
+				});
+		}
+	},
+
+	computed: {
+		...mapGetters(['usuarioLogado'])
+	},
+};
+
+</script>
+
+<style lang="less" scoped>
+
+#div-toolbar {
+	height: 16px;
+
+	#toolbar-title {
+		cursor: default;
+	}
+}
+
+.text-caption {
+	color: #BDBDBD;
+}
+
+.thin {
+	height: 1px !important;
+}
+
+</style>

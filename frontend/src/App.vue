@@ -3,16 +3,19 @@
 #app
 	v-app
 		v-main
+			MenuSuperior
 			router-view
 
 </template>
 
 <script>
+import MenuSuperior from '@/components/MenuSuperior.vue';
 
 export default {
 
 	name: "App",
 	components: {
+		MenuSuperior
 	},
 
 };
