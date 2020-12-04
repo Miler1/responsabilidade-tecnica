@@ -34,7 +34,7 @@ public class AcessoConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/autenticacao/entradaUnica").permitAll()
 			.and()
 			.formLogin()
-				.loginPage(VariaveisAmbientes.baseUrlFrontend() + GlobalReferences.AUTENTICACAO_PATH_CONFIGURADOR)
+				.loginPage(VariaveisAmbientes.baseUrlFrontend() + GlobalReferences.AUTENTICACAO_PATH)
 			.and()
 			.logout()
 				.clearAuthentication(true)

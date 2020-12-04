@@ -15,7 +15,7 @@ public class GlobalReferences {
 
     /** AUTENTICACAO*/
     public static final String AUTENTICACAO_KEY_USUARIO = "KEY_USUARIO_LOGADO";
-    public static final String AUTENTICACAO_PATH_CONFIGURADOR = "/login";
-    public static final String PATH_CONFIGURADOR = "/";
+    public static final String AUTENTICACAO_PATH = "/login";
+    public static final String ROOT_PATH = "/";
 
 }
