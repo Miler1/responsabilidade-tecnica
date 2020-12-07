@@ -11,7 +11,7 @@ const routes = [
 		path: '/',
 
 		beforeEnter: (to, from, next) => {
-			BuscaUsuarioLogado();
+			BuscaUsuarioLogado(next, true);
 		}
 	},
 	{
@@ -56,17 +56,17 @@ router.beforeEach((to, from, next) => {
 
 });
 
-function BuscaUsuarioLogado(next) {
+function BuscaUsuarioLogado(next, login) {
 
 	Index.dispatch(GET_USUARIO)
 		.then((usuario) => {
 
 			if (usuario.authenticated) {
 
-				if(next !== undefined){
-					next();
-				} else {
+				if(login){
 					next(usuario.role.url);
+				} else {
+					next();
 				}
 
 			} else {
