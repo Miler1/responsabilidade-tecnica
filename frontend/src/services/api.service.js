@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-//import { loading } from '@/utils/loading.js';
+import { loading } from '@/utils/loading.js';
 //import { ERROR_MESSAGES } from '@/utils/helpers/messages-utils';
 //import snackbar from '@/services/snack.service';
 
@@ -12,6 +12,9 @@ const ApiService = {
 	async init () {
 
 		Vue.use(VueAxios, axios);
+
+		console.log(process.env);
+
 		Vue.axios.defaults.baseURL = process.env.BASE_URL;
 		Vue.axios.defaults.timeout = 300000;
 		await this.setHeader();
