@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
 
 import { GET_USUARIO } from '@/store/actions.type';
 import Index from '@/store/index.js';
@@ -10,15 +9,9 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: '/',
-		name: 'Home',
-		component: Home,
-
-		meta: {
-			title: 'Gestão de Responsabilidade Técnica'
-		},
 
 		beforeEnter: (to, from, next) => {
-			BuscaUsuarioLogado(next);
+			BuscaUsuarioLogado(next, true);
 		}
 	},
 	{
@@ -32,7 +25,15 @@ const routes = [
 	{
 		path: '/admin',
 		name: 'Administrador',
-		component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+		meta: {
+			title: 'Gestão de Responsabilidade Técnica'
+		},
+
+		component: () => import('../views/Admin.vue'),
+
+		beforeEnter: (to, from, next) => {
+			BuscaUsuarioLogado(next);
+		}
 	}
 ];
 
@@ -55,16 +56,23 @@ router.beforeEach((to, from, next) => {
 
 });
 
-function BuscaUsuarioLogado(next) {
+function BuscaUsuarioLogado(next, login) {
 
 	Index.dispatch(GET_USUARIO)
 		.then((usuario) => {
-			console.log(usuario);
+
 			if (usuario.authenticated) {
-				next();
+
+				if(login){
+					next(usuario.role.url);
+				} else {
+					next();
+				}
+
 			} else {
 				window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
 			}
+
 		})
 		.catch(erro => {
 			next(false);
