@@ -1,41 +1,51 @@
 <template lang='pug'>
 
 #app
-	img(alt="Vue logo" src="./assets/logo.png")
-	HelloWorld(msg="Welcome to Your Vue.js App")
+	v-app
+		v-main.default
+			MenuSuperior
+
+			v-container
+				router-view
 
 </template>
 
 <script>
-
-import HelloWorld from './components/HelloWorld.vue';
+import MenuSuperior from '@/components/MenuSuperior.vue';
 
 export default {
-	name: 'App',
+
+	name: "App",
 	components: {
-		HelloWorld
-	}
+		MenuSuperior
+	},
+
 };
 
 </script>
 
 <style lang="less">
 
-html{ 
-	
+html {
 	overflow-y: auto !important;
 
-	body{
-
+	body {
 		margin: 0;
 
 		#app {
 			font-family: Roboto, sans-serif;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
-
 		}
 	}
+}
+
+.default{
+	background-color: #E0E0E0;
+}
+
+.container {
+	width: 85% !important;
 }
 
 </style>
