@@ -12,10 +12,8 @@
 						v-tooltip(bottom)
 							template(v-slot:activator="{ on, attrs }")
 								v-toolbar-title#toolbar-title.text-sm-body-2.text-center(v-bind="attrs", v-on="on")
-									//-| {{usuarioLogado && usuarioLogado.name}}
-									| Nome do usário
-							//-span {{usuarioLogado && usuarioLogado.name}}
-							span Nome do usuário
+									| {{usuarioLogado && usuarioLogado.name}}
+							span {{usuarioLogado && usuarioLogado.name}}
 						v-tooltip(bottom)
 							template(v-slot:activator="{ on, attrs }")
 								v-btn(icon, @click='logout', v-on="on")
