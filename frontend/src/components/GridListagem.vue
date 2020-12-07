@@ -1,39 +1,38 @@
 <template lang="pug">
 
 #grid-listagem
-	b.titulo-listagem {{ tituloListagem }}
-	v-row
-		v-col(cols='12' md='6')
-			v-text-field#QA-input-pesquisar(
-				outlined,
-				v-model="parametrosFiltro.stringPesquisa"
-				:placeholder="placeholderPesquisa",
-				prepend-inner-icon="mdi-magnify",
-				color="#E0E0E0",
-				dense,
-				@input='inputPesquisa'
-			)
-		v-col(cols='12' md='6')
-			v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
-					@click="abrirTelaCadastro",
-					large,
-					dark,
-					color="#84A98C",
-					v-if="buttonCadastrar"
-				)
-				v-icon.font-cadastrar mdi-plus
-				span.font-cadastrar Cadastrar
-			v-btn#QA-btn-gerar-relatorio.float-right(
-					@click="gerarRelatorio",
-					large,
-					outlined,
-					color="#84A98C"
-				)
-				v-icon mdi-download
-				span Gerar relatório
+	//- v-row
+	//- 	v-col(cols='12' md='6')
+	//- 		v-text-field#QA-input-pesquisar(
+	//- 			outlined,
+	//- 			v-model="parametrosFiltro.stringPesquisa"
+	//- 			:placeholder="placeholderPesquisa",
+	//- 			prepend-inner-icon="mdi-magnify",
+	//- 			color="#E0E0E0",
+	//- 			dense,
+	//- 			@input='inputPesquisa'
+	//- 		)
+	//- 	v-col(cols='12' md='6')
+	//- 		v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
+	//- 				@click="abrirTelaCadastro",
+	//- 				large,
+	//- 				dark,
+	//- 				color="#84A98C",
+	//- 				v-if="buttonCadastrar"
+	//- 			)
+	//- 			v-icon.font-cadastrar mdi-plus
+	//- 			span.font-cadastrar Cadastrar
+	//- 		v-btn#QA-btn-gerar-relatorio.float-right(
+	//- 				@click="gerarRelatorio",
+	//- 				large,
+	//- 				outlined,
+	//- 				color="#84A98C"
+	//- 			)
+	//- 			v-icon mdi-download
+	//- 			span Gerar relatório
 
 	template
-		v-data-table.elevation-1(
+		v-data-table(
 				:headers="headers",
 				:items='dadosListagem.content',
 				hide-default-footer,
@@ -41,69 +40,19 @@
 				@update:options="sortBy"
 			)
 
-			template(v-slot:item.atividadesCnae='{ item }')
-				span {{item.atividadesCnae ? item.codigoAtividadeCnae : ' ‒'}}
-
-			template(v-slot:item.validadeEmAnos='{ item }')
-				span {{item.validadeEmAnos ? item.validadeEmAnos : ' ‒'}}
-
-			template(v-slot:item.tipoPessoa='{ item }')
-				span {{item.tipoPessoa === 'PF' ? 'Física' : 'Jurídica'}}
-
-			template(v-slot:item.finalidade='{ item }')
-				span {{item.finalidade}}
-
-			template(v-slot:item.obrigatorio='{ item }')
-				span {{item.obrigatorio ? 'Básico' : 'Complementar'}}
-
-			template(v-slot:item.ativo='{ item }')
-				span {{item.ativo ? 'Ativo' : item.rascunho ? 'Rascunho' : 'Inativo'}}
-
-			template(v-slot:item.atividadeDispensavel='{ item }')
-				span {{item.atividadeDispensavel === null ? ' ‒' : item.atividadeDispensavel ? 'Sim' : 'Não'}}
-
-			template(v-slot:item.atividadeLicenciavel='{ item }')
-				span {{item.atividadeLicenciavel === null ? ' ‒' : item.atividadeLicenciavel ? 'Sim' : 'Não'}}
-
-			template(v-slot:item.isento='{ item }')
-				span {{item.isento ? 'Sim' : 'Não'}}
-
-			template(v-slot:item.tipologia.nome='{ item }')
-				span {{item.tipologia != null ? item.tipologia.nome : ' ‒'}}
-
-			template(v-slot:item.tiposLicencas='{ item }')
-				span {{item.tiposLicencas ? item.tiposLicencas : ' ‒'}}
-
-			template(v-slot:item.parametros='{ item }')
-				span {{item.parametros ? item.parametros : ' ‒'}}
-
-			template(v-slot:item.valor='{ item }')
-				span {{item.valor == '0' ? ' ‒' : item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2})}}
-
 			template(v-slot:item.actions='{ item }')
-				v-tooltip(bottom, v-if="!item.rascunho")
-					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#9EBAA4')
-							| mdi-pencil
-					span Editar {{tituloAba}}
 
-				v-tooltip(bottom, v-model = 'item.model', v-if="!item.rascunho")
+				v-tooltip(bottom)
 					template(v-slot:activator="{ on, attrs }")
-						v-icon(small @click='ativarDesativar(item)', v-on='on', :color= "item.ativo ? '#E6A23B' : '#67C239'")
-							| {{item.ativo ? 'mdi-minus-circle' : 'mdi-check-circle'}}
-					span {{item.ativo ? 'Desativar ' + tituloAba : 'Ativar ' + tituloAba }}
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+							| mdi-play-circle-outline
+					span Iniciar análise
 
-				v-tooltip(bottom, v-if="item.rascunho")
+				v-tooltip(bottom, v-if="item.status.codigo == 'VENCIDO'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='continuarRascunho(item)', v-on='on', color='#9EBAA4')
-							| fa fa-arrow-circle-right
-					span Continuar cadastro da {{tituloAba}}
-
-				v-tooltip(bottom, v-if="item.rascunho")
-					template(v-slot:activator="{ on, attrs }")
-						v-icon(small @click='excluirRascunho(item)', v-on='on', color='#F56C6C')
-							|  mdi-delete
-					span Excluir rascunho da {{tituloAba}}
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+							| mdi-replay
+					span Revalidar soicitação
 
 			template(v-slot:no-data, v-if="checkNomeItem()")
 				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
