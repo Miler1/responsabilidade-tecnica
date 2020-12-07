@@ -2,9 +2,11 @@
 
 #app
 	v-app
-		v-main
+		v-main.default
 			MenuSuperior
-			router-view
+
+			v-container
+				router-view
 
 </template>
 
@@ -23,17 +25,27 @@ export default {
 </script>
 
 <style lang="less">
+
 html {
-  overflow-y: auto !important;
+	overflow-y: auto !important;
 
-  body {
-    margin: 0;
+	body {
+		margin: 0;
 
-    #app {
-      font-family: Roboto, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-  }
+		#app {
+			font-family: Roboto, sans-serif;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+	}
 }
+
+.default{
+	background-color: #E0E0E0;
+}
+
+.container {
+	width: 85% !important;
+}
+
 </style>
