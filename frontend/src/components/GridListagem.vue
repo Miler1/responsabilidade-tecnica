@@ -3,22 +3,22 @@
 #grid-listagem
 	b.titulo-listagem {{ tituloListagem }}
 	v-row
-		v-col(cols='12' md='6')
-			v-text-field#QA-input-pesquisar(
-				outlined,
-				v-model="parametrosFiltro.stringPesquisa"
-				:placeholder="placeholderPesquisa",
-				prepend-inner-icon="mdi-magnify",
-				color="#E0E0E0",
-				dense,
-				@input='inputPesquisa'
-			)
-		v-col(cols='12' md='6')
+		//- v-col(cols='12' md='6')
+		//- 	v-text-field#QA-input-pesquisar(
+		//- 		outlined,
+		//- 		v-model="parametrosFiltro.stringPesquisa"
+		//- 		:placeholder="placeholderPesquisa",
+		//- 		prepend-inner-icon="mdi-magnify",
+		//- 		color="#E0E0E0",
+		//- 		dense,
+		//- 		@input='inputPesquisa'
+		//- 	)
+		v-col(cols='12' md='12')
 			v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
 					@click="abrirTelaCadastro",
 					large,
 					dark,
-					color="#84A98C",
+					color="#2196F3",
 					v-if="buttonCadastrar"
 				)
 				v-icon.font-cadastrar mdi-plus
@@ -27,7 +27,8 @@
 					@click="gerarRelatorio",
 					large,
 					outlined,
-					color="#84A98C"
+					color="#84A98C",
+					v-if="buttonRelatorio"
 				)
 				v-icon mdi-download
 				span Gerar relatório
@@ -40,45 +41,6 @@
 				:items-per-page="itensPerPage",
 				@update:options="sortBy"
 			)
-
-			template(v-slot:item.atividadesCnae='{ item }')
-				span {{item.atividadesCnae ? item.codigoAtividadeCnae : ' ‒'}}
-
-			template(v-slot:item.validadeEmAnos='{ item }')
-				span {{item.validadeEmAnos ? item.validadeEmAnos : ' ‒'}}
-
-			template(v-slot:item.tipoPessoa='{ item }')
-				span {{item.tipoPessoa === 'PF' ? 'Física' : 'Jurídica'}}
-
-			template(v-slot:item.finalidade='{ item }')
-				span {{item.finalidade}}
-
-			template(v-slot:item.obrigatorio='{ item }')
-				span {{item.obrigatorio ? 'Básico' : 'Complementar'}}
-
-			template(v-slot:item.ativo='{ item }')
-				span {{item.ativo ? 'Ativo' : item.rascunho ? 'Rascunho' : 'Inativo'}}
-
-			template(v-slot:item.atividadeDispensavel='{ item }')
-				span {{item.atividadeDispensavel === null ? ' ‒' : item.atividadeDispensavel ? 'Sim' : 'Não'}}
-
-			template(v-slot:item.atividadeLicenciavel='{ item }')
-				span {{item.atividadeLicenciavel === null ? ' ‒' : item.atividadeLicenciavel ? 'Sim' : 'Não'}}
-
-			template(v-slot:item.isento='{ item }')
-				span {{item.isento ? 'Sim' : 'Não'}}
-
-			template(v-slot:item.tipologia.nome='{ item }')
-				span {{item.tipologia != null ? item.tipologia.nome : ' ‒'}}
-
-			template(v-slot:item.tiposLicencas='{ item }')
-				span {{item.tiposLicencas ? item.tiposLicencas : ' ‒'}}
-
-			template(v-slot:item.parametros='{ item }')
-				span {{item.parametros ? item.parametros : ' ‒'}}
-
-			template(v-slot:item.valor='{ item }')
-				span {{item.valor == '0' ? ' ‒' : item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2})}}
 
 			template(v-slot:item.actions='{ item }')
 				v-tooltip(bottom, v-if="!item.rascunho")
@@ -178,6 +140,9 @@ export default {
 		buttonCadastrar: {
 			type: [Boolean]
 		},
+		buttonRelatorio: {
+			type: [Boolean]
+		},
 		abrirTelaCadastro: {
 			type: [Function]
 		},
@@ -271,13 +236,7 @@ export default {
 		},
 
 		checkNomeItem() {
-			return this.dadosListagem.nomeItem === 'tipologias'
-				|| this.dadosListagem.nomeItem === 'licenças'
-				|| this.dadosListagem.nomeItem === 'tabelas de taxas de licenciamento'
-				|| this.dadosListagem.nomeItem === 'taxas administrativas'
-				|| this.dadosListagem.nomeItem === 'perguntas'
-				|| this.dadosListagem.nomeItem === 'atividades dispensáveis'
-				|| this.dadosListagem.nomeItem === 'atividades licenciáveis';
+			return this.dadosListagem.nomeItem === 'usuarios';
 		},
 
 		ativarDesativar(item) {
@@ -336,6 +295,22 @@ tbody tr:nth-of-type(odd) {
 
 .font-cadastrar{
 	font-size:16px;
+}
+
+#QA-btn-abrir-cadastro {
+	border-radius: 2px;
+    position: relative;
+    padding: 8px 30px;
+    // margin: 40px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    will-change: box-shadow, transform;
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: 0;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 </style>
