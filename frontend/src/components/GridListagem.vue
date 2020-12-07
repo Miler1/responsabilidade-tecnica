@@ -1,35 +1,36 @@
 <template lang="pug">
 
 #grid-listagem
-	//- v-row
-	//- 	v-col(cols='12' md='6')
-	//- 		v-text-field#QA-input-pesquisar(
-	//- 			outlined,
-	//- 			v-model="parametrosFiltro.stringPesquisa"
-	//- 			:placeholder="placeholderPesquisa",
-	//- 			prepend-inner-icon="mdi-magnify",
-	//- 			color="#E0E0E0",
-	//- 			dense,
-	//- 			@input='inputPesquisa'
-	//- 		)
-	//- 	v-col(cols='12' md='6')
-	//- 		v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
-	//- 				@click="abrirTelaCadastro",
-	//- 				large,
-	//- 				dark,
-	//- 				color="#84A98C",
-	//- 				v-if="buttonCadastrar"
-	//- 			)
-	//- 			v-icon.font-cadastrar mdi-plus
-	//- 			span.font-cadastrar Cadastrar
-	//- 		v-btn#QA-btn-gerar-relatorio.float-right(
-	//- 				@click="gerarRelatorio",
-	//- 				large,
-	//- 				outlined,
-	//- 				color="#84A98C"
-	//- 			)
-	//- 			v-icon mdi-download
-	//- 			span Gerar relatório
+	v-row
+		v-col(cols='12' md='6')
+			v-text-field#QA-input-pesquisar(
+				outlined,
+				v-model="parametrosFiltro.stringPesquisa"
+				:placeholder="placeholderPesquisa",
+				prepend-inner-icon="mdi-magnify",
+				color="#E0E0E0",
+				dense,
+				@input='inputPesquisa'
+			)
+		//- v-col(cols='12' md='12')
+		//- 	v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
+		//- 			@click="abrirTelaCadastro",
+		//- 			large,
+		//- 			dark,
+		//- 			color="#84A98C",
+		//- 			v-if="buttonCadastrar"
+		//- 		)
+		//- 		//- v-icon.font-cadastrar mdi-plus
+		//- 		span.font-cadastrar Cadastrar
+		//- v-col(cols='12' md='12')
+		//-     v-btn#QA-btn-gerar-relatorio.float-right(
+		//- 		    @click="gerarRelatorio",
+		//- 		    large,
+		//- 		    outlined,
+		//- 		    color="#84A98C"
+		//- 	   )
+		//- 	   v-icon mdi-download
+		//- 	   span Gerar relatório
 
 	template
 		v-data-table(
@@ -42,7 +43,7 @@
 
 			template(v-slot:item.actions='{ item }')
 
-				v-tooltip(bottom)
+				v-tooltip(bottom, v-if="item.status.codigo!='REPROVADO' && item.status.codigo != 'APROVADO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-play-circle-outline
@@ -53,6 +54,18 @@
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-replay
 					span Revalidar solicitação
+
+				v-tooltip(bottom, v-if="item.status.codigo=='REPROVADO'")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+							| mdi-chat
+					span Visualizar justificativa
+
+				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO' || item.status.codigo == 'APROVADO'")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+							| mdi-eye
+					span Visualizar cadastro
 
 			template(v-slot:no-data, v-if="checkNomeItem()")
 				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
@@ -282,22 +295,6 @@ tbody tr:nth-of-type(odd) {
 
 .font-cadastrar{
 	font-size:16px;
-}
-
-#QA-btn-abrir-cadastro {
-	border-radius: 2px;
-    position: relative;
-    padding: 8px 30px;
-    // margin: 40px 28px;
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0;
-    will-change: box-shadow, transform;
-    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    outline: 0;
-    cursor: pointer;
-    text-decoration: none;
 }
 
 </style>

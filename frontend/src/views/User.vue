@@ -1,20 +1,22 @@
 <template lang="pug">
-	Panel(titulo = 'Cadastro de Responsabilidade Técnica e Ambiental')
-		GridListagem.pa-7(
-			:tituloAba="tituloAba",
-			:tituloListagem="tituloListagem",
-			:placeholderPesquisa="placeholderPesquisa",
-			:headers="headerListagem",
-			:dadosListagem="dadosListagem",
-			:updatePagination="updatePagination",
-			:parametrosFiltro="parametrosFiltro",
-			:abrirTelaCadastro="abrirTelaCadastro",
-			:buttonCadastrar="buttonCadastrar",
-			:buttonRelatorio="buttonRelatorio"
-		)
 
-		v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large, dark)
-			span Cadastro
+	v-container.pa-12.align-center.justify-center
+
+		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
+
+		Panel(titulo = 'Status da solicitação')
+			GridListagem.pa-7(
+				:tituloAba="tituloAba",
+				:tituloListagem="tituloListagem",
+				:placeholderPesquisa="placeholderPesquisa",
+				:headers="headerListagem",
+				:dadosListagem="dadosListagem",
+				:updatePagination="updatePagination",
+				:parametrosFiltro="parametrosFiltro"
+			)
+
+			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large, dark)
+				span Cadastro
 
 </template>
 
@@ -37,17 +39,35 @@ export default {
 		return {
 			tituloAba: "responsabilidade técnica",
 			tituloListagem: "Status solicitação",
-			placeholderPesquisa: "busca de usuários",
+			placeholderPesquisa: "",
 			headerListagem: HEADER,
-			dadosListagem: {},
-			parametrosFiltro: {
-				pagina: 0,
-				itemsPorPagina: 10,
-				tipoOrdenacao: 'ativo, asc',
-				stringPesquisa: ''
+			dadosListagem: {
+				content: [
+					{
+						solicitacao: {
+							nome: "Nome MOCK 2",
+							cod: "Um codigo mock 2"
+						},
+						status: {
+							codigo: "REPROVADO",
+							nome: "Reprovado"
+						},
+						validade: "-"
+					},
+					{
+						solicitacao: {
+							nome: "Nome MOCK 2",
+							cod: "Um codigo mock 2"
+						},
+						status: {
+							codigo: "APROVADO",
+							nome: "Aprovado"
+						},
+						validade: "31/06/2020"
+					}
+				]
 			},
-			buttonCadastrar: false,
-			buttonRelatorio: false
+			parametrosFiltro: {}
 		};
 	},
 	methods: {
@@ -61,7 +81,7 @@ export default {
 		},
 	},
 
-	mounted() {
+	created() {
 		this.updatePagination();
 	}
 };
