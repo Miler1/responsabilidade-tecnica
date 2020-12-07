@@ -13,8 +13,6 @@ const ApiService = {
 
 		Vue.use(VueAxios, axios);
 
-		console.log(process.env);
-
 		Vue.axios.defaults.baseURL = process.env.BASE_URL;
 		Vue.axios.defaults.timeout = 300000;
 		await this.setHeader();

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
 
 import { GET_USUARIO } from '@/store/actions.type';
 import Index from '@/store/index.js';
@@ -10,9 +9,6 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: '/',
-		name: 'Home',
-		component: Home,
-
 		meta: {
 			title: 'Gestão de Responsabilidade Técnica'
 		},
@@ -59,12 +55,13 @@ function BuscaUsuarioLogado(next) {
 
 	Index.dispatch(GET_USUARIO)
 		.then((usuario) => {
-			console.log(usuario);
+
 			if (usuario.authenticated) {
-				next();
+				next(usuario.role.url);
 			} else {
 				window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
 			}
+
 		})
 		.catch(erro => {
 			next(false);

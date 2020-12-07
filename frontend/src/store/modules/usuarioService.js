@@ -52,8 +52,12 @@ export const actions = {
 
 		return UsuarioService.getUsuario()
 			.then(({ data }) => {
+
+				data.role = UsuarioService.getRole(data.authorities);
+
 				commit(UPDATE_USUARIO_LOGIN, data);
 				return data;
+
 			}).catch(() => {
 				commit(END_USUARIO_LOGIN);
 			});
