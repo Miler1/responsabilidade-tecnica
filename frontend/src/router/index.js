@@ -16,7 +16,7 @@ const routes = [
 	},
 	{
 		path: '/user',
-		name: 'Usuário',
+		name: 'Usuario',
 		meta: {
 			title: 'Gestão de Responsabilidade Técnica'
 		},
