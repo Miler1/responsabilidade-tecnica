@@ -9,12 +9,9 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: '/',
-		meta: {
-			title: 'Gestão de Responsabilidade Técnica'
-		},
 
 		beforeEnter: (to, from, next) => {
-			BuscaUsuarioLogado(next);
+			BuscaUsuarioLogado();
 		}
 	},
 	{
@@ -28,7 +25,15 @@ const routes = [
 	{
 		path: '/admin',
 		name: 'Administrador',
-		component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+		meta: {
+			title: 'Gestão de Responsabilidade Técnica'
+		},
+
+		component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
+
+		beforeEnter: (to, from, next) => {
+			BuscaUsuarioLogado(next);
+		}
 	}
 ];
 
@@ -57,7 +62,13 @@ function BuscaUsuarioLogado(next) {
 		.then((usuario) => {
 
 			if (usuario.authenticated) {
-				next(usuario.role.url);
+
+				if(next !== undefined){
+					next();
+				} else {
+					next(usuario.role.url);
+				}
+
 			} else {
 				window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
 			}
