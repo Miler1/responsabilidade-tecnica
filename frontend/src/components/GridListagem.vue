@@ -52,7 +52,7 @@
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-replay
-					span Revalidar soicitação
+					span Revalidar solicitação
 
 			template(v-slot:no-data, v-if="checkNomeItem()")
 				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.

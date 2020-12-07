@@ -1,5 +1,5 @@
 const HEADER = [
-	{ text: 'Responsavel', value: 'responsavel.nome'},
+	{ text: 'Responsável', value: 'responsavel.nome'},
 	{ text: 'Status', value: 'status.nome' },
 	{ text: 'Justificativa', value: 'justificativa'},
 	{ text: 'Validade', value: 'validade', width: '145px'},
