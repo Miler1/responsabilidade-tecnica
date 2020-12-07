@@ -29,7 +29,7 @@ const routes = [
 			title: 'Gestão de Responsabilidade Técnica'
 		},
 
-		component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
+		component: () => import('../views/Admin.vue'),
 
 		beforeEnter: (to, from, next) => {
 			BuscaUsuarioLogado(next);
