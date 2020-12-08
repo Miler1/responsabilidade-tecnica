@@ -15,6 +15,19 @@ const routes = [
 		}
 	},
 	{
+		path: '/user',
+		name: 'Usuario',
+		meta: {
+			title: 'Gestão de Responsabilidade Técnica'
+		},
+
+		component: () => import('../views/User.vue'),
+
+		beforeEnter: (to, from, next) => {
+			BuscaUsuarioLogado(next);
+		}
+	},
+	{
 		path: '/admin',
 		name: 'Administrador',
 		meta: {
