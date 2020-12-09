@@ -8,6 +8,7 @@
 			GridListagem(
 				:headers="headerListagem",
 				:dadosListagem="dadosListagem",
+				:placeholderPesquisa="placeholderPesquisa",
 				:updatePagination="updatePagination",
 				:editarItem="editarItem",
 				:ativarDesativarItem="ativarDesativarItem",
@@ -28,6 +29,7 @@ export default {
 	data: () => {
 
 		return {
+			placeholderPesquisa: "teste placeholder",
 			headerListagem: HEADER,
 
 			dadosListagem: {
