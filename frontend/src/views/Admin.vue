@@ -2,7 +2,7 @@
 
 	v-container.pa-12.align-center.justify-center
 
-		h1.mb-12 Gestão de responsáveis técnicos
+		h1.mb-12 Gestão de responsáveis técnicos ambientais
 
 		Panel(titulo = 'Listagem de responsáveis técnicos cadastrados')
 			GridListagem(
@@ -29,7 +29,7 @@ export default {
 	data: () => {
 
 		return {
-			placeholderPesquisa: "teste placeholder",
+			placeholderPesquisa: "Pesquisar pelo responsável ou status do cadastro",
 			headerListagem: HEADER,
 
 			dadosListagem: {
