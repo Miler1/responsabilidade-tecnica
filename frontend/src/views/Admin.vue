@@ -2,9 +2,9 @@
 
 	v-container.pa-12.align-center.justify-center
 
-		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
+		h1.mb-12 Gestão de responsáveis técnicos
 
-		Panel(titulo = 'Cadastros')
+		Panel(titulo = 'Listagem de responsáveis técnicos cadastrados')
 			GridListagem(
 				:headers="headerListagem",
 				:dadosListagem="dadosListagem",
