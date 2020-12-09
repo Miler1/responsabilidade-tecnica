@@ -53,7 +53,7 @@
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-replay
-					span Revalidar solicitação
+					span Revalidar cadastro
 
 				v-tooltip(bottom, v-if="item.status.codigo=='REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
