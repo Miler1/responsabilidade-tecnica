@@ -66,7 +66,7 @@ function BuscaUsuarioLogado(next, login) {
 	Index.dispatch(GET_USUARIO)
 		.then((usuario) => {
 
-			if (usuario.authenticated) {
+			if (usuario && usuario.authenticated) {
 
 				if(login){
 					next(usuario.role.url);
