@@ -4,7 +4,7 @@
 
 		h1.mb-12 Central do responsável técnico ambiental
 
-		Panel(titulo = 'Situação do cadastro')
+		Panel(titulo = 'Situação do cadastro:')
 			GridListagem.pa-7(
 				:tituloAba="tituloAba",
 				:tituloListagem="tituloListagem",
