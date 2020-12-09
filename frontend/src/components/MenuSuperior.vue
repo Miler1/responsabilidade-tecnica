@@ -8,7 +8,7 @@
 			v-col.d-flex.flex-column.align-center(cols="12", md="4")
 				div.align-self-end
 					div#div-toolbar.d-flex.flex-row.justify-center.align-center
-						v-icon.mr-2 mdi-account-circle
+						v-icon.mr-2 mdi-account
 						v-tooltip(bottom)
 							template(v-slot:activator="{ on, attrs }")
 								v-toolbar-title#toolbar-title.text-sm-body-2.text-center(v-bind="attrs", v-on="on")
