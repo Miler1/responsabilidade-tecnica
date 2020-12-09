@@ -29,7 +29,7 @@ export default {
 	data: () => {
 
 		return {
-			placeholderPesquisa: "Pesquisar pelo nome do responsável ou status do cadastro",
+			placeholderPesquisa: "Pesquisar pelo nome ou status do cadastro",
 			headerListagem: HEADER,
 
 			dadosListagem: {
