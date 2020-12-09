@@ -20,7 +20,7 @@
 									v-icon mdi-logout
 							span Sair do sistema
 					v-toolbar-title.text-caption.text-center
-						| Usuário
+						| {{getPerfilUsuario()}}
 	//-hr.thin
 
 </template>
@@ -45,6 +45,13 @@ export default {
 					console.error(error);
 					snackbar.alert(ERROR_MESSAGES.logout);
 				});
+		},
+
+		getPerfilUsuario () {
+
+			return this.usuarioLogado == null ? '' : 
+				this.usuarioLogado.principal.authorities.filter(function(e) { return e.authority === 'ADMINISTRADOR'; }).length > 0 ? 'Administrador' : 'Usuário';
+
 		}
 	},
 
