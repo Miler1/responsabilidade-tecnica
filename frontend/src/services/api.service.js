@@ -145,7 +145,7 @@ const ApiService = {
 	handling401 () {
 		if (countRequest == 0) {
 			setTimeout(() => snackbar.alert(ERROR_MESSAGES.unauthorized), 500);
-			window.location.hash = '#/login';
+			window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
 		}
 	},
 
