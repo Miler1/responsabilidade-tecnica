@@ -26,12 +26,12 @@
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex';
-/*
 import { USUARIO_LOGOUT } from '@/store/actions.type.js';
 import { ERROR_MESSAGES } from '@/utils/helpers/messages-utils';
 import snackbar from '@/services/snack.service';
-*/
+
 export default {
 
 	name: 'MenuSuperior',
@@ -40,7 +40,7 @@ export default {
 		logout () {
 			this.$store.dispatch(USUARIO_LOGOUT)
 				.then (() => {
-					this.$router.push('/login');
+					window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
 				}).catch((error) => {
 					console.error(error);
 					snackbar.alert(ERROR_MESSAGES.logout);
