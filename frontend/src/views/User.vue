@@ -2,9 +2,9 @@
 
 	v-container.pa-12.align-center.justify-center
 
-		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
+		h1.mb-12 Central do responsável técnico ambiental
 
-		Panel(titulo = 'Status da solicitação')
+		Panel(titulo = 'Situação do cadastro')
 			GridListagem.pa-7(
 				:tituloAba="tituloAba",
 				:tituloListagem="tituloListagem",
