@@ -18,7 +18,7 @@ const routes = [
 		path: '/user',
 		name: 'Usuario',
 		meta: {
-			title: 'Gestão de Responsabilidade Técnica'
+			title: 'Gestão de Responsabilidade Técnica Ambiental'
 		},
 
 		component: () => import('../views/User.vue'),
@@ -31,7 +31,7 @@ const routes = [
 		path: '/admin',
 		name: 'Administrador',
 		meta: {
-			title: 'Gestão de Responsabilidade Técnica'
+			title: 'Gestão de Responsabilidade Técnica Ambiental'
 		},
 
 		component: () => import('../views/Admin.vue'),
