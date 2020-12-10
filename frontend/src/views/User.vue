@@ -22,6 +22,7 @@
 
 <script>
 
+import PessoaService from '@/services/pessoa.service';
 import GridListagem from '@/components/GridListagem';
 import Panel from '@/components/Panel';
 import { HEADER } from '@/utils/dadosHeader/ListagemUsuarioHeader';
@@ -78,6 +79,13 @@ export default {
 
 		abrirTelaCadastro() {
 			console.log('abrir');
+			PessoaService.buscaPessoalogada()
+				.then((result) => {
+					console.log(result);
+				})
+				.catch(erro => {
+					this.handleError(erro);
+				});
 		},
 	},
 
