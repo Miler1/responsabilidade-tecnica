@@ -10,22 +10,22 @@
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Nome Completo: &nbsp;
-							| {{"Pessoa 1"}}
+							| {{pessoa.nome}}
 						v-col(cols="12")
 							v-label CPF: &nbsp;
-							| 111.111.111-11
+							| {{pessoa.cpf}}
 						v-col(cols="12")
 							v-label Data de Nascimento: &nbsp;
-							| 01/01/0001
+							| {{pessoa.dataNascimento}}
 						v-col(cols="12")
 							v-label Sexo: &nbsp;
-							| Masculino:
+							| {{pessoa.sexo.nome}}
 						v-col(cols="12")
 							v-label Nome da mãe: &nbsp;
-							| Nome da mãe
+							| {{pessoa.nomeMae}}
 						v-col(cols="12")
 							v-label Estado Civil: &nbsp;
-							| Solteiro
+							| {{pessoa.estadoCivil.nome}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Naturalidade: &nbsp;
@@ -192,6 +192,8 @@
 </template>
 
 <script>
+
+import PessoaService from '@/services/pessoa.service';
 import expansivePanel from '@/components/expansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
@@ -216,34 +218,104 @@ export default {
 			currentFile: [],
 			files: [],
 			row: null,
-			dadosListagem: [
-				{
-					nome: 'Arquivo 1'
-				},
-				{
-					nome: 'Arquivo 2'
-				}
-			]
+			pessoa: {}
 		};
 	},
 
 	methods: {
+
 		incluirDados() {
 
 		},
+
 		uploadFile() {
 			console.log(this.currentFile);
 			this.files = [...this.currentFile];
 		},
+
 		errorMessage() {
 
 		},
-		salvar() {
+
+		updatePagination() {
+			PessoaService.buscaPessoalogada()
+				.then((result) => {
+					console.log(result);
+					this.pessoa = result.data;
+					console.log(this.pessoa);
+				})
+				.catch(erro => {
+					this.handleError(erro);
+				});
+		},
+
+		salvar(item) {
+			this.$fire({
+
+				title:
+					'<p class="title-modal-confirm">Cadastro de responsabilidade técnica </p>',
+
+				html:
+					`<p class="message-modal-confirm">Ao salvar o cadastro, ele ficará disponível no sistema.</p>
+					<p class="message-modal-confirm">
+						<b>Tem certeza que deseja salvar as informações do cadastro?</b>
+					</p>`,
+				showCancelButton: true,
+				confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+				cancelButtonColor: '#FFF',
+				showCloseButton: true,
+				focusConfirm: false,
+				confirmButtonText: '<i class="fa fa-check-circle"></i> Confirmar',
+				cancelButtonText: '<i class="fa fa-close"></i> Cancelar',
+				reverseButtons: true
+
+			}).then((result) => {
+
+				if(result.value) {
+					item.ativo = !item.ativo;
+					AtividadeService.ativarDesativarAtividadeDispensavel(item.id)
+						.then(() => {
+
+							if (item.ativo) {
+								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
+							} else {
+								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
+							}
+
+							this.updatePagination();
+							// this.resetaDadosFiltragem();
+
+						})
+						.catch(error => {
+
+							console.error(error);
+
+							if (item.ativo) {
+								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
+							} else {
+								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+							}
+
+							item.ativo = !item.ativo;
+
+						});
+
+				}
+
+			}).catch((error) => {
+				console.error(error);
+			});
 
 		},
+
 		voltar() {
 			this.$router.push('/user');
-		}
+		},
+
+	},
+
+	mounted() {
+		this.updatePagination();
 	}
 };
 </script>
