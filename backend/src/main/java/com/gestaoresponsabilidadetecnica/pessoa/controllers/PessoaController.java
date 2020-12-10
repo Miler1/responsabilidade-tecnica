@@ -21,7 +21,7 @@ public class PessoaController extends DefaultController {
     IPessoaService pessoaService;
 
     @GetMapping(value = "buscaPessoaLogada")
-    public ResponseEntity<Pessoa> buscaPessoaLogada(HttpServletRequest request) throws Exception {
+    public ResponseEntity<Pessoa> buscarPessoaLogada(HttpServletRequest request) throws Exception {
 
         verificarPermissao(request, Acao.BUSCAR_INFORMACAO_PESSOA);
 
