@@ -161,6 +161,7 @@
 							div.d-flex.flex-row.align-baseline
 								v-select#QA-select-area-especializacao(
 									outlined,
+									no-data-text="Nenhuma área de especialização encontrada",
 									dense
 								)
 		div.mb-6
