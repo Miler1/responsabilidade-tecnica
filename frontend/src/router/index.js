@@ -39,7 +39,7 @@ const routes = [
 	},
 	{
 		path: '/user/cadastro',
-		name: 'Usuario',
+		name: 'Cadastro',
 		meta: {
 			title: 'Gestão de Responsabilidade Técnica'
 		},
@@ -86,7 +86,8 @@ function BuscaUsuarioLogado(next, login) {
 		.then((usuario) => {
 
 			if (usuario && usuario.authenticated) {
-
+				console.log(usuario && usuario.authenticated, login);
+				console.log(next());
 				if(login){
 					next(usuario.role.url);
 				} else {
