@@ -107,6 +107,7 @@
 							v-label Formação: *
 							v-select#QA-select-input-formacao(
 								outlined,
+								no-data-text="Nenhuma formação encontrada",
 								dense
 							)
 						v-col.pb-0(cols="12", md="3")
