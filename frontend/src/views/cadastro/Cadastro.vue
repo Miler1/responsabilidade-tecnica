@@ -292,8 +292,8 @@ export default {
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
-				confirmButtonText: '<i class="fa fa-check-circle"></i> Confirmar',
-				cancelButtonText: '<i class="fa fa-close"></i> Cancelar',
+				confirmButtonText: '<i class="mdi-check-circle"></i> Confirmar',
+				cancelButtonText: '<i class="mdi-close"></i> Cancelar',
 				reverseButtons: true
 
 			}).then((result) => {
