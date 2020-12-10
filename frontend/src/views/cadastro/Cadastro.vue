@@ -161,6 +161,7 @@
 							div.d-flex.flex-row.align-baseline
 								v-select#QA-select-area-especializacao(
 									outlined,
+									no-data-text="Nenhuma área de especialização encontrada",
 									dense
 								)
 		div.mb-6
@@ -186,8 +187,10 @@
 
 		div.px-5
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large)
+					v-icon mdi-plus
 					span Cadastrar
 			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
+					v-icon mdi-arrow-left
 					span Voltar
 
 </template>
