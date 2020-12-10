@@ -10,22 +10,22 @@
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Nome Completo: &nbsp;
-							| {{"Pessoa 1"}}
+							| {{pessoa.nome}}
 						v-col(cols="12")
 							v-label CPF: &nbsp;
-							| 111.111.111-11
+							| {{pessoa.cpf}}
 						v-col(cols="12")
 							v-label Data de Nascimento: &nbsp;
-							| 01/01/0001
+							| {{pessoa.dataNascimento}}
 						v-col(cols="12")
 							v-label Sexo: &nbsp;
-							| Masculino:
+							| {{pessoa.sexo.nome}}
 						v-col(cols="12")
 							v-label Nome da mãe: &nbsp;
-							| Nome da mãe
+							| {{pessoa.nomeMae}}
 						v-col(cols="12")
 							v-label Estado Civil: &nbsp;
-							| Solteiro
+							| {{pessoa.estadoCivil.nome}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Naturalidade: &nbsp;
@@ -218,14 +218,7 @@ export default {
 			currentFile: [],
 			files: [],
 			row: null,
-			dadosListagem: [
-				{
-					nome: 'Arquivo 1'
-				},
-				{
-					nome: 'Arquivo 2'
-				}
-			]
+			pessoa: {}
 		};
 	},
 
@@ -243,6 +236,19 @@ export default {
 		errorMessage() {
 
 		},
+
+		updatePagination() {
+			PessoaService.buscaPessoalogada()
+				.then((result) => {
+					console.log(result);
+					this.pessoa = result.data;
+					console.log(this.pessoa);
+				})
+				.catch(erro => {
+					this.handleError(erro);
+				});
+		},
+
 		salvar(item) {
 			this.$fire({
 
@@ -309,13 +315,7 @@ export default {
 	},
 
 	mounted() {
-		PessoaService.buscaPessoalogada()
-			.then((result) => {
-				console.log(result);
-			})
-			.catch(erro => {
-				this.handleError(erro);
-			});
+		this.updatePagination();
 	}
 };
 </script>
