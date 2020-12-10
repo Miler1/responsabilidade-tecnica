@@ -186,8 +186,10 @@
 
 		div.px-5
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large)
+					v-icon mdi-plus
 					span Cadastrar
 			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
+					v-icon mdi-arrow-left
 					span Voltar
 
 </template>
