@@ -39,11 +39,11 @@ export default {
 
 .expansion-header {
 	color:  #333;
-	cursor: default;
+	cursor: pointer;
 	font-size: 20px !important;
 	// height: 40px;
 	padding: 0 20px;
-	// font-weight: bold;
+	font-weight: bold;
 	border-radius: 5px;
 }
 
