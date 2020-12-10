@@ -192,6 +192,8 @@
 </template>
 
 <script>
+
+import PessoaService from '@/services/pessoa.service';
 import expansivePanel from '@/components/expansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
@@ -228,22 +230,92 @@ export default {
 	},
 
 	methods: {
+
 		incluirDados() {
 
 		},
+
 		uploadFile() {
 			console.log(this.currentFile);
 			this.files = [...this.currentFile];
 		},
+
 		errorMessage() {
 
 		},
-		salvar() {
+		salvar(item) {
+			this.$fire({
+
+				title:
+					'<p class="title-modal-confirm">Cadastro de responsabilidade técnica </p>',
+
+				html:
+					`<p class="message-modal-confirm">Ao salvar o cadastro, ele ficará disponível no sistema.</p>
+					<p class="message-modal-confirm">
+						<b>Tem certeza que deseja salvar as informações do cadastro?</b>
+					</p>`,
+				showCancelButton: true,
+				confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+				cancelButtonColor: '#FFF',
+				showCloseButton: true,
+				focusConfirm: false,
+				confirmButtonText: '<i class="fa fa-check-circle"></i> Confirmar',
+				cancelButtonText: '<i class="fa fa-close"></i> Cancelar',
+				reverseButtons: true
+
+			}).then((result) => {
+
+				if(result.value) {
+					item.ativo = !item.ativo;
+					AtividadeService.ativarDesativarAtividadeDispensavel(item.id)
+						.then(() => {
+
+							if (item.ativo) {
+								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
+							} else {
+								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
+							}
+
+							this.updatePagination();
+							// this.resetaDadosFiltragem();
+
+						})
+						.catch(error => {
+
+							console.error(error);
+
+							if (item.ativo) {
+								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
+							} else {
+								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+							}
+
+							item.ativo = !item.ativo;
+
+						});
+
+				}
+
+			}).catch((error) => {
+				console.error(error);
+			});
 
 		},
+
 		voltar() {
 			this.$router.push('/user');
-		}
+		},
+
+	},
+
+	mounted() {
+		PessoaService.buscaPessoalogada()
+			.then((result) => {
+				console.log(result);
+			})
+			.catch(erro => {
+				this.handleError(erro);
+			});
 	}
 };
 </script>
