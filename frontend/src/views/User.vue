@@ -78,7 +78,7 @@ export default {
 
 		abrirTelaCadastro() {
 			console.log('abrir');
-			this.$router.push('cadastro');
+			this.$router.push({ name: 'Cadastro' });
 		},
 	},
 

@@ -5,27 +5,27 @@
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
 		div.mb-6
-			expansivePanel(titulo = 'Dados Pessoais')
+			expansivePanel(titulo = 'Dados pessoais')
 				v-row
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Nome Completo: &nbsp;
-							| {{"Pessoa 1"}}
+							v-label Nome completo: &nbsp;
+							| {{pessoa.nome}}
 						v-col(cols="12")
 							v-label CPF: &nbsp;
-							| 111.111.111-11
+							| {{pessoa.cpf}}
 						v-col(cols="12")
-							v-label Data de Nascimento: &nbsp;
-							| 01/01/0001
+							v-label Data de nascimento: &nbsp;
+							| {{pessoa.dataNascimento}}
 						v-col(cols="12")
 							v-label Sexo: &nbsp;
-							| Masculino:
+							| {{'Masculino'}}
 						v-col(cols="12")
 							v-label Nome da mãe: &nbsp;
-							| Nome da mãe
+							| {{pessoa.nomeMae}}
 						v-col(cols="12")
-							v-label Estado Civil: &nbsp;
-							| Solteiro
+							v-label Estado civil: &nbsp;
+							| {{'Solteiro'}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Naturalidade: &nbsp;
@@ -34,19 +34,19 @@
 							v-label Número do RG: &nbsp;
 							| 11-111.111
 						v-col(cols="12")
-							v-label Orgão Expedidor: &nbsp;
+							v-label Órgão expedidor: &nbsp;
 							| -
 						v-col(cols="12")
-							v-label Título Eleitoral: &nbsp;
+							v-label Título eleitoral: &nbsp;
 							| 111111111111111
 						v-col(cols="12")
-							v-label Zona Eleitoral: &nbsp;
+							v-label Zona eleitoral: &nbsp;
 							| -
 						v-col(cols="12")
-							v-label Seção Eleitoral: &nbsp;
+							v-label Seção eleitoral: &nbsp;
 							| -
 		div.mb-6
-			expansivePanel(titulo = 'Contato')
+			expansivePanel(titulo = 'Contatos')
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
@@ -63,11 +63,11 @@
 							| 35-99812-7151
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Telefone Residencial: &nbsp;
+							v-label Telefone residencial: &nbsp;
 							| 35-99812-7151
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Telefone Comercial: &nbsp;
+							v-label Telefone comercial: &nbsp;
 							| 35-99812-7151
 		div.mb-6
 			expansivePanel(titulo = 'Endereço')
@@ -100,7 +100,7 @@
 							| feetetetey
 
 		div.mb-6
-			expansivePanel(titulo = 'Informações Técnicas')
+			expansivePanel(titulo = 'Informações técnicas')
 				v-form.px-2(ref="cadastro")
 					v-row
 						v-col.pb-0(cols="12", md="6")
@@ -134,17 +134,17 @@
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model='row' row='')
+								v-radio-group#QA-radio-vinculo-gea(v-model='row1' row1='')
 									v-radio(label='Sim' value='radio-1')
 									v-radio(label='Não' value='radio-2')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
-							v-label Qual o vínculo: *
+							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model='row' row='')
-									v-radio(label='Efeito' value='radio-1')
+								v-radio-group#QA-radio-vinculo(v-model='row2' row2='')
+									v-radio(label='Efetivo' value='radio-1')
 									v-radio(label='Contrato' value='radio-2')
-									v-radio(label='Cargo Comissionado' value='radio-3')
+									v-radio(label='Cargo comissionado' value='radio-3')
 									v-radio(label='Outro' value='radio-4')
 
 								v-text-field#QA-input-outro-vinculo(
@@ -156,7 +156,7 @@
 								)
 					v-row
 						v-col(cols="12", md="12")
-							v-label Qual a área de especialização: *
+							v-label Área de especialização: *
 							div.d-flex.flex-row.align-baseline
 								v-select#QA-select-area-especializacao(
 									outlined,
@@ -218,14 +218,9 @@ export default {
 			currentFile: [],
 			files: [],
 			row: null,
-			dadosListagem: [
-				{
-					nome: 'Arquivo 1'
-				},
-				{
-					nome: 'Arquivo 2'
-				}
-			]
+			row1: null,
+			row2: null,
+			pessoa: {}
 		};
 	},
 
@@ -243,6 +238,19 @@ export default {
 		errorMessage() {
 
 		},
+
+		updatePagination() {
+			PessoaService.buscaPessoalogada()
+				.then((result) => {
+					console.log(result);
+					this.pessoa = result.data;
+					console.log(this.pessoa);
+				})
+				.catch(erro => {
+					this.handleError(erro);
+				});
+		},
+
 		salvar(item) {
 			this.$fire({
 
@@ -309,13 +317,7 @@ export default {
 	},
 
 	mounted() {
-		PessoaService.buscaPessoalogada()
-			.then((result) => {
-				console.log(result);
-			})
-			.catch(erro => {
-				this.handleError(erro);
-			});
+		this.updatePagination();
 	}
 };
 </script>
