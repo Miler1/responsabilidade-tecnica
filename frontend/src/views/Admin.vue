@@ -71,7 +71,7 @@ export default {
 		Panel,
 		GridListagem
 	}
-	
+
 };
 </script>
 
