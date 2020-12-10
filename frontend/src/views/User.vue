@@ -15,7 +15,7 @@
 				:parametrosFiltro="parametrosFiltro"
 			)
 
-			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large, dark)
+			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large)
 				span Cadastro
 
 </template>
@@ -77,7 +77,7 @@ export default {
 		},
 
 		abrirTelaCadastro() {
-			console.log('abrir');
+			this.$router.push('/user/cadastro');
 		},
 	},
 
@@ -92,20 +92,11 @@ export default {
 @import "../assets/css/variaveis.less";
 
 	#QA-btn-cadastro {
-	    border-radius: 2px;
-	    position: relative;
 	    padding: 8px 30px;
 	    margin: 40px 28px;
-	    font-size: 14px;
-	    font-weight: 500;
-	    text-transform: uppercase;
-	    letter-spacing: 0;
-	    will-change: box-shadow, transform;
-	    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-	    outline: 0;
-	    cursor: pointer;
-	    text-decoration: none;
+	    font-size: 16px;
 	    background: @blue-primary;
+	    color: white;
 	}
 
 </style>

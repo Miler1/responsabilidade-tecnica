@@ -25,7 +25,26 @@ const routes = [
 
 		beforeEnter: (to, from, next) => {
 			BuscaUsuarioLogado(next);
-		}
+		},
+
+		// children: [
+		// 	// CADASTRO
+		// 	{
+		// 		path: 'cadastro',
+		// 		name: 'Cadastro',
+		// 		component: () => import('../views/cadastro/Cadastro.vue')
+		// 	},
+
+		// ],
+	},
+	{
+		path: '/user/cadastro',
+		name: 'Usuario',
+		meta: {
+			title: 'Gestão de Responsabilidade Técnica'
+		},
+
+		component: () => import('../views/cadastro/Cadastro.vue'),
 	},
 	{
 		path: '/admin',
