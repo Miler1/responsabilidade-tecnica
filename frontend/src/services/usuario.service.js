@@ -9,10 +9,10 @@ export default {
 	getRole: authorities => {
 
 		let defaultRoles = ['ADMINISTRADOR', 'USUARIO'];
-		let roles = new Map();
-
-		roles.set('ADMINISTRADOR', {role: 'Administrador', url: '/admin'});
-		roles.set('USUARIO', {role: 'Usuário', url: '/user'});
+		let roles = {
+			ADMINISTRADOR: {role: 'Administrador', url: '/admin', codigo: 'ADMIN'},
+			USUARIO: {role: 'Usuário', url: '/user', codigo: "USER"}
+		};
 
 		let role = null;
 
@@ -21,14 +21,14 @@ export default {
 			authorities.forEach(elem => {
 
 				if(defaultRoles.indexOf(elem.authority) >= 0){
-					role = roles.get(elem.authority);
+					role = roles[elem.authority];
 				}
 
 			});
 
 		}
 
-		return role;
+		return {perfis:roles, perfilSelecionado:role};
 
 	}
 
