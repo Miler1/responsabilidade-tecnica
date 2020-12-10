@@ -19,13 +19,13 @@
 							| {{pessoa.dataNascimento}}
 						v-col(cols="12")
 							v-label Sexo: &nbsp;
-							| {{pessoa.sexo.nome}}
+							| {{'Masculino'}}
 						v-col(cols="12")
 							v-label Nome da mãe: &nbsp;
 							| {{pessoa.nomeMae}}
 						v-col(cols="12")
 							v-label Estado Civil: &nbsp;
-							| {{pessoa.estadoCivil.nome}}
+							| {{'Solteiro'}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Naturalidade: &nbsp;
@@ -134,14 +134,14 @@
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model='row' row='')
+								v-radio-group#QA-radio-vinculo-gea(v-model='row1' row1='')
 									v-radio(label='Sim' value='radio-1')
 									v-radio(label='Não' value='radio-2')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Qual o vínculo: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model='row' row='')
+								v-radio-group#QA-radio-vinculo(v-model='row2' row2='')
 									v-radio(label='Efeito' value='radio-1')
 									v-radio(label='Contrato' value='radio-2')
 									v-radio(label='Cargo Comissionado' value='radio-3')
@@ -218,6 +218,8 @@ export default {
 			currentFile: [],
 			files: [],
 			row: null,
+			row1: null,
+			row2: null,
 			pessoa: {}
 		};
 	},
