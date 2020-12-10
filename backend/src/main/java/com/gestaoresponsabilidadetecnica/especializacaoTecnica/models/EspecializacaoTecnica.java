@@ -1,11 +1,15 @@
 package com.gestaoresponsabilidadetecnica.especializacaoTecnica.models;
 
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(schema = GlobalReferences.ESQUEMA, name = "especializacao_tecnica")

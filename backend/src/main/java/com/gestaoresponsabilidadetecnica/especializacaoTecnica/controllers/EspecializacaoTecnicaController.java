@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ ")
+@RequestMapping("/especializacaoTecnica")
 public class EspecializacaoTecnicaController extends DefaultController {
 
     private static final String HEADER_CORS = "Access-Control-Allow-Origin";

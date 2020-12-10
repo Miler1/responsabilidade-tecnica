@@ -159,10 +159,20 @@
 						v-col(cols="12", md="12")
 							v-label Área de especialização: *
 							div.d-flex.flex-row.align-baseline
-								v-select#QA-select-area-especializacao(
+								v-autocomplete#QA-select-area-especializacao(
 									outlined,
+									dense,
+									:placeholder="placeholderSelect"
+									item-color="grey darken-3",
+									v-model="dados.especializacao",
+									:items="especializacoes",
+									:filter="filtroSelect",
+									item-text="textoExibicao",
+									:error-messages="errorMessage(dados.especializacao)",
 									no-data-text="Nenhuma área de especialização encontrada",
-									dense
+									@click.native="resetErrorMessage",
+									required,
+									return-object=true
 								)
 		div.mb-6
 			expansivePanel(titulo = 'Anexos')
@@ -198,6 +208,7 @@
 <script>
 
 import PessoaService from '@/services/pessoa.service';
+import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import expansivePanel from '@/components/expansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
@@ -217,14 +228,19 @@ export default {
 		return {
 			placeholder: "Digite aqui...",
 			labelNoData: 'Não há nenhum anexo a ser exibido',
+			placeholderSelect: "Selecione",
 			headerListagem: HEADER,
 			isInclusao: true,
 			currentFile: [],
 			files: [],
 			row: null,
+			pessoa: {},
+			especializacoes: [],
+			dados: {
+				especializacao: null
+			},
 			row1: null,
 			row2: null,
-			pessoa: {}
 		};
 	},
 
@@ -243,16 +259,21 @@ export default {
 
 		},
 
-		updatePagination() {
-			PessoaService.buscaPessoalogada()
-				.then((result) => {
-					console.log(result);
-					this.pessoa = result.data;
-					console.log(this.pessoa);
-				})
-				.catch(erro => {
-					this.handleError(erro);
-				});
+		filtroSelect(item, query, itemText) {
+
+			query = this.normalizer(query);
+			itemText = itemText ? this.normalizer(itemText) : itemText;
+
+			return itemText.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1;
+
+		},
+
+		normalizer(string) {
+			return string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+		},
+
+		resetErrorMessage() {
+
 		},
 
 		salvar(item) {
@@ -288,7 +309,7 @@ export default {
 								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
 							}
 
-							this.updatePagination();
+							// this.updatePagination();
 							// this.resetaDadosFiltragem();
 
 						})
@@ -320,8 +341,23 @@ export default {
 
 	},
 
-	mounted() {
-		this.updatePagination();
+	created() {
+
+		PessoaService.buscaPessoalogada()
+			.then((result) => {
+				this.pessoa = result.data;
+			})
+			.catch(erro => {
+				this.handleError(erro);
+			});
+		
+		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
+			.then((result) => {
+				this.especializacoes = result.data;
+				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
+			}).catch(erro => {
+				this.handleError(erro);
+			});
 	}
 };
 </script>
