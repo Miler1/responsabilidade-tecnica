@@ -16,7 +16,7 @@
 			)
 
 			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large)
-				span Cadastro
+				span Cadastrar
 
 </template>
 
