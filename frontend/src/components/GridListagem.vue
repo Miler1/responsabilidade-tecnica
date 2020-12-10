@@ -2,16 +2,15 @@
 
 #grid-listagem
 	v-row
-		v-col(cols='12' md='6')
-			v-text-field#QA-input-pesquisar(
-				outlined,
-				v-model="parametrosFiltro.stringPesquisa"
-				:placeholder="placeholderPesquisa",
-				prepend-inner-icon="mdi-magnify",
-				color="#E0E0E0",
-				dense,
-				@input='inputPesquisa'
-			)
+		//- v-col(cols='12' md='6')
+		//- 	v-text-field#QA-input-pesquisar(
+		//- 		v-model="parametrosFiltro.stringPesquisa"
+		//- 		:placeholder="placeholderPesquisa",
+		//- 		prepend-inner-icon="mdi-magnify",
+		//- 		color="#E0E0E0",
+		//- 		dense,
+		//- 		@input='inputPesquisa'
+		//- 	)
 		//- v-col(cols='12' md='12')
 		//- 	v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
 		//- 			@click="abrirTelaCadastro",
@@ -295,6 +294,38 @@ tbody tr:nth-of-type(odd) {
 
 .font-cadastrar{
 	font-size:16px;
+}
+
+#QA-input-pesquisar {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.v-text-field {
+	padding-top: 2px !important;
+    margin-top: 0 !important;
+}
+
+.v-label {
+	display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px !important;
 }
 
 </style>
