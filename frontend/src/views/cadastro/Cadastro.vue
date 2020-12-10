@@ -169,7 +169,7 @@
 									:filter="filtroSelect",
 									item-text="textoExibicao",
 									:error-messages="errorMessage(dados.especializacao)",
-									no-data-text="Nenhuma especialização encontrada",
+									no-data-text="Nenhuma área de especialização encontrada",
 									@click.native="resetErrorMessage",
 									required,
 									return-object=true
