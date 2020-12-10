@@ -16,6 +16,7 @@
 			)
 
 			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large)
+				v-icon mdi-plus
 				span Cadastrar
 
 </template>
