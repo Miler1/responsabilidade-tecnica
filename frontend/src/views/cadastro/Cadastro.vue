@@ -178,11 +178,10 @@
 			expansivePanel(titulo = 'Anexos')
 				v-file-input(
 					v-model="currentFile",
+					hide-input
 				    outlined,
 				    dense,
-				    multiple,
-				    counter,
-				    chips,
+				    multiple
 				    @change="uploadFile()"
 				)
 				div.mt-6(style="height: 50px;")
@@ -252,7 +251,8 @@ export default {
 
 		uploadFile() {
 			console.log(this.currentFile);
-			this.files = [...this.currentFile];
+			this.files = this.files.concat([...this.currentFile]);
+			console.log(this.files);
 		},
 
 		errorMessage() {
