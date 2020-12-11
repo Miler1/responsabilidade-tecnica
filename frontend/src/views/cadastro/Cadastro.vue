@@ -5,7 +5,7 @@
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
 		div.mb-6
-			expansivePanel(titulo = 'Dados pessoais')
+			ExpansivePanel(titulo = 'Dados pessoais')
 				v-row
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -46,13 +46,13 @@
 							v-label Seção eleitoral: &nbsp;
 							| -
 		div.mb-6
-			expansivePanel(titulo = 'Contatos')
+			ExpansivePanel(titulo = 'Contatos')
 				v-row
-					v-col(cols="12", md="4")
+					v-col.pb-0(cols="12", md="4")
 						v-col(cols="12")
 							v-label E-mail principal: &nbsp;
 							| {{"miler@xxxxx"}}
-					v-col(cols="12", md="6")
+					v-col.pb-0(cols="12", md="6")
 						v-col(cols="12")
 							v-label E-mail secundário: &nbsp;
 							| xxxxxxxxxxx@xxxx
@@ -70,7 +70,7 @@
 							v-label Telefone comercial: &nbsp;
 							| 35-99812-7151
 		div.mb-6
-			expansivePanel(titulo = 'Endereço')
+			ExpansivePanel(titulo = 'Endereço')
 				v-row
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -100,7 +100,7 @@
 							| feetetetey
 
 		div.mb-6
-			expansivePanel(titulo = 'Informações técnicas')
+			ExpansivePanel(titulo = 'Informações técnicas')
 				v-form.px-2(ref="cadastro")
 					v-row
 						v-col.pb-0(cols="12", md="6")
@@ -128,21 +128,21 @@
 						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
-								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(v-model='row' row='')
+								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(v-model='row' row)
 									v-radio(label='Consultor pessoa física' value='radio-1')
 									v-radio(label='Empresa consultora' value='radio-2')
 									v-radio(label='Funcionário' value='radio-3')
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model='row1' row1='')
+								v-radio-group#QA-radio-vinculo-gea(v-model='row1' row)
 									v-radio(label='Sim' value='radio-1')
 									v-radio(label='Não' value='radio-2')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model='row2' row2='')
+								v-radio-group#QA-radio-vinculo(v-model='row2' row)
 									v-radio(label='Efetivo' value='radio-1')
 									v-radio(label='Contrato' value='radio-2')
 									v-radio(label='Cargo comissionado' value='radio-3')
@@ -175,8 +175,8 @@
 									return-object=true
 								)
 		div.mb-6
-			expansivePanel(titulo = 'Anexos')
-				
+			ExpansivePanel(titulo = 'Anexos')
+
 				div.mt-6
 				v-btn#QA-btn-adicionar-anexo.float-right(
 					color="#2196F3",
@@ -203,7 +203,7 @@
 					:labelNoData="labelNoData"
 				)
 
-		div.px-5
+		div.px-6
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
@@ -217,7 +217,7 @@
 
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
-import expansivePanel from '@/components/expansivePanel';
+import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
@@ -226,7 +226,7 @@ export default {
 	name: 'Cadastro',
 
 	components: {
-		expansivePanel,
+		ExpansivePanel,
 		GridListagemInclusao,
 		TextField
 	},
@@ -368,7 +368,7 @@ export default {
 			.catch(erro => {
 				this.handleError(erro);
 			});
-		
+
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
 				this.especializacoes = result.data;
@@ -408,6 +408,12 @@ export default {
 		color: #2196F3;
         background-color: white;
         width: 145px;
+	}
+
+	.v-radio {
+		.v-label {
+			font-weight: 400;
+		}
 	}
 
 }
