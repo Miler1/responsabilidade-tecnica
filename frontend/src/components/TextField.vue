@@ -10,7 +10,8 @@
 		:error-messages="errorMessages(modelText, true)",
 		required,
 		dense,
-		outlined
+		outlined,
+		@blur="changeModel()"
 	)
 
 </template>
@@ -41,6 +42,12 @@ export default {
 	},
 
 	methods: {
+		changeModel() {
+
+			this.$emit('changeModel', this.modelText);
+
+		},
+
 		clearModel() {
 			this.modelText = null;
 		},
