@@ -104,11 +104,11 @@
 				v-form.px-2(ref="cadastro")
 					v-row
 						v-col.pb-0(cols="12", md="6")
-							v-label Formação: *
-							v-select#QA-select-input-formacao(
-								outlined,
-								no-data-text="Nenhuma formação encontrada",
-								dense
+								TextField(
+								labelOption = "Formação: *",
+								id = "QA-input-formacao",
+								placeholder="Digite aqui",
+								:errorMessages="errorMessage"
 							)
 						v-col.pb-0(cols="12", md="3")
 							TextField(
