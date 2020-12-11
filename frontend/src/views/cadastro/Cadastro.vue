@@ -176,26 +176,35 @@
 								)
 		div.mb-6
 			expansivePanel(titulo = 'Anexos')
-				v-file-input(
-					v-model="currentFile",
-					hide-input
-				    outlined,
-				    dense,
-				    multiple
-				    @change="uploadFile()"
+				
+				div.mt-6
+				v-btn#QA-btn-adicionar-anexo.float-right(
+					color="#2196F3",
+					class="text-none",
+					depressed,
+					outlined,
+					:loading="isSelecting",
+					@click="onButtonClick"
 				)
-				div.mt-6(style="height: 50px;")
-					v-btn#QA-btn-adicionar-anexo.float-right(@click="incluirDados", large, v-if="isInclusao")
-						v-icon mdi-plus-circle-outline
-						span Adicionar anexo
+					v-icon mdi-plus-circle-outline
+					span Adicionar anexo
+				input(
+					ref="uploader",
+					class="d-none",
+					type="file",
+					multiple,
+					@change="uploadFile"
+				)
 
-				GridListagemInclusao(
+				GridListagemInclusao.mt-12.mb-4(
 					:headers="headerListagem",
 					:dadosListagem="files",
+					:hideFooter="true",
+					:labelNoData="labelNoData"
 				)
 
 		div.px-5
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
 			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
@@ -228,9 +237,11 @@ export default {
 			placeholder: "Digite aqui...",
 			labelNoData: 'Não há nenhum anexo a ser exibido',
 			placeholderSelect: "Selecione",
+			labelNoData: "Nenhum anexo adicionado",
 			headerListagem: HEADER,
 			isInclusao: true,
 			currentFile: [],
+			isSelecting: false,
 			files: [],
 			row: null,
 			pessoa: {},
@@ -249,10 +260,17 @@ export default {
 
 		},
 
-		uploadFile() {
-			console.log(this.currentFile);
-			this.files = this.files.concat([...this.currentFile]);
-			console.log(this.files);
+		onButtonClick() {
+			this.isSelecting = true;
+			window.addEventListener('focus', () => {
+				this.isSelecting = false;
+			}, { once: true });
+
+			this.$refs.uploader.click();
+		},
+
+		uploadFile(e) {
+			this.files = this.files.concat([...e.target.files]);
 		},
 
 		errorMessage() {
@@ -380,11 +398,6 @@ export default {
 
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
-	}
-
-	.v-btn {
-		color: white;
-        background-color: #2196F3;
 	}
 
 	.v-data-footer {
