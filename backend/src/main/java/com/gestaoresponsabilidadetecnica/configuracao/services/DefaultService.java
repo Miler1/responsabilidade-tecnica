@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 public class DefaultService implements IDefaultService {
 
     @Override
-    public Boolean verificaPermissao(HttpServletRequest request, Acao... acoes) {
+    public Boolean verificarPermissao(HttpServletRequest request, Acao... acoes) {
 
         boolean permitido = false;
 
         User usuarioSessao = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(usuarioSessao == null) {
+        if (usuarioSessao == null) {
             throw new UnauthenticatedException("Opa! Sua seção expirou. Faça login novamente!");
         }
 
@@ -33,7 +33,8 @@ public class DefaultService implements IDefaultService {
 
         Collection<GrantedAuthority> perfilSelecionado = ((UsernamePasswordAuthenticationToken) principal).getAuthorities();
 
-        List<GrantedAuthority> authoritys = usuarioSessao.getAuthorities().stream().filter(p -> perfilSelecionado.contains(p)).collect(Collectors.toList());
+        List<GrantedAuthority> authoritys = usuarioSessao.getAuthorities().stream()
+                .filter(perfilSelecionado::contains).collect(Collectors.toList());
 
         for (Acao acao : acoes)
             permitido = permitido || (usuarioSessao != null && hasPermissao(authoritys, acao.getCodigo()));
@@ -43,7 +44,7 @@ public class DefaultService implements IDefaultService {
 
     private boolean hasPermissao(List<GrantedAuthority> authoritys, String codigoAcao) {
 
-        return authoritys.stream().filter(authority -> authority.getAuthority().equals(codigoAcao)).count() > 0;
+        return authoritys.stream().anyMatch(authority -> authority.getAuthority().equals(codigoAcao));
     }
 
 }
