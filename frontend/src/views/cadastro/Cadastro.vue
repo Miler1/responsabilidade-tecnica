@@ -280,7 +280,7 @@ export default {
 			this.$fire({
 
 				title:
-					'<p class="title-modal-confirm">Confirmar cadastro de responsabilidade técnica </p>',
+					'<p class="title-modal-confirm">Confirmar cadastro</p>',
 
 				html:
 					`<p class="message-modal-confirm">Ao confirmar o cadastro, todas as informações serão enviadas para análise.</p>
@@ -288,7 +288,7 @@ export default {
 						<b>Tem certeza que deseja confirmar o cadastro?</b>
 					</p>`,
 				showCancelButton: true,
-				confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+				confirmButtonColor: item.ativo ? '#E6A23C' : '#2196F3',
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
