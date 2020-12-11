@@ -239,13 +239,13 @@
 						:labelNoData="labelNoData"
 					)
 
-		div.d-flex.flex-row.justify-space-between.px-7
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
-					v-icon mdi-plus
-					span Cadastrar
+		div.d-flex.flex-row.justify-space-between
 			v-btn#QA-btn-voltar-cadastro(@click='voltar', large, outlined)
-					v-icon mdi-arrow-left
-					span Voltar
+				v-icon mdi-arrow-left
+				span Voltar
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
+				v-icon mdi-plus
+				span Cadastrar
 
 </template>
 
