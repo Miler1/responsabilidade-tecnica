@@ -20,12 +20,12 @@
 		v-data-table.elevation-1(
 				:headers="headers",
 				:items='dadosListagem',
-				:search='stringPesquisa'
-				:customFilter='customFilter'
-				:items-per-page='itemsPerPage'
-				:footer-props='footerProps'
-				:hide-default-footer="hideFooter"
-				:no-results-text='labelNoResultset'
+				:search='stringPesquisa',
+				:customFilter='customFilter',
+				:items-per-page='itemsPerPage',
+				:footer-props='footerProps',
+				:hide-default-footer="hideFooter",
+				:no-results-text='labelNoResultset',
 			)
 
 			template(v-slot:item.actions='{ item }')
@@ -56,13 +56,12 @@ export default {
 
 		stringPesquisa: null,
 		footerProps: {
-
 			itemsPerPageText: 'Resultados por página',
 			itemsPerPageOptions: [10, 20, 30, 50, 100]
 		},
 
 	}),
-	
+
 	created() {
 		console.log(this.dadosListagem);
 	},
@@ -136,7 +135,7 @@ export default {
 		},
 		itemsPerPage: {
 			type: [Number],
-			default: 10
+			default: 100
 		},
 		dadosSelect: {
 			type: [Array]

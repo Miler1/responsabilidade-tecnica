@@ -9,7 +9,7 @@
 				v-row(v-if="pessoa != undefined")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Nome completo:  &nbsp;
+							v-label Nome completo: &nbsp;
 							| {{pessoa.nome}}
 						v-col(cols="12")
 							v-label CPF: &nbsp;
@@ -130,7 +130,7 @@
 						//- 		:errorMessages="errorMessage",
 						//- 		@click="resetErrorMessage"
 						//- 	)
-						v-col.pb-0(cols="12", md="6")
+						v-col(cols="12", md="6")
 							TextField(
 								labelOption = "Formação: *",
 								id = "QA-input-formacao",
@@ -138,7 +138,7 @@
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage"
 							)
-						v-col.pb-0(cols="12", md="3")
+						v-col(cols="12", md="3")
 							TextField(
 								labelOption = "Conselho de classe: *",
 								id = "QA-input-conselho-classe",
@@ -146,7 +146,7 @@
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage"
 							)
-						v-col.pb-0(cols="12", md="3")
+						v-col(cols="12", md="3")
 							TextField(
 								labelOption = "Registro: *",
 								id = "QA-input-registro",
@@ -212,42 +212,40 @@
 								)
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
-				div.mt-6
-				v-btn#QA-btn-adicionar-anexo.float-right(
-					color="#2196F3",
-					class="text-none",
-					depressed,
-					outlined,
-					:loading="isSelecting",
-					@click="onButtonClick"
-				)
-					v-icon mdi-plus-circle-outline
-					span Adicionar anexo
-				input(
-					ref="uploader",
-					class="d-none",
-					type="file",
-					multiple,
-					@change="uploadFile"
-				)
 
-				GridListagemInclusao.mt-12.mb-4(
-					:headers="headerListagem",
-					:dadosListagem="files",
-					:hideFooter="true",
-					:labelNoData="labelNoData",
-					:removerAnexo="removerAnexo",
-					:downloadAnexo="downloadAnexo"
-				)
+				div.px-3.pt-7
+					v-btn#QA-btn-adicionar-anexo.float-right(
+						color="#2196F3",
+						class="text-none",
+						depressed,
+						outlined,
+						:loading="isSelecting",
+						@click="onButtonClick"
+					)
+						v-icon mdi-plus-circle-outline
+						span Adicionar anexo
+					input(
+						ref="uploader",
+						class="d-none",
+						type="file",
+						multiple,
+						@change="uploadFile"
+					)
 
-		div.px-6
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
+					GridListagemInclusao.mt-12.mb-4(
+						:headers="headerListagem",
+						:dadosListagem="files",
+						:hideFooter="false",
+						:labelNoData="labelNoData"
+					)
+
+		div.d-flex.flex-row.justify-space-between.px-7
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
-			v-btn#QA-btn-cancelar-cadastro.float-left(@click='cancelar', large, outlined)
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined)
 					v-icon mdi-close
 					span Cancelar
-
 
 </template>
 

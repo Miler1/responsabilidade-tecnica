@@ -34,7 +34,7 @@ public class DefaultController {
 
 	protected void verificarPermissao(HttpServletRequest request, Acao... acoes) throws Exception {
 
-		boolean permitido = defaultService.verificaPermissao(request, acoes);
+		boolean permitido = defaultService.verificarPermissao(request, acoes);
 
 		if(!permitido) {
 			throw new PermissionException("Usuário sem permissão para realizar a ação!");

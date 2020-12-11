@@ -1,8 +1,8 @@
 <template lang="pug">
 
-	v-expansion-panels(multiple, v-model="panel", readonly=true)
+	v-expansion-panels(multiple, v-model="panel")
 		v-expansion-panel
-			v-expansion-panel-header.expansion-header
+			v-expansion-panel-header
 				span {{titulo}}
 			v-divider
 			v-expansion-panel-content
@@ -37,18 +37,15 @@ export default {
 	padding-bottom: 1%;
 }
 
-.expansion-header {
+.v-expansion-panel-header {
 	color:  rgb(4, 82, 4);
 	cursor: default;
-	font-size: 24px !important;
-	height: 80px;
-	// color:  #333;
-	// cursor: pointer;
-	// font-size: 20px !important;
-	// // height: 40px;
-	// padding: 0 20px;
-	// font-weight: bold;
-	// border-radius: 5px;
+
+	padding: 5px 24px;
+
+	span {
+		font-size: 24px !important;
+	}
 }
 
 </style>

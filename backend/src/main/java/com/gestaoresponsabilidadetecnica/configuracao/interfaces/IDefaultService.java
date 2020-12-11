@@ -6,5 +6,5 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface IDefaultService {
 
-    Boolean verificaPermissao(HttpServletRequest request, Acao... acoes);
+    Boolean verificarPermissao(HttpServletRequest request, Acao... acoes);
 }
