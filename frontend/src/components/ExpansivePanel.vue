@@ -14,7 +14,7 @@
 
 export default {
 
-	name: 'Panel',
+	name: 'ExpansivePanel',
 
 	data: () => {
 		return {
