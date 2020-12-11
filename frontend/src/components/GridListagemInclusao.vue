@@ -33,12 +33,12 @@
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#9EBAA4')
 							| mdi-close-circle
-					span Editar {{tituloTooltip}}
+					span Remover anexo {{tituloTooltip}}
 				v-tooltip(bottom, v-if="exibirIconeRemover")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon(small @click='excluirItem(item)', v-on='on', color='#F56C6C')
 							|  mdi-download
-					span Remover {{tituloTooltip}}
+					span Baixar anexo {{tituloTooltip}}
 
 			template(#footer.page-text="props")
 				span Exibindo {{props.pageStart}}-{{props.pageStop}} de {{props.itemsLength}} registros
