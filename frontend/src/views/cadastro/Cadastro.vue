@@ -131,64 +131,55 @@
 						//- 		@click="resetErrorMessage"
 						//- 	)
 						v-col.pb-0(cols="12", md="6")
-							v-label Formação: *
-							v-text-field#QA-input-formacao(
-								outlined,
-								color="#E0E0E0",
-								:placeholder="placeholder",
-								@click.native="resetErrorMessage",
-								v-model="dados.formacao",
-								:error-messages="errorMessage(dados.formacao)",
-								required,
-								dense
+							TextField(
+								labelOption = "Formação: *",
+								id = "QA-input-formacao",
+								@changeModel="dados.formacao = $event",
+								placeholder="Digite aqui",
+								:errorMessages="errorMessage"
 							)
 						v-col.pb-0(cols="12", md="3")
-							v-label Conselho de classe: *
-							v-text-field#QA-input-conselho-classe(
-								outlined,
-								color="#E0E0E0",
-								:placeholder="placeholder",
-								@click.native="resetErrorMessage",
-								v-model="dados.conselho",
-								:error-messages="errorMessage(dados.conselho)",
-								required,
-								dense
+							TextField(
+								labelOption = "Conselho de classe: *",
+								id = "QA-input-conselho-classe",
+								@changeModel="dados.conselhoDeClasse = $event",
+								placeholder="Digite aqui",
+								:errorMessages="errorMessage"
 							)
 						v-col.pb-0(cols="12", md="3")
-							v-label Registro: *
-							v-text-field#QA-input-registro(
-								outlined,
-								color="#E0E0E0",
-								:placeholder="placeholder",
-								@click.native="resetErrorMessage",
-								v-model="dados.registro",
-								:error-messages="errorMessage(dados.registro)",
-								required,
-								dense
+							TextField(
+								labelOption = "Registro: *",
+								id = "QA-input-registro",
+								@changeModel="dados.registro = $event",
+								placeholder="Digite aqui",
+								:errorMessages="errorMessage"
 							)
 					v-row
 						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
-								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(v-model="dados.responsabilidade", :errorMessages="errorMessage(dados.responsabilidade)")
-									v-radio(label='Consultor pessoa física' value='CONSULTOR PESSOA FÍSICA' @click="resetErrorMessage")
-									v-radio(label='Empresa consultora' value='EMPRESA CONSULTORA' @click="resetErrorMessage")
-									v-radio(label='Funcionário' value='FUNCIONÁRIO' @click="resetErrorMessage")
+								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
+									v-model="dados.nivelResponsabilidadeTecnica",
+									row
+								)
+									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
+									v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
+									v-radio(label='Funcionário' value='FUNCIONARIO')
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="dados.vinculoGea", :errorMessages="errorMessage(dados.vinculoGea)")
-									v-radio(label='Sim' value='Sim' @click="resetErrorMessage")
-									v-radio(label='Não' value='Não' @click="resetErrorMessage")
+								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", row)
+									v-radio(label='Sim' value='true')
+									v-radio(label='Não' value='false')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio" :errorMessages="errorMessage(dados.vinculoEmpregaticio)")
-									v-radio(label='Efetivo' value='EFETIVO' @click="resetErrorMessage" @change="permiteOutroVinculo(false)")
-									v-radio(label='Contrato' value='CONTRATO' @click="resetErrorMessage" @change="permiteOutroVinculo(false)")
-									v-radio(label='Cargo comissionado' value='CARGO COMISSIONADO' @click="resetErrorMessage" @change="permiteOutroVinculo(false)")
-									v-radio(label='Outro' value=' ' @click="resetErrorMessage" @change="permiteOutroVinculo(true)")
+								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", row)
+									v-radio(label='Efetivo' value='EFETIVO')
+									v-radio(label='Contrato' value='CONTRATO')
+									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
+									v-radio(label='Outro' value='OUTRO')
 
 								v-text-field#QA-input-outro-vinculo(
 									v-model="dados.outroVinculoEmpregaticio",
@@ -249,13 +240,13 @@
 					:downloadAnexo="downloadAnexo"
 				)
 
-		div.px-5
+		div.px-6
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
-			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
-					v-icon mdi-arrow-left
-					span Voltar
+			v-btn#QA-btn-cancelar-cadastro.float-left(@click='cancelar', large, outlined)
+					v-icon mdi-close
+					span Cancelar
 
 
 </template>
@@ -298,10 +289,10 @@ export default {
 			especializacoes: [],
 			dados: {
 				formacao: null,
-				conselho: null,
+				conselhoDeClasse: null,
 				registro: null,
-				responsabilidade: null,
-				vinculoGea: null,
+				nivelResponsabilidadeTecnica: null,
+				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
 				especializacao: null
@@ -506,7 +497,7 @@ export default {
 
 		},
 
-		voltar() {
+		cancelar() {
 			this.$router.push('/user');
 		},
 
@@ -557,10 +548,16 @@ export default {
 		display: none;
 	}
 
-	#QA-btn-voltar-cadastro {
+	#QA-btn-cancelar-cadastro {
 		color: #2196F3;
 		background-color: white;
 		width: 145px;
+	}
+
+	.v-radio {
+		.v-label {
+			font-weight: 400;
+		}
 	}
 
 }
