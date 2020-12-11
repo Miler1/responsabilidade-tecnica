@@ -207,9 +207,9 @@
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
-			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
-					v-icon mdi-arrow-left
-					span Voltar
+			v-btn#QA-btn-cancelar-cadastro.float-left(@click='cancelar', large, outlined)
+					v-icon mdi-close
+					span Cancelar
 
 </template>
 
@@ -353,7 +353,7 @@ export default {
 
 		},
 
-		voltar() {
+		cancelar() {
 			this.$router.push('/user');
 		},
 
@@ -404,7 +404,7 @@ export default {
 		display: none;
 	}
 
-	#QA-btn-voltar-cadastro {
+	#QA-btn-cancelar-cadastro {
 		color: #2196F3;
         background-color: white;
         width: 145px;
