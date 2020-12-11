@@ -1,8 +1,8 @@
 const png = require('@/assets/img/loading.gif');
 const image = document.createElement('img');
 image.setAttribute('src', png);
-image.setAttribute('height', '80');
-image.setAttribute('width', '80');
+image.setAttribute('height', '100');
+image.setAttribute('width', '100');
 image.style.cssText = 'z-index: 9999';
 
 const container = document.createElement('div');
