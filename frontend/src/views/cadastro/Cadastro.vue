@@ -280,20 +280,20 @@ export default {
 			this.$fire({
 
 				title:
-					'<p class="title-modal-confirm">Cadastro de responsabilidade técnica </p>',
+					'<p class="title-modal-confirm">Confirmar cadastro</p>',
 
 				html:
-					`<p class="message-modal-confirm">Ao salvar o cadastro, ele ficará disponível no sistema.</p>
+					`<p class="message-modal-confirm">Ao confirmar o cadastro, todas as informações serão enviadas para análise.</p>
 					<p class="message-modal-confirm">
-						<b>Tem certeza que deseja salvar as informações do cadastro?</b>
+						<b>Tem certeza que deseja confirmar o cadastro?</b>
 					</p>`,
 				showCancelButton: true,
-				confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+				confirmButtonColor: item.ativo ? '#E6A23C' : '#2196F3',
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
-				confirmButtonText: '<i class="fa fa-check-circle"></i> Confirmar',
-				cancelButtonText: '<i class="fa fa-close"></i> Cancelar',
+				confirmButtonText: '<i class="mdi mdi-check"></i> Confirmar',
+				cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
 				reverseButtons: true
 
 			}).then((result) => {
@@ -393,8 +393,8 @@ export default {
 
 	#QA-btn-voltar-cadastro {
 		color: #2196F3;
-        background-color: #E0E0E0;
-        width: 121px;
+        background-color: white;
+        width: 145px;
 	}
 
 }
