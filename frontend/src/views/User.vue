@@ -16,6 +16,7 @@
 			)
 
 			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large)
+				v-icon mdi-plus
 				span Cadastrar
 
 </template>
@@ -93,7 +94,7 @@ export default {
 @import "../assets/css/variaveis.less";
 
 	#QA-btn-cadastro {
-	    padding: 8px 30px;
+	    //padding: 8px 30px;
 	    margin: 40px 28px;
 	    font-size: 16px;
 	    background: @blue-primary;

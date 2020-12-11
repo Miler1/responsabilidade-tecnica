@@ -122,7 +122,7 @@ export default {
 			type: [Array]
 		},
 		dadosListagem: {
-			type: [Object]
+			type: [Array]
 		},
 		updatePagination: {
 			type: [Function]

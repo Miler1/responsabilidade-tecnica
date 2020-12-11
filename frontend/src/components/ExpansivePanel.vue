@@ -42,9 +42,13 @@ export default {
 	cursor: default;
 	font-size: 24px !important;
 	height: 80px;
-	padding: 0 20px;
-	font-weight: bold;
-	border-radius: 5px;
+	// color:  #333;
+	// cursor: pointer;
+	// font-size: 20px !important;
+	// // height: 40px;
+	// padding: 0 20px;
+	// font-weight: bold;
+	// border-radius: 5px;
 }
 
 </style>

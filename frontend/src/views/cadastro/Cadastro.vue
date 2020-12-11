@@ -224,6 +224,8 @@
 				GridListagemInclusao(
 					:headers="headerListagem",
 					:dadosListagem="files",
+					:hideFooter="true",
+					:labelNoData="labelNoData"
 				)
 
 				//- v-file-input(
@@ -258,7 +260,7 @@
 						span Adicionar anexo
 
 		div.px-5
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
 			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
@@ -292,10 +294,12 @@ export default {
 			placeholder: "Digite aqui...",
 			labelNoData: 'Não há nenhum anexo a ser exibido',
 			placeholderSelect: "Selecione",
+			labelNoData: "Nenhum anexo adicionado",
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
 			currentFile: [],
+			isSelecting: false,
 			files: [],
 			file: null,
 			pessoa: {},
@@ -320,20 +324,17 @@ export default {
 
 		},
 
-		selectFile(){
-			let fileInputElement = this.$refs.file;
-			console.log(fileInputElement);
-			// fileInputElement.click();
-			this.file = this.$refs.file;
+		onButtonClick() {
+			this.isSelecting = true;
+			window.addEventListener('focus', () => {
+				this.isSelecting = false;
+			}, { once: true });
+
+			this.$refs.uploader.click();
 		},
 
-		uploadFile() {
-			console.log(this.currentFile);
-			this.files = [...this.currentFile, ...this.files];
-		},
-
-		errorMessage(value) {
-			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
+		uploadFile(e) {
+			this.files = this.files.concat([...e.target.files]);
 		},
 
 		checkForm() {
@@ -382,6 +383,10 @@ export default {
 			this.errorMessageEmpty = true;
 		},
 
+		errorMessage(value) {
+			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
+		},
+
 		permiteOutroVinculo(isChecked) {
 
 			if (!isChecked) {
@@ -399,6 +404,10 @@ export default {
 			console.log(this.dados.vinculoEmpregaticio);
 			console.log(this.dados);
 
+		},
+
+		handleError(erro) {
+			console.log(erro);
 		},
 
 		salvar() {
@@ -515,43 +524,14 @@ export default {
 		padding: 10px 0;
 	}
 
-	.v-btn {
-		color: white;
-		background-color: #2196F3;
-	}
-
 	.v-data-footer {
 		display: none;
 	}
 
 	#QA-btn-voltar-cadastro {
 		color: #2196F3;
-		background-color: #E0E0E0;
-		width: 121px;
-	}
-
-	#QA-btn-adicionar-anexo {
-		border-radius: 30px;
-	}
-
-	.input-file {
-		&__input {
-			visibility: hidden;
-		}
-
-		&__button{
-			background-color: red;
-			width: 200px;
-			padding: 10px;
-			border-radius: 4px;
-			text-align: center;
-			cursor: pointer;
-
-			&:hover{
-				background-color: #000;
-				color: #fff;
-			}
-		}
+        background-color: white;
+        width: 145px;
 	}
 
 }

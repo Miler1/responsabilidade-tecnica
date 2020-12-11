@@ -10,9 +10,10 @@ const routes = [
 	{
 		path: '/',
 
-		beforeEnter: (to, from, next) => {
-			BuscaUsuarioLogado(next, true);
+		beforeEnter: async (to, from, next) => {
+			ValidarRotaDefault(next);
 		}
+
 	},
 	{
 		path: '/user',
@@ -24,7 +25,7 @@ const routes = [
 		component: () => import('../views/User.vue'),
 
 		beforeEnter: (to, from, next) => {
-			BuscaUsuarioLogado(next);
+			ValidarRota(next, 'USUARIO');
 		},
 
 		// children: [
@@ -56,8 +57,16 @@ const routes = [
 		component: () => import('../views/Admin.vue'),
 
 		beforeEnter: (to, from, next) => {
-			BuscaUsuarioLogado(next);
+			ValidarRota(next, 'ADMINISTRADOR');
 		}
+	},
+	{
+		path:'*',
+
+		beforeEnter: (to, from, next) => {
+			ValidarRotaDefault(next);
+		}
+
 	}
 ];
 
@@ -80,29 +89,58 @@ router.beforeEach((to, from, next) => {
 
 });
 
-function BuscaUsuarioLogado(next, login) {
+async function ValidarRotaDefault(next) {
 
-	Index.dispatch(GET_USUARIO)
+	let usuario = await BuscarUsuarioLogado();
+
+	if (usuario) {
+		next(usuario.role.perfilSelecionado.url);
+	} else {
+		window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
+	}
+
+}
+
+async function BuscarUsuarioLogado() {
+
+	let usuarioLogado;
+
+	await Index.dispatch(GET_USUARIO)
 		.then((usuario) => {
 
 			if (usuario && usuario.authenticated) {
-				console.log(usuario && usuario.authenticated, login);
-				console.log(next());
-				if(login){
-					next(usuario.role.url);
-				} else {
-					next();
-				}
-
-			} else {
-				window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
+				usuarioLogado = usuario;
 			}
 
 		})
-		.catch(erro => {
-			next(false);
+		.catch(error => {
+			console.error(error);
 		});
 
+	return usuarioLogado;
+
 }
+
+async function ValidarRota(next, perfil) {
+
+	let usuario = await BuscarUsuarioLogado(next);
+
+	if (ValidarPerfil(usuario, perfil)) {
+		next();
+	} else {
+		next(usuario.role.perfilSelecionado.url);
+	}
+
+}
+
+function ValidarPerfil(usuario, perfil) {
+
+	if (!usuario) {
+		window.location.href = process.env.VUE_APP_URL_PORTAL_SEGURANCA;
+	}
+
+	return usuario.role.perfilSelecionado === usuario.role.perfis[perfil];
+
+};
 
 export default router;

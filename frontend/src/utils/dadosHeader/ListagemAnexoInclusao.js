@@ -1,6 +1,6 @@
 const HEADER = [
-	{ text: 'Arquivos', value: 'nome'},
-	{ text: 'Ações', value: 'actions', sortable: false, width: '200px'},
+	{ text: 'Nome', value: 'name'},
+	{ text: 'Ações', value: 'actions', align: 'right', sortable: false, width: '200px'},
 ];
 
 export {
