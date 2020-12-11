@@ -34,7 +34,7 @@
 							v-label Número do RG: &nbsp;
 							| {{pessoa.rg != undefined ? pessoa.rg.numero : "-"}}
 						v-col(cols="12")
-							v-label Orgão expedidor: &nbsp;
+							v-label Órgão expedidor: &nbsp;
 							| {{pessoa.rg != undefined ? pessoa.rg.orgaoExpedidor : '-'}}
 						v-col(cols="12")
 							v-label Título eleitoral: &nbsp;
