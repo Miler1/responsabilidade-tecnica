@@ -1,6 +1,6 @@
 <template lang="pug">
 
-	v-container.pa-12.align-center.justify-center
+	v-container.py-12.align-center.justify-center
 
 		h1.mb-12 Central do responsável técnico ambiental
 
@@ -17,9 +17,9 @@
 
 			)
 
-			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large)
-				v-icon mdi-plus
-				span Cadastrar
+		v-btn#QA-btn-cadastro.float-right.mt-6(@click='abrirTelaCadastro', large)
+			v-icon mdi-plus
+			span Cadastrar
 
 </template>
 
@@ -97,7 +97,6 @@ export default {
 
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
-		margin: 40px 28px;
 		font-size: 16px;
 		background: @blue-primary;
 		color: white;
