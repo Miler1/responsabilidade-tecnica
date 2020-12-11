@@ -2,15 +2,16 @@
 
 #grid-listagem
 	v-row
-		//- v-col(cols='12' md='6')
-		//- 	v-text-field#QA-input-pesquisar(
-		//- 		v-model="parametrosFiltro.stringPesquisa"
-		//- 		:placeholder="placeholderPesquisa",
-		//- 		prepend-inner-icon="mdi-magnify",
-		//- 		color="#E0E0E0",
-		//- 		dense,
-		//- 		@input='inputPesquisa'
-		//- 	)
+		v-col(v-if="perfilUsuario !== 'Usuario'", cols='12' md='6')
+			v-text-field#QA-input-pesquisar(
+				v-model="parametrosFiltro.stringPesquisa"
+				:placeholder="placeholderPesquisa",
+				prepend-inner-icon="mdi-magnify",
+				color="#E0E0E0",
+				outlined,
+				dense,
+				@input='inputPesquisa'
+			)
 		//- v-col(cols='12' md='12')
 		//- 	v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
 		//- 			@click="abrirTelaCadastro",
@@ -150,6 +151,8 @@ export default {
 		},
 		excluirRascunho: {
 			type: [Function]
+		}, perfilUsuario: {
+			type: [String]
 		}
 
 	},
@@ -294,25 +297,6 @@ tbody tr:nth-of-type(odd) {
 
 .font-cadastrar{
 	font-size:16px;
-}
-
-#QA-input-pesquisar {
-	display: block;
-	width: 100%;
-	height: 34px;
-	padding: 6px 12px;
-	font-size: 14px;
-	line-height: 1.42857143;
-	color: #555555;
-	background-color: #fff;
-	background-image: none;
-	border: 1px solid #ccc;
-	border-radius: 2px;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
 .v-text-field {
