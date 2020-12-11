@@ -160,6 +160,7 @@
 							div
 								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
 									v-model="dados.nivelResponsabilidadeTecnica",
+									:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
 									row
 								)
 									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
@@ -168,14 +169,14 @@
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", row)
+								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)", row)
 									v-radio(label='Sim' value='true')
 									v-radio(label='Não' value='false')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", row)
+								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
@@ -236,7 +237,9 @@
 						:headers="headerListagem",
 						:dadosListagem="files",
 						:hideFooter="false",
-						:labelNoData="labelNoData"
+						:labelNoData="labelNoData",
+						:removerAnexo="removerAnexo",
+						:downloadAnexo="downloadAnexo"
 					)
 
 		div.d-flex.flex-row.justify-space-between.px-7
@@ -305,8 +308,15 @@ export default {
 			let deletedFile = this.files.splice(pos, 1);
 		},
 
-		downloadAnexo() {
-			console.log(window.location);
+		// downloadMedia(media) {
+		// 	let uriContent = "data:application/octet-stream," + encodeURIComponent(media);
+		// 	window.open(uriContent, 'neuesDokument');
+		// },
+
+		downloadAnexo(item) {
+			console.log(item);
+			// this.downloadMedia(item);
+			// console.log(window.location);
 			this.$http({
 				method: 'get',
 				url: this.url,
@@ -316,6 +326,7 @@ export default {
 					this.forceFileDownload(response);
 				})
 				.catch(() => console.log('error occured'));
+
 		},
 
 		forceFileDownload(response){
@@ -344,10 +355,10 @@ export default {
 		checkForm() {
 
 			return this.dados.formacao !== null
-				&& this.dados.conselho !== null
+				&& this.dados.conselhoDeClasse !== null
 				&& this.dados.registro !== null
-				&& this.dados.responsabilidade !== null
-				&& this.dados.vinculoGea !== null
+				&& this.dados.nivelResponsabilidadeTecnica !== null
+				&& this.dados.possuiVinculoComGea !== null
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
 				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
 				&& this.dados.vinculoEmpregaticio != " "
@@ -358,10 +369,10 @@ export default {
 		clear() {
 
 			this.dados.formacao = null;
-			this.dados.conselho = null;
+			this.dados.conselhoDeClasse = null;
 			this.dados.registro = null;
-			this.dados.responsabilidade = null;
-			this.dados.vinculoGea = null;
+			this.dados.nivelResponsabilidadeTecnica = null;
+			this.dados.possuiVinculoComGea = null;
 			this.dados.vinculoEmpregaticio = null;
 			this.dados.outroVinculoEmpregaticio = null;
 			this.dados.especializacao = null;
@@ -481,7 +492,7 @@ export default {
 
 		},
 
-		cancelar() {
+		voltar() {
 			this.$router.push('/user');
 		},
 

@@ -31,7 +31,7 @@
 			template(v-slot:item.actions='{ item }')
 				v-tooltip(bottom, v-if="exibirIconeEditar")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='removerAnexo(item.name)', v-on='on', color='#9EBAA4')
+						v-icon.mr-2(small @click='removerAnexo(item)', v-on='on', color='#9EBAA4')
 							| mdi-close-circle
 					span Remover anexo {{tituloTooltip}}
 				v-tooltip(bottom, v-if="exibirIconeRemover")
