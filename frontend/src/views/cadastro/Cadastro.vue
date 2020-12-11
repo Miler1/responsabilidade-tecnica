@@ -221,43 +221,31 @@
 								)
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
-				GridListagemInclusao(
+				div.mt-6
+				v-btn#QA-btn-adicionar-anexo.float-right(
+					color="#2196F3",
+					class="text-none",
+					depressed,
+					outlined,
+					:loading="isSelecting",
+					@click="onButtonClick"
+				)
+					v-icon mdi-plus-circle-outline
+					span Adicionar anexo
+				input(
+					ref="uploader",
+					class="d-none",
+					type="file",
+					multiple,
+					@change="uploadFile"
+				)
+
+				GridListagemInclusao.mt-12.mb-4(
 					:headers="headerListagem",
 					:dadosListagem="files",
 					:hideFooter="true",
 					:labelNoData="labelNoData"
 				)
-
-				//- v-file-input(
-				//- 	v-model="currentFile",
-				//-     outlined,
-				//-     dense,
-				//-     multiple,
-				//-     hide-input,
-				//-     counter,
-				//-     chips,
-				//-     prepend-icon="mdi-camera"
-				//-     @change="uploadFile()"
-				//- )
-
-				v-file-input#QA-input-file(input-file__input
-					v-model="file",
-					ref='file',
-					type='file',
-					color="#E0E0E0",
-					outlined,
-					dense,
-					@click="selectFile()"
-				)
-
-				//- div.input-file
-				//- 	input.input-file__input(ref='file' type='file')
-				//- 	    div.input-file__button(@click='selectFile()') click to select a file
-
-				div.mt-6(style="height: 50px;")
-					v-btn#QA-btn-adicionar-anexo.float-left(@click="incluirDados", large, v-if="isInclusao")
-						v-icon mdi-plus-circle-outline
-						span Adicionar anexo
 
 		div.px-5
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
@@ -530,8 +518,8 @@ export default {
 
 	#QA-btn-voltar-cadastro {
 		color: #2196F3;
-        background-color: white;
-        width: 145px;
+		background-color: white;
+		width: 145px;
 	}
 
 }
