@@ -5,7 +5,7 @@
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
 		div.mb-6
-			ExpansivePanel(titulo = 'Dados Pessoais')
+			ExpansivePanel(titulo = 'Dados pessoais')
 				v-row(v-if="pessoa != undefined")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -24,7 +24,7 @@
 							v-label Nome da mãe: &nbsp;
 							| {{pessoa.nomeMae}}
 						v-col(cols="12")
-							v-label Estado Civil: &nbsp;
+							v-label Estado civil: &nbsp;
 							| {{pessoa.estadoCivil != undefined ? pessoa.estadoCivil.descricao : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -34,10 +34,10 @@
 							v-label Número do RG: &nbsp;
 							| {{pessoa.rg != undefined ? pessoa.rg.numero : "-"}}
 						v-col(cols="12")
-							v-label Orgão Expedidor: &nbsp;
+							v-label Orgão expedidor: &nbsp;
 							| {{pessoa.rg != undefined ? pessoa.rg.orgaoExpedidor : '-'}}
 						v-col(cols="12")
-							v-label Título Eleitoral: &nbsp;
+							v-label Título eleitoral: &nbsp;
 							| {{pessoa.tituloEleitoral != undefined ? pessoa.tituloEleitoral : '-'}}
 						v-col(cols="12")
 							v-label Zona eleitoral: &nbsp;
@@ -46,7 +46,7 @@
 							v-label Seção eleitoral: &nbsp;
 							| -
 		div.mb-6
-			ExpansivePanel(titulo = 'Contato')
+			ExpansivePanel(titulo = 'Contatos')
 				v-row(v-if="pessoa.contatos != undefined")
 					v-col(cols="12", md="4")
 						v-col(cols="12")
