@@ -330,20 +330,6 @@ export default {
 			link.click();
 		},
 
-		downloadWithVueResource() {
-
-			this.$http({
-				method: 'get',
-				url: this.url,
-				responseType: 'arraybuffer'
-			})
-				.then(response => {
-					this.forceFileDownload(response);
-				})
-				.catch(() => console.log('error occured'));
-
-		},
-
 		onButtonClick() {
 			this.isSelecting = true;
 			window.addEventListener('focus', () => {
