@@ -244,7 +244,9 @@
 					:headers="headerListagem",
 					:dadosListagem="files",
 					:hideFooter="true",
-					:labelNoData="labelNoData"
+					:labelNoData="labelNoData",
+					:removerAnexo="removerAnexo",
+					:downloadAnexo="downloadAnexo"
 				)
 
 		div.px-5
@@ -290,6 +292,7 @@ export default {
 			isSelecting: false,
 			files: [],
 			file: null,
+			url: window.location,
 			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
@@ -308,7 +311,45 @@ export default {
 
 	methods: {
 
-		incluirDados() {
+		removerAnexo(item) {
+			let pos = this.files.map(function(e) { return e.name; }).indexOf(item);
+			let deletedFile = this.files.splice(pos, 1);
+		},
+
+		downloadAnexo() {
+			console.log(window.location);
+			this.$http({
+				method: 'get',
+				url: this.url,
+				responseType: 'arraybuffer'
+			})
+				.then(response => {
+					this.forceFileDownload(response);
+				})
+				.catch(() => console.log('error occured'));
+		},
+
+		forceFileDownload(response){
+			console.log(response);
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', 'file.png'); //or any other extension
+			document.body.appendChild(link);
+			link.click();
+		},
+
+		downloadWithVueResource() {
+
+			this.$http({
+				method: 'get',
+				url: this.url,
+				responseType: 'arraybuffer'
+			})
+				.then(response => {
+					this.forceFileDownload(response);
+				})
+				.catch(() => console.log('error occured'));
 
 		},
 
