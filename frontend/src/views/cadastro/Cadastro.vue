@@ -392,9 +392,9 @@ export default {
 	}
 
 	#QA-btn-voltar-cadastro {
-		color: #2196F3;
-        background-color: #E0E0E0;
-        width: 121px;
+		color: @blue-primary;
+        background-color: white;
+        width: 145px;
 	}
 
 }
