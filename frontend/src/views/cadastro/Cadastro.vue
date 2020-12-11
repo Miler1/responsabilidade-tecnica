@@ -504,7 +504,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 
 #container-cadastro {
 
@@ -534,6 +534,11 @@ export default {
         width: 145px;
 	}
 
+}
+
+.theme--light.v-list-item .v-list-item__mask{
+	color:white;
+	background: #65afef;
 }
 
 </style>
