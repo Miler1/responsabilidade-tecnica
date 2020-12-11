@@ -12,7 +12,8 @@
 				:updatePagination="updatePagination",
 				:editarItem="editarItem",
 				:ativarDesativarItem="ativarDesativarItem",
-				:parametrosFiltro="parametrosFiltro"
+				:parametrosFiltro="parametrosFiltro",
+				:perfilUsuario="perfilUsuario"
 			)
 
 </template>
@@ -63,7 +64,8 @@ export default {
 			updatePagination: () => {},
 			editarItem: () => console.log("EDITAR"),
 			ativarDesativarItem: () => console.log("ATIVAR/DESATIVAR"),
-			parametrosFiltro: {}
+			parametrosFiltro: {},
+			perfilUsuario: 'Administrador'
 		};
 	},
 
