@@ -104,9 +104,10 @@
 				v-form.px-2(ref="cadastro")
 					v-row
 						v-col.pb-0(cols="12", md="6")
-								TextField(
+							TextField(
 								labelOption = "Formação: *",
 								id = "QA-input-formacao",
+								@changeModel="informacoes.formacao = $event",
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage"
 							)
@@ -114,6 +115,7 @@
 							TextField(
 								labelOption = "Conselho de classe: *",
 								id = "QA-input-conselho-classe",
+								@changeModel="informacoes.conselhoDeClasse = $event",
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage"
 							)
@@ -121,6 +123,7 @@
 							TextField(
 								labelOption = "Registro: *",
 								id = "QA-input-registro",
+								@changeModel="informacoes.registro = $event",
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage"
 							)
@@ -128,30 +131,34 @@
 						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
-								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(v-model='row' row='')
-									v-radio(label='Consultor pessoa física' value='radio-1')
-									v-radio(label='Empresa consultora' value='radio-2')
-									v-radio(label='Funcionário' value='radio-3')
+								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
+									v-model="informacoes.nivelResponsabilidadeTecnica",
+									row=''
+								)
+									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
+									v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
+									v-radio(label='Funcionário' value='FUNCIONARIO')
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model='row1' row1='')
-									v-radio(label='Sim' value='radio-1')
-									v-radio(label='Não' value='radio-2')
+								v-radio-group#QA-radio-vinculo-gea(v-model="informacoes.possuiVinculoComGea", row1='')
+									v-radio(label='Sim' value='true')
+									v-radio(label='Não' value='false')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model='row2' row2='')
-									v-radio(label='Efetivo' value='radio-1')
-									v-radio(label='Contrato' value='radio-2')
-									v-radio(label='Cargo comissionado' value='radio-3')
-									v-radio(label='Outro' value='radio-4')
+								v-radio-group#QA-radio-vinculo(v-model="informacoes.vinculoEmpregaticio", row2='')
+									v-radio(label='Efetivo' value='EFETIVO')
+									v-radio(label='Contrato' value='CONTRATO')
+									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
+									v-radio(label='Outro' value='OUTRO')
 
 								v-text-field#QA-input-outro-vinculo(
 									color="#E0E0E0",
 									:placeholder="placeholder",
 									required,
+									v-model="informacoes.outroVinculoEmpregaticio"
 									outlined,
 									dense
 								)
@@ -164,11 +171,11 @@
 									dense,
 									:placeholder="placeholderSelect"
 									item-color="grey darken-3",
-									v-model="dados.especializacao",
+									v-model="informacoes.especializacao",
 									:items="especializacoes",
 									:filter="filtroSelect",
 									item-text="textoExibicao",
-									:error-messages="errorMessage(dados.especializacao)",
+									:error-messages="errorMessage(informacoes.especializacao)",
 									no-data-text="Nenhuma área de especialização encontrada",
 									@click.native="resetErrorMessage",
 									required,
@@ -246,7 +253,14 @@ export default {
 			row: null,
 			pessoa: {},
 			especializacoes: [],
-			dados: {
+			informacoes: {
+				formacao: null,
+				conselhoDeClasse: null,
+				registro: null,
+				nivelResponsabilidadeTecnica: null,
+				possuiVinculoComGea: null,
+				vinculoEmpregaticio: null,
+				outroVinculoEmpregaticio: null,
 				especializacao: null
 			},
 			row1: null,
@@ -317,33 +331,34 @@ export default {
 			}).then((result) => {
 
 				if(result.value) {
-					item.ativo = !item.ativo;
-					AtividadeService.ativarDesativarAtividadeDispensavel(item.id)
-						.then(() => {
+					console.log(this.informacoes);
+					// item.ativo = !item.ativo;
+					// AtividadeService.ativarDesativarAtividadeDispensavel(item.id)
+					// 	.then(() => {
 
-							if (item.ativo) {
-								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
-							} else {
-								snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
-							}
+					// 		if (item.ativo) {
+					// 			snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
+					// 		} else {
+					// 			snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
+					// 		}
 
-							// this.updatePagination();
-							// this.resetaDadosFiltragem();
+					// 		// this.updatePagination();
+					// 		// this.resetaDadosFiltragem();
 
-						})
-						.catch(error => {
+					// 	})
+					// 	.catch(error => {
 
-							console.error(error);
+					// 		console.error(error);
 
-							if (item.ativo) {
-								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
-							} else {
-								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-							}
+					// 		if (item.ativo) {
+					// 			snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
+					// 		} else {
+					// 			snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+					// 		}
 
-							item.ativo = !item.ativo;
+					// 		item.ativo = !item.ativo;
 
-						});
+					// 	});
 
 				}
 
