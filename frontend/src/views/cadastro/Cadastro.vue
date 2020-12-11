@@ -5,7 +5,7 @@
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
 		div.mb-6
-			expansivePanel(titulo = 'Dados pessoais')
+			ExpansivePanel(titulo = 'Dados pessoais')
 				v-row
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -46,13 +46,13 @@
 							v-label Seção eleitoral: &nbsp;
 							| -
 		div.mb-6
-			expansivePanel(titulo = 'Contatos')
+			ExpansivePanel(titulo = 'Contatos')
 				v-row
-					v-col(cols="12", md="4")
+					v-col.pb-0(cols="12", md="4")
 						v-col(cols="12")
 							v-label E-mail principal: &nbsp;
 							| {{"miler@xxxxx"}}
-					v-col(cols="12", md="6")
+					v-col.pb-0(cols="12", md="6")
 						v-col(cols="12")
 							v-label E-mail secundário: &nbsp;
 							| xxxxxxxxxxx@xxxx
@@ -70,7 +70,7 @@
 							v-label Telefone comercial: &nbsp;
 							| 35-99812-7151
 		div.mb-6
-			expansivePanel(titulo = 'Endereço')
+			ExpansivePanel(titulo = 'Endereço')
 				v-row
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -100,7 +100,7 @@
 							| feetetetey
 
 		div.mb-6
-			expansivePanel(titulo = 'Informações técnicas')
+			ExpansivePanel(titulo = 'Informações técnicas')
 				v-form.px-2(ref="cadastro")
 					v-row
 						v-col.pb-0(cols="12", md="6")
@@ -133,7 +133,7 @@
 							div
 								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
 									v-model="informacoes.nivelResponsabilidadeTecnica",
-									row=''
+									row
 								)
 									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
 									v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
@@ -141,14 +141,14 @@
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="informacoes.possuiVinculoComGea", row1='')
+								v-radio-group#QA-radio-vinculo-gea(v-model="informacoes.possuiVinculoComGea", row)
 									v-radio(label='Sim' value='true')
 									v-radio(label='Não' value='false')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model="informacoes.vinculoEmpregaticio", row2='')
+								v-radio-group#QA-radio-vinculo(v-model="informacoes.vinculoEmpregaticio", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
@@ -182,8 +182,8 @@
 									return-object=true
 								)
 		div.mb-6
-			expansivePanel(titulo = 'Anexos')
-				
+			ExpansivePanel(titulo = 'Anexos')
+
 				div.mt-6
 				v-btn#QA-btn-adicionar-anexo.float-right(
 					color="#2196F3",
@@ -210,13 +210,13 @@
 					:labelNoData="labelNoData"
 				)
 
-		div.px-5
+		div.px-6
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica.float-right(@click='salvar', large, color="#2196F3", dark)
 					v-icon mdi-plus
 					span Cadastrar
-			v-btn#QA-btn-voltar-cadastro.float-left(@click='voltar', large, outlined)
-					v-icon mdi-arrow-left
-					span Voltar
+			v-btn#QA-btn-cancelar-cadastro.float-left(@click='cancelar', large, outlined)
+					v-icon mdi-close
+					span Cancelar
 
 </template>
 
@@ -224,7 +224,7 @@
 
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
-import expansivePanel from '@/components/expansivePanel';
+import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
@@ -233,7 +233,7 @@ export default {
 	name: 'Cadastro',
 
 	components: {
-		expansivePanel,
+		ExpansivePanel,
 		GridListagemInclusao,
 		TextField
 	},
@@ -368,7 +368,7 @@ export default {
 
 		},
 
-		voltar() {
+		cancelar() {
 			this.$router.push('/user');
 		},
 
@@ -383,7 +383,7 @@ export default {
 			.catch(erro => {
 				this.handleError(erro);
 			});
-		
+
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
 				this.especializacoes = result.data;
@@ -419,10 +419,16 @@ export default {
 		display: none;
 	}
 
-	#QA-btn-voltar-cadastro {
+	#QA-btn-cancelar-cadastro {
 		color: #2196F3;
         background-color: white;
         width: 145px;
+	}
+
+	.v-radio {
+		.v-label {
+			font-weight: 400;
+		}
 	}
 
 }
