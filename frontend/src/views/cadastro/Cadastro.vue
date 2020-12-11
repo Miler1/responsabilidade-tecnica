@@ -9,7 +9,7 @@
 				v-row(v-if="pessoa != undefined")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Nome completo: &nbsp;
+							v-label Nome completo:  &nbsp;
 							| {{pessoa.nome}}
 						v-col(cols="12")
 							v-label CPF: &nbsp;

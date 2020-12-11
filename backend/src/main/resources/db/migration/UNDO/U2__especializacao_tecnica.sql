@@ -1,0 +1,1 @@
+DROP TABLE cadastro_unificado.especializacao_tecnica;
