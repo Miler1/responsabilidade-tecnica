@@ -364,8 +364,6 @@ export default {
 
 <style lang="less" scoped>
 
-@import "../assets/css/variaveis.less";
-
 #container-cadastro {
 
 	.v-label {
