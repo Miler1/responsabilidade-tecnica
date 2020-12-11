@@ -104,11 +104,11 @@
 				v-form.px-2(ref="cadastro")
 					v-row
 						v-col.pb-0(cols="12", md="6")
-							v-label Formação: *
-							v-select#QA-select-input-formacao(
-								outlined,
-								no-data-text="Nenhuma formação encontrada",
-								dense
+								TextField(
+								labelOption = "Formação: *",
+								id = "QA-input-formacao",
+								placeholder="Digite aqui",
+								:errorMessages="errorMessage"
 							)
 						v-col.pb-0(cols="12", md="3")
 							TextField(
@@ -178,11 +178,10 @@
 			expansivePanel(titulo = 'Anexos')
 				v-file-input(
 					v-model="currentFile",
+					hide-input
 				    outlined,
 				    dense,
-				    multiple,
-				    counter,
-				    chips,
+				    multiple
 				    @change="uploadFile()"
 				)
 				div.mt-6(style="height: 50px;")
@@ -252,7 +251,8 @@ export default {
 
 		uploadFile() {
 			console.log(this.currentFile);
-			this.files = [...this.currentFile];
+			this.files = this.files.concat([...this.currentFile]);
+			console.log(this.files);
 		},
 
 		errorMessage() {
