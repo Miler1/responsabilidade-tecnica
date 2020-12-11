@@ -12,7 +12,9 @@
 				:headers="headerListagem",
 				:dadosListagem="dadosListagem",
 				:updatePagination="updatePagination",
-				:parametrosFiltro="parametrosFiltro"
+				:parametrosFiltro="parametrosFiltro",
+				:perfilUsuario="perfilUsuario"
+
 			)
 
 			v-btn#QA-btn-cadastro.float-right(@click='abrirTelaCadastro', large)
@@ -68,7 +70,8 @@ export default {
 					}
 				]
 			},
-			parametrosFiltro: {}
+			parametrosFiltro: {},
+			perfilUsuario: 'Usuario'
 		};
 	},
 	methods: {
@@ -95,10 +98,10 @@ export default {
 
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
-	    margin: 40px 28px;
-	    font-size: 16px;
-	    background: @blue-primary;
-	    color: white;
+		margin: 40px 28px;
+		font-size: 16px;
+		background: @blue-primary;
+		color: white;
 	}
 
 </style>
