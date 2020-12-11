@@ -1,6 +1,6 @@
 <template lang="pug">
 
-	v-expansion-panels(multiple, v-model="panel")
+	v-expansion-panels(multiple, v-model="panel", readonly=true)
 		v-expansion-panel
 			v-expansion-panel-header.expansion-header
 				span {{titulo}}
@@ -14,7 +14,7 @@
 
 export default {
 
-	name: 'Panel',
+	name: 'ExpansivePanel',
 
 	data: () => {
 		return {
@@ -38,12 +38,12 @@ export default {
 }
 
 .expansion-header {
-	color:  #333;
+	color:  rgb(4, 82, 4);
 	cursor: default;
-	font-size: 20px !important;
-	// height: 40px;
+	font-size: 24px !important;
+	height: 80px;
 	padding: 0 20px;
-	// font-weight: bold;
+	font-weight: bold;
 	border-radius: 5px;
 }
 
