@@ -224,10 +224,12 @@
 
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
 	name: 'Cadastro',
@@ -331,34 +333,24 @@ export default {
 			}).then((result) => {
 
 				if(result.value) {
-					console.log(this.informacoes);
-					// item.ativo = !item.ativo;
-					// AtividadeService.ativarDesativarAtividadeDispensavel(item.id)
-					// 	.then(() => {
 
-					// 		if (item.ativo) {
-					// 			snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
-					// 		} else {
-					// 			snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
-					// 		}
+					this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
 
-					// 		// this.updatePagination();
-					// 		// this.resetaDadosFiltragem();
+					ResponsavelTecnicoService.salvarSolicitacao(this.informacoes)
+						.then(() => {
 
-					// 	})
-					// 	.catch(error => {
+							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-					// 		console.error(error);
+							this.$router.push({name: 'Usuario'});
 
-					// 		if (item.ativo) {
-					// 			snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
-					// 		} else {
-					// 			snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-					// 		}
+						})
+						.catch(error => {
 
-					// 		item.ativo = !item.ativo;
+							console.error(error);
 
-					// 	});
+							snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+						});
 
 				}
 
@@ -369,7 +361,7 @@ export default {
 		},
 
 		cancelar() {
-			this.$router.push('/user');
+			this.$router.push({name: 'Usuario'});
 		},
 
 	},
@@ -380,16 +372,16 @@ export default {
 			.then((result) => {
 				this.pessoa = result.data;
 			})
-			.catch(erro => {
-				this.handleError(erro);
+			.catch(error => {
+				console.log(error.message);
 			});
 
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
 				this.especializacoes = result.data;
 				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
-			}).catch(erro => {
-				this.handleError(erro);
+			}).catch(error => {
+				console.log(error.message);
 			});
 	}
 };
