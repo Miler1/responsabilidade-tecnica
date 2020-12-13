@@ -3,7 +3,9 @@ package com.gestaoresponsabilidadetecnica.configuracao.utils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateUtil {
 
@@ -15,6 +17,16 @@ public class DateUtil {
 		data = DateUtils.setMilliseconds(data, milisegundos);
 
 		return data;
+	}
+
+	public static Date acrescentarUmAno(Date date) {
+
+		Calendar c = new GregorianCalendar();
+		c.setTime(date);
+		c.add(Calendar.YEAR, 1);
+
+		return c.getTime();
+
 	}
 
 	public static String formataBrCompleto(Date data){

@@ -205,7 +205,7 @@
 
 				GridListagemInclusao.mt-12.mb-4(
 					:headers="headerListagem",
-					:dadosListagem="files",
+					:dadosListagem="informacoes.files",
 					:hideFooter="true",
 					:labelNoData="labelNoData"
 				)
@@ -225,6 +225,7 @@
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
+import snackbar from '@/services/snack.service';
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
@@ -251,7 +252,6 @@ export default {
 			isInclusao: true,
 			currentFile: [],
 			isSelecting: false,
-			files: [],
 			row: null,
 			pessoa: {},
 			especializacoes: [],
@@ -263,7 +263,8 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
+				files: [] 
 			},
 			row1: null,
 			row2: null,
@@ -286,7 +287,7 @@ export default {
 		},
 
 		uploadFile(e) {
-			this.files = this.files.concat([...e.target.files]);
+			this.informacoes.files = this.informacoes.files.concat([...e.target.files]);
 		},
 
 		errorMessage() {
@@ -307,6 +308,13 @@ export default {
 		},
 
 		resetErrorMessage() {
+
+		},
+
+		preparaPraSalvar() {
+
+			this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
+			delete this.informacoes.especializacao.textoExibicao;
 
 		},
 
@@ -334,7 +342,15 @@ export default {
 
 				if(result.value) {
 
-					this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
+					this.preparaPraSalvar();
+
+					this.informacoes.files.forEach(file => {
+
+						console.log(file);
+
+						ResponsavelTecnicoService.upload(file);
+
+					});
 
 					ResponsavelTecnicoService.salvarSolicitacao(this.informacoes)
 						.then(() => {
