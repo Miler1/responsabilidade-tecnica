@@ -13,7 +13,7 @@
 				:editarItem="editarItem",
 				:ativarDesativarItem="ativarDesativarItem",
 				:parametrosFiltro="parametrosFiltro",
-				:perfilUsuario="perfilUsuario"
+				:perfil="perfil"
 			)
 
 </template>
@@ -65,7 +65,7 @@ export default {
 			editarItem: () => console.log("EDITAR"),
 			ativarDesativarItem: () => console.log("ATIVAR/DESATIVAR"),
 			parametrosFiltro: {},
-			perfilUsuario: 'Administrador'
+			perfil: 'Administrador'
 		};
 	},
 
