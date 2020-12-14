@@ -28,38 +28,38 @@
 							span &nbsp;{{pessoa.estadoCivil ? pessoa.estadoCivil.descricao : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Naturalidade:&nbsp;
+							v-label Naturalidade:
 							span &nbsp;{{pessoa.naturalidade}}
 						v-col(cols="12")
-							v-label Número do RG:&nbsp;
-							span &nbsp;{{pessoa.rg ? pessoa.rg.numero : "-"}}
+							v-label Número do RG:
+							span &nbsp;{{pessoa.rg && pessoa.rg.numero  ? pessoa.rg.numero : "-"}}
 						v-col(cols="12")
-							v-label Orgão expedidor: &nbsp;
-							span &nbsp;{{pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
+							v-label Orgão expedidor:
+							span &nbsp;{{pessoa.rg && pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
 						v-col(cols="12")
-							v-label Título eleitoral:&nbsp;
+							v-label Título eleitoral:
 							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.numero : '-'}}
 						v-col(cols="12")
-							v-label Zona eleitoral:&nbsp;
-							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
+							v-label Zona eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
 						v-col(cols="12")
-							v-label Seção eleitoral:&nbsp;
-							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
+							v-label Seção eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
 		div.mb-6
 			ExpansivePanel(titulo = 'Contatos')
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label E-mail principal:&nbsp;
+							v-label E-mail principal:
 							span &nbsp;{{this.contatos.email1}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label E-mail secundário:&nbsp;
+							v-label E-mail secundário:
 							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Celular:&nbsp;
+							v-label Celular:
 							span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-" }}
 					v-col(cols="12", md="4")
 						v-col(cols="12")
@@ -74,29 +74,29 @@
 				v-row(v-if="pessoa.enderecos")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Zona de localização &nbsp;
+							v-label Zona de localização:
 							span &nbsp; {{pessoa.enderecos[0].zonaLocalizacao.descricao}}
 						v-col(cols="12")
-							v-label CEP:&nbsp;
+							v-label CEP:
 							span &nbsp; {{prepararCep(pessoa.enderecos[0].cep)}}
 						v-col(cols="12")
 							v-label Logradouro:
 							span &nbsp; &nbsp;{{pessoa.enderecos[0].logradouro}}
 						v-col(cols="12")
-							v-label Número:&nbsp;
+							v-label Número:
 							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].bairro : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Complemento:&nbsp;
+							v-label Complemento:
 							span &nbsp; {{pessoa.enderecos[0].complemento ? pessoa.enderecos[0].complemento : "-" }}
 						v-col(cols="12")
-							v-label Bairro:&nbsp;
+							v-label Bairro:
 							span &nbsp; {{pessoa.enderecos[0].bairro}}
 						v-col(cols="12")
-							v-label UF:&nbsp;
+							v-label UF:
 							span &nbsp; {{pessoa.enderecos[0].municipio.estado.sigla}}
 						v-col(cols="12")
-							v-label Município:&nbsp;
+							v-label Município:
 							span &nbsp; {{pessoa.enderecos[0].municipio.nome}}
 
 		div.mb-6
@@ -303,11 +303,7 @@ export default {
 	methods: {
 
 		prepararCpf() {
-
-			if (this.pessoa.cpf) {
-				return DataUtils.formatarCpf(this.pessoa.cpf);
-			}
-
+			return DataUtils.formatarCpf(this.pessoa.cpf);
 		},
 
 		prepararData(milisegundos) {
