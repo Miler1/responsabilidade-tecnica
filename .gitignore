@@ -40,8 +40,10 @@ backend/!**/src/main/**
 backend/!**/src/test/**
 backend/logs/**
 backend/src/main/resources/static/
+backend/arquios/
 
 # -- FRONTEND --
 frontend/node_modules
 frontend/build
 frontend/package-lock.json
+

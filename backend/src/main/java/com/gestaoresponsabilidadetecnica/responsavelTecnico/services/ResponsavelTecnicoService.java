@@ -26,12 +26,13 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
-    private static final String DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA = "sincronia";
+    private static final String DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA = "responsavel-tecnico";
 
     @Autowired
     EspecializacaoTecnicaRepository especializacaoTecnicaRepository;
@@ -90,7 +91,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        return responsavelTecnicoRespository.findByPessoa(pessoa);
+        List<ResponsavelTecnico> responsaveis = responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+
+        return responsaveis.get(responsaveis.size() - 1);
 
     }
 
@@ -115,7 +118,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         String pathSalvarArquivo = VariaveisAmbientes.pathSalvarArquivos() +
                 File.separator + DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA +
                 File.separator + LocalDate.now().format(FORMATO_DATA_MES_ANO) +
-                File.separator + UUID.randomUUID() + multipartFile.getContentType();
+                File.separator + UUID.randomUUID() + "." + multipartFile.getContentType().split("/")[1];
 
         return ArquivoUtils.salvaArquivoDiretorio(multipartFile, pathSalvarArquivo);
 

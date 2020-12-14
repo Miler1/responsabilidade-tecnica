@@ -14,7 +14,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
 @Table(schema = GlobalReferences.ESQUEMA, name = "documento_responsavel_tecnico")
 public class DocumentoResponsavelTecnico {
 

@@ -37,8 +37,6 @@ public class ResponsavelTecnicoController extends DefaultController {
                 .body(responsavelTecnico);
     }
 
-//    SALVAR_ARQUIVOS
-
     @PostMapping(value = "uploadFile")
     public ResponseStatus uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
 
