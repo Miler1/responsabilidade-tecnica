@@ -40,7 +40,7 @@ backend/!**/src/main/**
 backend/!**/src/test/**
 backend/logs/**
 backend/src/main/resources/static/
-backend/arquios/
+backend/arquivos/
 
 # -- FRONTEND --
 frontend/node_modules
