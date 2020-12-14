@@ -27,6 +27,4 @@ public class ResponsavelTecnicoDTO {
 
     private String vinculoEmpregaticio;
 
-    private List<File> files;
-
 }

@@ -205,7 +205,7 @@
 
 				GridListagemInclusao.mt-12.mb-4(
 					:headers="headerListagem",
-					:dadosListagem="informacoes.files",
+					:dadosListagem="files",
 					:hideFooter="true",
 					:labelNoData="labelNoData"
 				)
@@ -264,8 +264,8 @@ export default {
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
 				especializacao: null,
-				files: [] 
 			},
+			files: [], 
 			row1: null,
 			row2: null,
 		};
@@ -287,7 +287,7 @@ export default {
 		},
 
 		uploadFile(e) {
-			this.informacoes.files = this.informacoes.files.concat([...e.target.files]);
+			this.files = this.files.concat([...e.target.files]);
 		},
 
 		errorMessage() {
@@ -318,6 +318,28 @@ export default {
 
 		},
 
+		salvarArquivos() {
+			
+			this.files.forEach(file => {
+
+				console.log('TYPEOFFF', file);
+
+				let formData = new FormData();
+				formData.append('file', file);
+
+				ResponsavelTecnicoService.upload(formData)
+					.catch(error => {
+
+						console.error(error);
+
+						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					});
+
+			});
+
+		},
+
 		salvar(item) {
 			this.$fire({
 
@@ -342,18 +364,14 @@ export default {
 
 				if(result.value) {
 
-					this.preparaPraSalvar();
+					var that = this;
 
-					this.informacoes.files.forEach(file => {
+					that.preparaPraSalvar();
 
-						console.log(file);
-
-						ResponsavelTecnicoService.upload(file);
-
-					});
-
-					ResponsavelTecnicoService.salvarSolicitacao(this.informacoes)
+					ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
 						.then(() => {
+
+							this.salvarArquivos();
 
 							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
