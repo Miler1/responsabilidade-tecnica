@@ -240,9 +240,9 @@
 					)
 
 		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-voltar-cadastro(@click='voltar', large, outlined)
-				v-icon mdi-arrow-left
-				span Voltar
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined)
+				v-icon mdi-close
+				span Cancelar
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
 				v-icon mdi-plus
 				span Cadastrar
