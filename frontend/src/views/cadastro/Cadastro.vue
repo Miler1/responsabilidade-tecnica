@@ -84,7 +84,7 @@
 							span &nbsp; &nbsp;{{pessoa.enderecos[0].logradouro}}
 						v-col(cols="12")
 							v-label Número:&nbsp;
-							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].bairro : "-"}}
+							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].numero : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Complemento:&nbsp;
@@ -210,7 +210,7 @@
 						class="d-none",
 						type="file",
 						multiple,
-						:rules="rules",
+						:rules="rules.select",
 						@change="uploadFile"
 					)
 
@@ -283,9 +283,9 @@ export default {
 				outroVinculoEmpregaticio: null,
 				especializacao: null,
 			},
-			rules: [
-				files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
-			],
+			rules: {
+				select: [v => !!v || 'Item is required']
+			},
 			contatos: {},
 			files: []
 		};
@@ -363,12 +363,16 @@ export default {
 
 		},
 
+		checkSize() {
+			files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!';
+		},
+
 		uploadFile(e) {
-			// e.target.files.forEach(file => {
-			// 	if (file.type == 'image/jpeg') {
-			// 		console.log(file);
-			// 	}
-			// });
+			// this.checkSize(e);
+			// console.log(e.target.files);
+			// if (!e.target.files || !e.target.files.some(file => file.size > 2097152)) {
+			// 	console.log('Avatar size should be less than 2 MB!');
+			// }
 
 			this.files = this.files.concat([...e.target.files]);
 
@@ -438,8 +442,8 @@ export default {
 
 		preparaPraSalvar() {
 
-			this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
-			delete this.informacoes.especializacao.textoExibicao;
+			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea === 'true' ? true : false;
+			delete this.dados.especializacao.textoExibicao;
 
 		},
 
@@ -512,7 +516,7 @@ export default {
 						console.log(that);
 						that.preparaPraSalvar();
 
-						ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
+						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
 							.then(() => {
 
 								this.salvarArquivos();
