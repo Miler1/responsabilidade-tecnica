@@ -5,7 +5,7 @@
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
 		div.mb-6
-			ExpansivePanel(titulo = 'Dados Pessoais')
+			ExpansivePanel(titulo = 'Dados pessoais')
 				v-row(v-if="pessoa != undefined")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -24,7 +24,7 @@
 							v-label Nome da mãe:
 							span &nbsp;{{pessoa.nomeMae}}
 						v-col(cols="12")
-							v-label Estado Civil:
+							v-label Estado civil:
 							span &nbsp;{{pessoa.estadoCivil ? pessoa.estadoCivil.descricao : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -34,10 +34,10 @@
 							v-label Número do RG:&nbsp;
 							span &nbsp;{{pessoa.rg ? pessoa.rg.numero : "-"}}
 						v-col(cols="12")
-							v-label Orgão Expedidor: &nbsp;
+							v-label Orgão expedidor: &nbsp;
 							span &nbsp;{{pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
 						v-col(cols="12")
-							v-label Título Eleitoral:&nbsp;
+							v-label Título eleitoral:&nbsp;
 							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.numero : '-'}}
 						v-col(cols="12")
 							v-label Zona eleitoral:&nbsp;
@@ -46,7 +46,7 @@
 							v-label Seção eleitoral:&nbsp;
 							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
 		div.mb-6
-			ExpansivePanel(titulo = 'Contato')
+			ExpansivePanel(titulo = 'Contatos')
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
@@ -240,9 +240,9 @@
 					)
 
 		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-voltar-cadastro(@click='cancelar', large, outlined)
-				v-icon mdi-arrow-left
-				span Voltar
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined)
+				v-icon mdi-close
+				span Cancelar
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
 				v-icon mdi-plus
 				span Cadastrar
