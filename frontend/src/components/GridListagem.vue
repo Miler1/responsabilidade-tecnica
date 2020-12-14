@@ -2,7 +2,7 @@
 
 #grid-listagem
 	v-row
-		v-col(v-if="perfilUsuario !== 'Usuario'", cols='12' md='6')
+		v-col(v-if="perfil !== 'Usuario'", cols='12' md='6')
 			v-text-field#QA-input-pesquisar(
 				v-model="parametrosFiltro.stringPesquisa"
 				:placeholder="placeholderPesquisa",
@@ -151,7 +151,8 @@ export default {
 		},
 		excluirRascunho: {
 			type: [Function]
-		}, perfilUsuario: {
+		},
+		perfil: {
 			type: [String]
 		}
 

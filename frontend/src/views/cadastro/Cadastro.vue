@@ -9,95 +9,95 @@
 				v-row(v-if="pessoa != undefined")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Nome completo: &nbsp;
-							| {{pessoa.nome}}
+							v-label Nome completo:
+							span &nbsp;{{pessoa.nome}}
 						v-col(cols="12")
-							v-label CPF: &nbsp;
-							| {{pessoa.cpf}}
+							v-label CPF:
+							span &nbsp; {{prepararCpf()}}
 						v-col(cols="12")
-							v-label Data de nascimento: &nbsp;
-							| {{pessoa.dataNascimento}}
+							v-label Data de nascimento:
+							span &nbsp; {{prepararData(pessoa.dataNascimento)}}
 						v-col(cols="12")
-							v-label Sexo: &nbsp;
-							| {{ pessoa.sexo != undefined ? pessoa.sexo.descricao : "-"}}
+							v-label Sexo:
+							span &nbsp;{{ pessoa.sexo ? pessoa.sexo.descricao : "-"}}
 						v-col(cols="12")
-							v-label Nome da mãe: &nbsp;
-							| {{pessoa.nomeMae}}
+							v-label Nome da mãe:
+							span &nbsp;{{pessoa.nomeMae}}
 						v-col(cols="12")
-							v-label Estado Civil: &nbsp;
-							| {{pessoa.estadoCivil != undefined ? pessoa.estadoCivil.descricao : "-"}}
+							v-label Estado Civil:
+							span &nbsp;{{pessoa.estadoCivil ? pessoa.estadoCivil.descricao : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Naturalidade: &nbsp;
-							| {{pessoa.naturalidade}}
+							v-label Naturalidade:&nbsp;
+							span &nbsp;{{pessoa.naturalidade}}
 						v-col(cols="12")
-							v-label Número do RG: &nbsp;
-							| {{pessoa.rg != undefined ? pessoa.rg.numero : "-"}}
+							v-label Número do RG:&nbsp;
+							span &nbsp;{{pessoa.rg ? pessoa.rg.numero : "-"}}
 						v-col(cols="12")
 							v-label Orgão Expedidor: &nbsp;
-							| {{pessoa.rg != undefined ? pessoa.rg.orgaoExpedidor : '-'}}
+							span &nbsp;{{pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
 						v-col(cols="12")
-							v-label Título Eleitoral: &nbsp;
-							| {{pessoa.tituloEleitoral != undefined ? pessoa.tituloEleitoral : '-'}}
+							v-label Título Eleitoral:&nbsp;
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.numero : '-'}}
 						v-col(cols="12")
-							v-label Zona eleitoral: &nbsp;
-							| -
+							v-label Zona eleitoral:&nbsp;
+							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
 						v-col(cols="12")
-							v-label Seção eleitoral: &nbsp;
-							| -
+							v-label Seção eleitoral:&nbsp;
+							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
 		div.mb-6
 			ExpansivePanel(titulo = 'Contato')
-				v-row(v-if="pessoa.contatos != undefined")
-					v-col(cols="12", md="4")
-						v-col(cols="12")
-							v-label E-mail principal: &nbsp;
-							| {{pessoa.contatos[0].valor}}
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label E-mail secundário: &nbsp;
-							| {{ pessoa.contatos[1] != undefined ? pessoa.contatos[1].valor : "-"}}
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Celular: &nbsp;
-							| 35-99812-7151
+							v-label E-mail principal:&nbsp;
+							span &nbsp;{{this.contatos.email1}}
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label E-mail secundário:&nbsp;
+							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
+				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Telefone residencial: &nbsp;
-							| 35-99812-7151
+							v-label Celular:&nbsp;
+							span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-" }}
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Telefone comercial: &nbsp;
-							| 35-99812-7151
+							v-label Telefone residencial:&nbsp;
+							span &nbsp; {{this.contatos.tel1 ? prepararNumTelefone(this.contatos.tel1) : "-" }}
+					v-col(cols="12", md="4")
+						v-col(cols="12")
+							v-label Telefone comercial:&nbsp;
+							span &nbsp; {{this.contatos.tel2 ? prepararNumTelefone(this.contatos.tel2) : "-" }}
 		div.mb-6
 			ExpansivePanel(titulo = 'Endereço')
-				v-row(v-if="pessoa.enderecos != undefined")
+				v-row(v-if="pessoa.enderecos")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Zona de localização: &nbsp;
-							| {{pessoa.enderecos[0].zonaLocalizacao.descricao}}
+							v-label Zona de localização &nbsp;
+							span &nbsp; {{pessoa.enderecos[0].zonaLocalizacao.descricao}}
 						v-col(cols="12")
-							v-label CEP: &nbsp;
-							| {{pessoa.enderecos[0].cep}}
+							v-label CEP:&nbsp;
+							span &nbsp; {{prepararCep(pessoa.enderecos[0].cep)}}
 						v-col(cols="12")
-							v-label Logradouro: &nbsp;
-							| {{pessoa.enderecos[0].logradouro}}
+							v-label Logradouro:
+							span &nbsp; &nbsp;{{pessoa.enderecos[0].logradouro}}
 						v-col(cols="12")
-							v-label Número: &nbsp;
-							| {{pessoa.enderecos[0].numero}}
+							v-label Número:&nbsp;
+							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].bairro : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Complemento: &nbsp;
-							| {{pessoa.enderecos[0].complemento}}
+							v-label Complemento:&nbsp;
+							span &nbsp; {{pessoa.enderecos[0].complemento ? pessoa.enderecos[0].complemento : "-" }}
 						v-col(cols="12")
-							v-label Bairro: &nbsp;
-							| {{pessoa.enderecos[0].bairro}}
+							v-label Bairro:&nbsp;
+							span &nbsp; {{pessoa.enderecos[0].bairro}}
 						v-col(cols="12")
-							v-label UF: &nbsp;
-							| {{pessoa.enderecos[0].municipio.estado.sigla}}
+							v-label UF:&nbsp;
+							span &nbsp; {{pessoa.enderecos[0].municipio.estado.sigla}}
 						v-col(cols="12")
-							v-label Município: &nbsp;
-							| {{pessoa.enderecos[0].municipio.nome}}
+							v-label Município:&nbsp;
+							span &nbsp; {{pessoa.enderecos[0].municipio.nome}}
 
 		div.mb-6
 			ExpansivePanel(titulo = 'Informações técnicas')
@@ -182,14 +182,14 @@
 									v-radio(label='Outro' value='OUTRO')
 
 								v-text-field#QA-input-outro-vinculo(
+									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
 									v-model="dados.outroVinculoEmpregaticio",
 									:errorMessages="errorMessage(dados.outroVinculoEmpregaticio)",
 									color="#E0E0E0",
 									:placeholder="placeholder",
 									required,
 									outlined,
-									dense,
-									:disabled="!isHabilitado"
+									dense
 								)
 					v-row
 						v-col(cols="12", md="12")
@@ -240,7 +240,7 @@
 					)
 
 		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-voltar-cadastro(@click='voltar', large, outlined)
+			v-btn#QA-btn-voltar-cadastro(@click='cancelar', large, outlined)
 				v-icon mdi-arrow-left
 				span Voltar
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
@@ -257,6 +257,7 @@ import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
+import DataUtils from '@/utils/dataUtils';
 
 export default {
 	name: 'Cadastro',
@@ -295,18 +296,41 @@ export default {
 				outroVinculoEmpregaticio: null,
 				especializacao: null
 			},
+			contatos: {}
 		};
 	},
 
 	methods: {
 
+		prepararCpf() {
+
+			if (this.pessoa.cpf) {
+				return DataUtils.formatarCpf(this.pessoa.cpf);
+			}
+
+		},
+
+		prepararData(milisegundos) {
+			return DataUtils.formatarData(milisegundos);
+		},
+
+		prepararCep(cep) {
+			return DataUtils.formatarCep(cep);
+		},
+
+		prepararNumTelefone(numTelefone) {
+			return DataUtils.formatarTelefone(numTelefone);
+		},
+
 		removerAnexo(item) {
+
 			let pos = this.files.map(function(e) { return e.name; }).indexOf(item);
 			let deletedFile = this.files.splice(pos, 1);
+
 		},
 
 		downloadAnexo() {
-			console.log(window.location);
+
 			this.$http({
 				method: 'get',
 				url: this.url,
@@ -316,25 +340,31 @@ export default {
 					this.forceFileDownload(response);
 				})
 				.catch(() => console.log('error occured'));
+
 		},
 
 		forceFileDownload(response){
-			console.log(response);
+
 			const url = window.URL.createObjectURL(new Blob([response.data]));
 			const link = document.createElement('a');
+
 			link.href = url;
 			link.setAttribute('download', 'file.png'); //or any other extension
 			document.body.appendChild(link);
 			link.click();
+
 		},
 
 		onButtonClick() {
+
 			this.isSelecting = true;
+
 			window.addEventListener('focus', () => {
 				this.isSelecting = false;
 			}, { once: true });
 
 			this.$refs.uploader.click();
+
 		},
 
 		uploadFile(e) {
@@ -402,11 +432,10 @@ export default {
 		},
 
 		prepararParaSalvar() {
+
 			if (this.dados.vinculoEmpregaticio == " " && this.dados.outroVinculoEmpregaticio != null) {
 				this.dados.vinculoEmpregaticio = this.dados.outroVinculoEmpregaticio;
 			}
-			console.log(this.dados.vinculoEmpregaticio);
-			console.log(this.dados);
 
 		},
 
@@ -415,9 +444,11 @@ export default {
 		},
 
 		salvar() {
+
 			this.prepararParaSalvar();
+
 			if (this.checkForm()) {
-				console.log(this.dados);
+
 				this.$fire({
 
 					title:
@@ -439,7 +470,7 @@ export default {
 
 				}).then((result) => {
 
-					if(result.value) {
+					if (result.value) {
 						//item.ativo = !item.ativo;
 						AtividadeService.ativarDesativarAtividadeDispensavel(this.dados)
 							.then(() => {
@@ -485,6 +516,30 @@ export default {
 			this.$router.push('/user');
 		},
 
+		prepararContatos() {
+
+			this.pessoa.contatos.forEach( (contato) => {
+
+				if (contato.tipo.descricao === 'Email') {
+
+					if (contato.principal) {
+						this.contatos.email1 = contato.valor;
+					} else {
+						this.contatos.email2 = contato.valor;
+					}
+
+				} else if (contato.tipo.descricao === 'Telefone celular') {
+					this.contatos.cel = contato.valor;
+				} else if (contato.tipo.descricao === 'Telefone residencial') {
+					this.contatos.tel1 = contato.valor;
+				} else  {
+					this.contatos.tel2 = contato.valor;
+				}
+
+			});
+
+		}
+
 	},
 
 	created() {
@@ -492,6 +547,7 @@ export default {
 		PessoaService.buscaPessoalogada()
 			.then((result) => {
 				this.pessoa = result.data;
+				this.prepararContatos();
 			})
 			.catch(erro => {
 				this.handleError(erro);
@@ -504,7 +560,9 @@ export default {
 			}).catch(erro => {
 				this.handleError(erro);
 			});
+
 	}
+
 };
 </script>
 
