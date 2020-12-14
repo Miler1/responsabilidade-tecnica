@@ -12,11 +12,16 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.ResponsavelTe
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.StatusCadastroResponsavelTecnico;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.ResponsavelTecnicoRespository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.StatusCadastroResponsavelTecnicoRepository;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.specifications.ResponsavelTecnicoSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
@@ -66,6 +71,29 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         responsavelTecnicoRespository.save(responsavelTecnico);
 
         return responsavelTecnico;
+
+    }
+
+    public List<ResponsavelTecnico> buscarNovosExpirados() {
+
+        StatusCadastroResponsavelTecnico statusAtivo = statusCadastroResponsavelTecnicoRepository.findByCodigo("APROVADO");
+
+        return responsavelTecnicoRespository.findAll(
+                Specification
+                        .where(ResponsavelTecnicoSpecification.vencidoPorData(new Date()))
+                        .and(ResponsavelTecnicoSpecification.status(statusAtivo))
+        );
+
+    }
+
+    public StatusCadastroResponsavelTecnico buscarStatusPorCodigo(String codigo){
+        return statusCadastroResponsavelTecnicoRepository.findByCodigo(codigo);
+    }
+
+    public void mudarStatusResponsavelTecnico(ResponsavelTecnico responsavelTecnico, StatusCadastroResponsavelTecnico status){
+
+        responsavelTecnico.setStatus(status);
+        responsavelTecnicoRespository.save(responsavelTecnico);
 
     }
 
