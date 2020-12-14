@@ -1,0 +1,3 @@
+DROP TABLE cadastro_unificado.responsavel_tecnico;
+DROP SEQUENCE cadastro_unificado.responsavel_tecnico_id_seq;
+DROP TABLE cadastro_unificado.status_cadastro_responsavel_tecnico;
