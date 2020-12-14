@@ -78,7 +78,13 @@ const ApiService = {
 
 	async post (resource, params) {
 		try {
-			return await Vue.axios.post(`${resource}`, params);
+
+			if(params.constructor.name === 'FormData') {
+				return await Vue.axios.post(`${resource}`, params, { headers: { 'Content-Type': 'multipart/form-data' } });
+			} else {
+				return await Vue.axios.post(`${resource}`, params);
+			}
+
 		} catch (error) {
 			const result = { message: this.genericErrorHandling(error) };
 
