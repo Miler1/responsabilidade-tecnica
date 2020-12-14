@@ -46,6 +46,10 @@ const routes = [
 		},
 
 		component: () => import('../views/cadastro/Cadastro.vue'),
+
+		beforeEnter: (to, from, next) => {
+			ValidarRota(next, 'USUARIO');
+		},
 	},
 	{
 		path: '/admin',

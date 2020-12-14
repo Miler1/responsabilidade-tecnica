@@ -45,4 +45,8 @@ public final class VariaveisAmbientes {
 		return environment.getProperty("entrada.unica.cadastro.unificado");
 	}
 
+	public static String pathSalvarArquivos() {
+		return environment.getProperty("path.arquivos.salvar");
+	}
+
 }
