@@ -303,7 +303,11 @@ export default {
 	methods: {
 
 		prepararCpf() {
-			return DataUtils.formatarCpf(this.pessoa.cpf);
+
+			if (this.pessoa.cpf) {
+				return DataUtils.formatarCpf(this.pessoa.cpf);
+			}
+
 		},
 
 		prepararData(milisegundos) {
