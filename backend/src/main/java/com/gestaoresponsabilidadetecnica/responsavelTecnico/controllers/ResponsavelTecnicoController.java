@@ -4,6 +4,7 @@ import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbien
 import com.gestaoresponsabilidadetecnica.configuracao.controllers.DefaultController;
 import com.gestaoresponsabilidadetecnica.configuracao.enums.Acao;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.ResponsavelTecnico;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,9 @@ public class ResponsavelTecnicoController extends DefaultController {
     @PostMapping(value = "uploadFile")
     public ResponseStatus uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
 
-        verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
+        verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
+
+        RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.salvarAnexo(request, file);
 
         return null;
     }
