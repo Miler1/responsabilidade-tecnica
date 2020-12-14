@@ -28,38 +28,38 @@
 							span &nbsp;{{pessoa.estadoCivil ? pessoa.estadoCivil.descricao : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Naturalidade:&nbsp;
-							span &nbsp;{{pessoa.naturalidade}}
+							v-label Naturalidade:
+							span &nbsp;{{pessoa.naturalidade ? pessoa.naturalidade : '-'}}
 						v-col(cols="12")
-							v-label Número do RG:&nbsp;
-							span &nbsp;{{pessoa.rg ? pessoa.rg.numero : "-"}}
+							v-label Número do RG:
+							span &nbsp;{{pessoa.rg && pessoa.rg.numero  ? pessoa.rg.numero : "-"}}
 						v-col(cols="12")
-							v-label Orgão expedidor: &nbsp;
-							span &nbsp;{{pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
+							v-label Órgão expedidor:
+							span &nbsp;{{pessoa.rg && pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
 						v-col(cols="12")
-							v-label Título eleitoral:&nbsp;
+							v-label Título eleitoral:
 							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.numero : '-'}}
 						v-col(cols="12")
-							v-label Zona eleitoral:&nbsp;
-							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
+							v-label Zona eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
 						v-col(cols="12")
-							v-label Seção eleitoral:&nbsp;
-							span &nbsp; {{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
+							v-label Seção eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
 		div.mb-6
 			ExpansivePanel(titulo = 'Contatos')
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label E-mail principal:&nbsp;
+							v-label E-mail principal:
 							span &nbsp;{{this.contatos.email1}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label E-mail secundário:&nbsp;
+							v-label E-mail secundário:
 							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
 				v-row
 					v-col(cols="12", md="4")
 						v-col(cols="12")
-							v-label Celular:&nbsp;
+							v-label Celular:
 							span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-" }}
 					v-col(cols="12", md="4")
 						v-col(cols="12")
@@ -74,10 +74,10 @@
 				v-row(v-if="pessoa.enderecos")
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Zona de localização &nbsp;
+							v-label Zona de localização:
 							span &nbsp; {{pessoa.enderecos[0].zonaLocalizacao.descricao}}
 						v-col(cols="12")
-							v-label CEP:&nbsp;
+							v-label CEP:
 							span &nbsp; {{prepararCep(pessoa.enderecos[0].cep)}}
 						v-col(cols="12")
 							v-label Logradouro:
@@ -87,16 +87,16 @@
 							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].numero : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
-							v-label Complemento:&nbsp;
+							v-label Complemento:
 							span &nbsp; {{pessoa.enderecos[0].complemento ? pessoa.enderecos[0].complemento : "-" }}
 						v-col(cols="12")
-							v-label Bairro:&nbsp;
+							v-label Bairro:
 							span &nbsp; {{pessoa.enderecos[0].bairro}}
 						v-col(cols="12")
-							v-label UF:&nbsp;
+							v-label UF:
 							span &nbsp; {{pessoa.enderecos[0].municipio.estado.sigla}}
 						v-col(cols="12")
-							v-label Município:&nbsp;
+							v-label Município:
 							span &nbsp; {{pessoa.enderecos[0].municipio.nome}}
 
 		div.mb-6
@@ -209,8 +209,7 @@
 						accept="image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 						class="d-none",
 						type="file",
-						multiple,
-						:rules="rules.select",
+						:rules="rules.files",
 						@change="uploadFile"
 					)
 
@@ -243,7 +242,6 @@ import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
-import { saveAs } from 'file-saver';
 import DataUtils from '@/utils/dataUtils';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
@@ -268,7 +266,8 @@ export default {
 			errorMessageEmpty: true,
 			isSelecting: false,
 			files: [],
-			dataNascimento: null,
+			file: null,
+			url: window.location,
 			row: null,
 			pessoa: {},
 			isHabilitado: false,
@@ -283,11 +282,10 @@ export default {
 				outroVinculoEmpregaticio: null,
 				especializacao: null,
 			},
-			rules: {
-				select: [v => !!v || 'Item is required']
-			},
 			contatos: {},
-			files: []
+			rules: {
+				files: [files => {files.size < 200; console.log('limit achieved!'); }]
+			}
 		};
 	},
 
@@ -440,6 +438,20 @@ export default {
 			}
 		},
 
+		permiteOutroVinculo(isChecked) {
+
+			if (!isChecked) {
+				this.dados.outroVinculoEmpregaticio = '';
+			}
+
+			this.isHabilitado = isChecked;
+
+		},
+
+		handleError(erro) {
+			console.log(erro);
+		},
+
 		preparaPraSalvar() {
 
 			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea === 'true' ? true : false;
@@ -469,22 +481,7 @@ export default {
 
 		},
 
-		permiteOutroVinculo() {
-
-			if (this.dados.vinculoEmpregaticio == "OUTRO") {
-				this.isHabilitado = true;
-			} else {
-				this.dados.outroVinculoEmpregaticio = '';
-				this.isHabilitado = false;
-			}
-
-		},
-
-		handleError(erro) {
-			console.log(erro);
-		},
-
-		salvar(item) {
+		salvar() {
 
 			this.preparaPraSalvar();
 
@@ -494,7 +491,6 @@ export default {
 
 					title:
 						'<p class="title-modal-confirm">Confirmar cadastro</p>',
-
 					html:
 						`<p class="message-modal-confirm">Ao confirmar o cadastro, todas as informações serão salvas e enviadas para análise.</p>
 						<p class="message-modal-confirm">
@@ -511,12 +507,13 @@ export default {
 
 				}).then((result) => {
 
-					if (result.value) {
+					if(result.value) {
+
 						var that = this;
-						console.log(that);
+
 						that.preparaPraSalvar();
 
-						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
+						ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
 							.then(() => {
 
 								this.salvarArquivos();
