@@ -16,7 +16,7 @@
 							| {{pessoa.cpf}}
 						v-col(cols="12")
 							v-label Data de nascimento: &nbsp;
-							| {{pessoa.dataNascimento}}
+							| {{pessoa.dataNascimento != null ? this.dataNascimento.toLocaleDateString() : '-'}}
 						v-col(cols="12")
 							v-label Sexo: &nbsp;
 							| {{ pessoa.sexo != undefined ? pessoa.sexo.descricao : "-"}}
@@ -103,56 +103,35 @@
 			ExpansivePanel(titulo = 'Informações técnicas')
 				v-form.px-2(ref="cadastro")
 					v-row
-						//- v-col.pb-0(cols="12", md="6")
-						//- 	TextField(
-						//- 		v-model="dados.formacao",
-						//- 		labelOption = "Formação: *",
-						//- 		id = "QA-input-formacao",
-						//- 		placeholder="Digite aqui",
-						//- 		:errorMessages="errorMessage",
-						//- 		@click="resetErrorMessage"
-						//- 	)
-						//- v-col.pb-0(cols="12", md="3")
-						//- 	TextField(
-						//- 		v-model="dados.conselho",
-						//- 		labelOption = "Conselho de classe: *",
-						//- 		id = "QA-input-conselho-classe",
-						//- 		placeholder="Digite aqui",
-						//- 		:errorMessages="errorMessage",
-						//- 		@click="resetErrorMessage"
-						//- 	)
-						//- v-col.pb-0(cols="12", md="3")
-						//- 	TextField(
-						//- 		v-model="dados.registro",
-						//- 		labelOption = "Registro: *",
-						//- 		id = "QA-input-registro",
-						//- 		placeholder="Digite aqui",
-						//- 		:errorMessages="errorMessage",
-						//- 		@click="resetErrorMessage"
-						//- 	)
 						v-col(cols="12", md="6")
 							TextField(
+								v-model="dados.formacao",
 								labelOption = "Formação: *",
 								id = "QA-input-formacao",
 								@changeModel="dados.formacao = $event",
 								placeholder="Digite aqui",
-								:errorMessages="errorMessage"
+								:errorMessages="errorMessage",
+								@click.native="resetErrorMessage"
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								v-model="dados.conselhoDeClasse",
 								labelOption = "Conselho de classe: *",
 								id = "QA-input-conselho-classe",
 								@changeModel="dados.conselhoDeClasse = $event",
 								placeholder="Digite aqui",
-								:errorMessages="errorMessage"
+								:errorMessages="errorMessage",
+								@click.native="resetErrorMessage"
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								v-model="dados.registro",
 								labelOption = "Registro: *",
 								id = "QA-input-registro",
 								@changeModel="dados.registro = $event",
 								placeholder="Digite aqui",
-								:errorMessages="errorMessage"
+								:errorMessages="errorMessage",
+								@click.native="resetErrorMessage"
 							)
 					v-row
 						v-col.py-0(cols="12", md="8")
@@ -169,14 +148,14 @@
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)", row)
+								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
 									v-radio(label='Sim' value='true')
 									v-radio(label='Não' value='false')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
+								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
@@ -184,7 +163,7 @@
 
 								v-text-field#QA-input-outro-vinculo(
 									v-model="dados.outroVinculoEmpregaticio",
-									:errorMessages="errorMessage(dados.outroVinculoEmpregaticio)",
+									:errorMessages="errorMessageOutroVinculo(dados.outroVinculoEmpregaticio)",
 									color="#E0E0E0",
 									:placeholder="placeholder",
 									required,
@@ -260,6 +239,7 @@ import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
+import { saveAs } from 'file-saver';
 
 export default {
 	name: 'Cadastro',
@@ -280,11 +260,9 @@ export default {
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
-			currentFile: [],
 			isSelecting: false,
 			files: [],
-			file: null,
-			url: window.location,
+			dataNascimento: null,
 			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
@@ -304,39 +282,13 @@ export default {
 	methods: {
 
 		removerAnexo(item) {
-			let pos = this.files.map(function(e) { return e.name; }).indexOf(item);
+			let pos = this.files.map(function(file) { return file.name; }).indexOf(item.name);
 			let deletedFile = this.files.splice(pos, 1);
 		},
 
-		// downloadMedia(media) {
-		// 	let uriContent = "data:application/octet-stream," + encodeURIComponent(media);
-		// 	window.open(uriContent, 'neuesDokument');
-		// },
-
 		downloadAnexo(item) {
-			console.log(item);
-			// this.downloadMedia(item);
-			// console.log(window.location);
-			this.$http({
-				method: 'get',
-				url: this.url,
-				responseType: 'arraybuffer'
-			})
-				.then(response => {
-					this.forceFileDownload(response);
-				})
-				.catch(() => console.log('error occured'));
-
-		},
-
-		forceFileDownload(response){
-			console.log(response);
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', 'file.png'); //or any other extension
-			document.body.appendChild(link);
-			link.click();
+			var blob = new Blob([item], { type: item.type });
+			saveAs(blob, item.name);
 		},
 
 		onButtonClick() {
@@ -361,7 +313,6 @@ export default {
 				&& this.dados.possuiVinculoComGea !== null
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
 				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
-				&& this.dados.vinculoEmpregaticio != " "
 				&& this.dados.especializacao !== null;
 
 		},
@@ -402,23 +353,30 @@ export default {
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
 		},
 
-		permiteOutroVinculo(isChecked) {
-
-			if (!isChecked) {
-				this.dados.outroVinculoEmpregaticio = '';
+		errorMessageOutroVinculo(value) {
+			if (this.isHabilitado) {
+				return this.errorMessageEmpty || value ? '' : 'Obrigatório';
 			}
+		},
 
-			this.isHabilitado = isChecked;
+		permiteOutroVinculo() {
+
+			if (this.dados.vinculoEmpregaticio == "OUTRO") {
+				this.isHabilitado = true;
+			} else {
+				this.dados.outroVinculoEmpregaticio = '';
+				this.isHabilitado = false;
+			}
 
 		},
 
 		prepararParaSalvar() {
-			if (this.dados.vinculoEmpregaticio == " " && this.dados.outroVinculoEmpregaticio != null) {
+			if (this.dados.vinculoEmpregaticio == "OUTRO" && this.dados.outroVinculoEmpregaticio != null) {
 				this.dados.vinculoEmpregaticio = this.dados.outroVinculoEmpregaticio;
+				// this.dados.outroVinculoEmpregaticio = null;
 			}
 			console.log(this.dados.vinculoEmpregaticio);
 			console.log(this.dados);
-
 		},
 
 		handleError(erro) {
@@ -486,7 +444,7 @@ export default {
 				});
 
 			} else {
-				window.scrollTo(0, 0);
+				// window.scrollTo(0, 0);
 				this.errorMessageEmpty = false;
 			}
 
@@ -499,10 +457,10 @@ export default {
 	},
 
 	created() {
-
 		PessoaService.buscaPessoalogada()
 			.then((result) => {
 				this.pessoa = result.data;
+				this.dataNascimento = new Date(this.pessoa.dataNascimento);
 			})
 			.catch(erro => {
 				this.handleError(erro);

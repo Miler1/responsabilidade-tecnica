@@ -36,7 +36,7 @@
 					span Remover anexo {{tituloTooltip}}
 				v-tooltip(bottom, v-if="exibirIconeRemover")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon(small @click='downloadAnexo(item)', v-on='on', color='#F56C6C')
+						v-icon(small @click.prevent='downloadAnexo(item)', v-on='on', color='#F56C6C')
 							|  mdi-download
 					span Baixar anexo {{tituloTooltip}}
 
