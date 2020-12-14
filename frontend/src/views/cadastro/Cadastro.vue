@@ -224,10 +224,13 @@
 
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
+import snackbar from '@/services/snack.service';
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
 	name: 'Cadastro',
@@ -249,7 +252,6 @@ export default {
 			isInclusao: true,
 			currentFile: [],
 			isSelecting: false,
-			files: [],
 			row: null,
 			pessoa: {},
 			especializacoes: [],
@@ -261,8 +263,9 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
 			},
+			files: [], 
 			row1: null,
 			row2: null,
 		};
@@ -308,6 +311,35 @@ export default {
 
 		},
 
+		preparaPraSalvar() {
+
+			this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
+			delete this.informacoes.especializacao.textoExibicao;
+
+		},
+
+		salvarArquivos() {
+			
+			this.files.forEach(file => {
+
+				console.log('TYPEOFFF', file);
+
+				let formData = new FormData();
+				formData.append('file', file);
+
+				ResponsavelTecnicoService.upload(formData)
+					.catch(error => {
+
+						console.error(error);
+
+						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					});
+
+			});
+
+		},
+
 		salvar(item) {
 			this.$fire({
 
@@ -331,34 +363,28 @@ export default {
 			}).then((result) => {
 
 				if(result.value) {
-					console.log(this.informacoes);
-					// item.ativo = !item.ativo;
-					// AtividadeService.ativarDesativarAtividadeDispensavel(item.id)
-					// 	.then(() => {
 
-					// 		if (item.ativo) {
-					// 			snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
-					// 		} else {
-					// 			snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
-					// 		}
+					var that = this;
 
-					// 		// this.updatePagination();
-					// 		// this.resetaDadosFiltragem();
+					that.preparaPraSalvar();
 
-					// 	})
-					// 	.catch(error => {
+					ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
+						.then(() => {
 
-					// 		console.error(error);
+							this.salvarArquivos();
 
-					// 		if (item.ativo) {
-					// 			snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
-					// 		} else {
-					// 			snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-					// 		}
+							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-					// 		item.ativo = !item.ativo;
+							this.$router.push({name: 'Usuario'});
 
-					// 	});
+						})
+						.catch(error => {
+
+							console.error(error);
+
+							snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+						});
 
 				}
 
@@ -369,7 +395,7 @@ export default {
 		},
 
 		cancelar() {
-			this.$router.push('/user');
+			this.$router.push({name: 'Usuario'});
 		},
 
 	},
@@ -380,16 +406,16 @@ export default {
 			.then((result) => {
 				this.pessoa = result.data;
 			})
-			.catch(erro => {
-				this.handleError(erro);
+			.catch(error => {
+				console.log(error.message);
 			});
 
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
 				this.especializacoes = result.data;
 				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
-			}).catch(erro => {
-				this.handleError(erro);
+			}).catch(error => {
+				console.log(error.message);
 			});
 	}
 };
