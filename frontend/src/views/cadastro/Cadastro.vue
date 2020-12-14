@@ -253,11 +253,14 @@
 
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
+import snackbar from '@/services/snack.service';
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
 import DataUtils from '@/utils/dataUtils';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
 	name: 'Cadastro',
@@ -283,6 +286,7 @@ export default {
 			files: [],
 			file: null,
 			url: window.location,
+			row: null,
 			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
@@ -294,7 +298,7 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
 			},
 			contatos: {}
 		};
@@ -431,16 +435,37 @@ export default {
 
 		},
 
-		prepararParaSalvar() {
+		handleError(erro) {
+			console.log(erro);
+		},
 
-			if (this.dados.vinculoEmpregaticio == " " && this.dados.outroVinculoEmpregaticio != null) {
-				this.dados.vinculoEmpregaticio = this.dados.outroVinculoEmpregaticio;
-			}
+		preparaPraSalvar() {
+
+			this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
+			delete this.informacoes.especializacao.textoExibicao;
 
 		},
 
-		handleError(erro) {
-			console.log(erro);
+		salvarArquivos() {
+			
+			this.files.forEach(file => {
+
+				console.log('TYPEOFFF', file);
+
+				let formData = new FormData();
+				formData.append('file', file);
+
+				ResponsavelTecnicoService.upload(formData)
+					.catch(error => {
+
+						console.error(error);
+
+						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					});
+
+			});
+
 		},
 
 		salvar() {
@@ -453,7 +478,6 @@ export default {
 
 					title:
 						'<p class="title-modal-confirm">Confirmar cadastro</p>',
-
 					html:
 						`<p class="message-modal-confirm">Ao confirmar o cadastro, todas as informações serão salvas e enviadas para análise.</p>
 						<p class="message-modal-confirm">
@@ -470,32 +494,27 @@ export default {
 
 				}).then((result) => {
 
-					if (result.value) {
-						//item.ativo = !item.ativo;
-						AtividadeService.ativarDesativarAtividadeDispensavel(this.dados)
+					if(result.value) {
+
+						var that = this;
+
+						that.preparaPraSalvar();
+
+						ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
 							.then(() => {
 
-								if (item.ativo) {
-									snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
-								} else {
-									snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
-								}
+								this.salvarArquivos();
 
-								// this.updatePagination();
-								// this.resetaDadosFiltragem();
+								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+
+								this.$router.push({name: 'Usuario'});
 
 							})
 							.catch(error => {
 
 								console.error(error);
 
-								if (item.ativo) {
-									snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
-								} else {
-									snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-								}
-
-								item.ativo = !item.ativo;
+								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 							});
 
@@ -513,7 +532,7 @@ export default {
 		},
 
 		cancelar() {
-			this.$router.push('/user');
+			this.$router.push({name: 'Usuario'});
 		},
 
 		prepararContatos() {
@@ -549,16 +568,16 @@ export default {
 				this.pessoa = result.data;
 				this.prepararContatos();
 			})
-			.catch(erro => {
-				this.handleError(erro);
+			.catch(error => {
+				console.log(error.message);
 			});
 
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
 				this.especializacoes = result.data;
 				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
-			}).catch(erro => {
-				this.handleError(erro);
+			}).catch(error => {
+				console.log(error.message);
 			});
 
 	}
