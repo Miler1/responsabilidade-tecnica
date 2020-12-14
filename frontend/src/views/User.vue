@@ -13,7 +13,7 @@
 				:dadosListagem="dadosListagem",
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
-				:perfilUsuario="perfilUsuario"
+				:perfil="perfil"
 
 			)
 
@@ -31,7 +31,7 @@ import { HEADER } from '@/utils/dadosHeader/ListagemUsuarioHeader';
 
 export default {
 
-	name: 'User',
+	name: 'Usuario',
 
 	components: {
 		GridListagem,
@@ -71,7 +71,7 @@ export default {
 				]
 			},
 			parametrosFiltro: {},
-			perfilUsuario: 'Usuario'
+			perfil: 'Usuario'
 		};
 	},
 	methods: {
