@@ -210,7 +210,7 @@
 						class="d-none",
 						type="file",
 						multiple,
-						:errorMessage="errorMessage(files)",
+						:rules="rules",
 						@change="uploadFile"
 					)
 
@@ -237,12 +237,15 @@
 
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
+import snackbar from '@/services/snack.service';
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
 import { saveAs } from 'file-saver';
 import DataUtils from '@/utils/dataUtils';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
 	name: 'Cadastro',
@@ -266,6 +269,7 @@ export default {
 			isSelecting: false,
 			files: [],
 			dataNascimento: null,
+			row: null,
 			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
@@ -277,9 +281,13 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
 			},
-			contatos: {}
+			rules: [
+				files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
+			],
+			contatos: {},
+			files: []
 		};
 	},
 
@@ -316,7 +324,7 @@ export default {
 			var blob = new Blob([item], { type: item.type });
 			saveAs(blob, item.name);
 		},
-		
+
 		downloadAnexo() {
 
 			this.$http({
@@ -428,6 +436,35 @@ export default {
 			}
 		},
 
+		preparaPraSalvar() {
+
+			this.informacoes.possuiVinculoComGea = this.informacoes.possuiVinculoComGea === 'true' ? true : false;
+			delete this.informacoes.especializacao.textoExibicao;
+
+		},
+
+		salvarArquivos() {
+
+			this.files.forEach(file => {
+
+				console.log('TYPEOFFF', file);
+
+				let formData = new FormData();
+				formData.append('file', file);
+
+				ResponsavelTecnicoService.upload(formData)
+					.catch(error => {
+
+						console.error(error);
+
+						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					});
+
+			});
+
+		},
+
 		permiteOutroVinculo() {
 
 			if (this.dados.vinculoEmpregaticio == "OUTRO") {
@@ -439,20 +476,13 @@ export default {
 
 		},
 
-		prepararParaSalvar() {
-			if (this.dados.vinculoEmpregaticio == "OUTRO" && this.dados.outroVinculoEmpregaticio != null) {
-				this.dados.vinculoEmpregaticio = this.dados.outroVinculoEmpregaticio;
-				// this.dados.outroVinculoEmpregaticio = null;
-			}
-		},
-
 		handleError(erro) {
 			console.log(erro);
 		},
 
-		salvar() {
+		salvar(item) {
 
-			this.prepararParaSalvar();
+			this.preparaPraSalvar();
 
 			if (this.checkForm()) {
 
@@ -467,7 +497,7 @@ export default {
 							<b>Tem certeza que deseja confirmar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
 						</p>`,
 					showCancelButton: true,
-					// confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+					confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
 					cancelButtonColor: '#FFF',
 					showCloseButton: true,
 					focusConfirm: false,
@@ -478,31 +508,25 @@ export default {
 				}).then((result) => {
 
 					if (result.value) {
-						//item.ativo = !item.ativo;
-						AtividadeService.ativarDesativarAtividadeDispensavel(this.dados)
+						var that = this;
+						console.log(that);
+						that.preparaPraSalvar();
+
+						ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
 							.then(() => {
 
-								if (item.ativo) {
-									snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.ativar, snackbar.type.SUCCESS);
-								} else {
-									snackbar.alert(SUCCESS_MESSAGES.atividadeDispensavel.desativar, snackbar.type.SUCCESS);
-								}
+								this.salvarArquivos();
 
-								// this.updatePagination();
-								// this.resetaDadosFiltragem();
+								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+
+								this.$router.push({name: 'Usuario'});
 
 							})
 							.catch(error => {
 
 								console.error(error);
 
-								if (item.ativo) {
-									snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.ativar);
-								} else {
-									snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-								}
-
-								item.ativo = !item.ativo;
+								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 							});
 
@@ -520,7 +544,7 @@ export default {
 		},
 
 		cancelar() {
-			this.$router.push('/user');
+			this.$router.push({name: 'Usuario'});
 		},
 
 		prepararContatos() {
@@ -555,16 +579,16 @@ export default {
 				this.pessoa = result.data;
 				this.prepararContatos();
 			})
-			.catch(erro => {
-				this.handleError(erro);
+			.catch(error => {
+				console.log(error.message);
 			});
 
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
 				this.especializacoes = result.data;
 				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
-			}).catch(erro => {
-				this.handleError(erro);
+			}).catch(error => {
+				console.log(error.message);
 			});
 
 	}

@@ -8,7 +8,7 @@ const ERROR_MESSAGES = {
 
 const SUCCESS_MESSAGES = {
 
-	// cadastro: 'Sucesso! As informações foram cadastradas.',
+	cadastro: 'Sucesso! As informações foram salvas.',
 
 	// cnae: {
 	// 	ativar: 'Sucesso! O CNAE foi ativado.',
