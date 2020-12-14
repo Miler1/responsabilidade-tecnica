@@ -206,9 +206,11 @@
 						span Adicionar anexo
 					input(
 						ref="uploader",
+						accept="image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 						class="d-none",
 						type="file",
 						multiple,
+						:errorMessage="errorMessage(files)",
 						@change="uploadFile"
 					)
 
@@ -301,7 +303,14 @@ export default {
 		},
 
 		uploadFile(e) {
+			// e.target.files.forEach(file => {
+			// 	if (file.type == 'image/jpeg') {
+			// 		console.log(file);
+			// 	}
+			// });
+
 			this.files = this.files.concat([...e.target.files]);
+
 		},
 
 		checkForm() {
@@ -313,7 +322,8 @@ export default {
 				&& this.dados.possuiVinculoComGea !== null
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
 				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
-				&& this.dados.especializacao !== null;
+				&& this.dados.especializacao !== null
+				&& this.files != null;
 
 		},
 
@@ -350,6 +360,12 @@ export default {
 		},
 
 		errorMessage(value) {
+			if (Array.isArray(value)){
+				console.log(value);
+				if (value.some(file => file.size > 2e6)) {
+					return 'Avatar size should be less than 2 MB!';
+				}
+			}
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
 		},
 
@@ -398,7 +414,7 @@ export default {
 							<b>Tem certeza que deseja confirmar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
 						</p>`,
 					showCancelButton: true,
-					confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+					// confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
 					cancelButtonColor: '#FFF',
 					showCloseButton: true,
 					focusConfirm: false,
@@ -450,7 +466,7 @@ export default {
 
 		},
 
-		voltar() {
+		cancelar() {
 			this.$router.push('/user');
 		},
 
