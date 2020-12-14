@@ -1,5 +1,7 @@
 package com.gestaoresponsabilidadetecnica.responsavelTecnico.services;
 
+import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
+import com.gestaoresponsabilidadetecnica.configuracao.utils.ArquivoUtils;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.DateUtil;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.repositories.EspecializacaoTecnicaRepository;
@@ -7,19 +9,29 @@ import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.DocumentoResponsavelTecnico;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.ResponsavelTecnico;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.StatusCadastroResponsavelTecnico;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.DocumentoResponsavelTecnicoRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.ResponsavelTecnicoRespository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.StatusCadastroResponsavelTecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
+
+    private static final String DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA = "sincronia";
 
     @Autowired
     EspecializacaoTecnicaRepository especializacaoTecnicaRepository;
@@ -32,6 +44,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     @Autowired
     PessoaRepository pessoaRepository;
+
+    @Autowired
+    DocumentoResponsavelTecnicoRepository documentoResponsavelTecnicoRepository;
 
     @Autowired
     IPessoaService pessoaService;
@@ -68,5 +83,50 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         return responsavelTecnico;
 
     }
+
+    private ResponsavelTecnico findByPessoaLogada(HttpServletRequest request) {
+
+        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
+
+        Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
+
+        return responsavelTecnicoRespository.findByPessoa(pessoa);
+
+    }
+
+    @Override
+    public RetornoUploadArquivoDTO salvarAnexo(HttpServletRequest request, MultipartFile multipartFile) throws Exception {
+
+        File file = salvaArquivoDiretorio(multipartFile);
+
+        DocumentoResponsavelTecnico documentoResponsavelTecnico = new DocumentoResponsavelTecnico(file, findByPessoaLogada(request));
+
+        documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
+
+        return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
+    }
+
+    private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
+
+//        validaTipoArquivo(multipartFile);
+
+        final DateTimeFormatter FORMATO_DATA_MES_ANO = DateTimeFormatter.ofPattern("MM-YYYY");
+
+        String pathSalvarArquivo = VariaveisAmbientes.pathSalvarArquivos() +
+                File.separator + DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA +
+                File.separator + LocalDate.now().format(FORMATO_DATA_MES_ANO) +
+                File.separator + UUID.randomUUID() + multipartFile.getContentType();
+
+        return ArquivoUtils.salvaArquivoDiretorio(multipartFile, pathSalvarArquivo);
+
+    }
+
+//    private void validaTipoArquivo(MultipartFile multipartFile) throws Exception {
+//
+//        if(!multipartFile.getOriginalFilename().endsWith(EXTENSAO_ARQUIVO_SINCRONIA)) {
+//            throw new Exception("A extensão do arquivo informado deve ser " + EXTENSAO_ARQUIVO_SINCRONIA);
+//        }
+//
+//    }
 
 }

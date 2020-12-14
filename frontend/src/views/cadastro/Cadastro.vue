@@ -366,25 +366,27 @@ export default {
 
 					var that = this;
 
-					that.preparaPraSalvar();
+					this.salvarArquivos();
 
-					ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
-						.then(() => {
+					// that.preparaPraSalvar();
 
-							this.salvarArquivos();
+					// ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
+					// 	.then(() => {
 
-							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+					// 		this.salvarArquivos();
 
-							this.$router.push({name: 'Usuario'});
+					// 		snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-						})
-						.catch(error => {
+					// 		this.$router.push({name: 'Usuario'});
 
-							console.error(error);
+					// 	})
+					// 	.catch(error => {
 
-							snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+					// 		console.error(error);
 
-						});
+					// 		snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					// 	});
 
 				}
 
