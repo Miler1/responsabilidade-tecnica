@@ -209,7 +209,7 @@
 						accept="image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 						class="d-none",
 						type="file",
-						:rules="rules.files",
+						multiple,
 						@change="uploadFile"
 					)
 
@@ -282,10 +282,7 @@ export default {
 				outroVinculoEmpregaticio: null,
 				especializacao: null,
 			},
-			contatos: {},
-			rules: {
-				files: [files => {files.size < 200; console.log('limit achieved!'); }]
-			}
+			contatos: {}
 		};
 	},
 
@@ -367,13 +364,14 @@ export default {
 
 		uploadFile(e) {
 			// this.checkSize(e);
-			// console.log(e.target.files);
-			// if (!e.target.files || !e.target.files.some(file => file.size > 2097152)) {
-			// 	console.log('Avatar size should be less than 2 MB!');
-			// }
-
+			console.log(e.target.files);
+			e.target.files.forEach(file => {
+				if (file.size > 2000000) {
+					console.log(file.size);
+					return;
+				}
+			});
 			this.files = this.files.concat([...e.target.files]);
-
 		},
 
 		checkForm() {
