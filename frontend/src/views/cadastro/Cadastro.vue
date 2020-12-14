@@ -210,8 +210,13 @@
 						class="d-none",
 						type="file",
 						multiple,
+						required,
+						:error-messages="errorMessage(files)",
 						@change="uploadFile"
 					)
+
+					div(v-if="files.length == 0 && !errorMessageEmpty" style="color: #ff5252 !important; caret-color: #ff5252 !important;flex: 1 1 auto;font-size: 12px;min-height: 14px;min-width: 1px;position: relative;") Obrigatório
+					div(v-if="excedeuTamanhoMaximoArquivo" style="color: #ff5252 !important; caret-color: #ff5252 !important;flex: 1 1 auto;font-size: 12px;min-height: 14px;min-width: 1px;position: relative;") Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
 
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
@@ -269,6 +274,8 @@ export default {
 			file: null,
 			url: window.location,
 			row: null,
+			excedeuTamanhoMaximoArquivo: false,
+			totalPermitido: 2000000,
 			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
@@ -282,7 +289,8 @@ export default {
 				outroVinculoEmpregaticio: null,
 				especializacao: null,
 			},
-			contatos: {}
+			contatos: {},
+			tamanho: []
 		};
 	},
 
@@ -358,20 +366,22 @@ export default {
 
 		},
 
-		checkSize() {
-			files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!';
+		checaTamanhoArquivo() {
+
+			if (this.files.some(file => file.size > this.totalPermitido)) {
+				this.files.splice(0,this.files.length);
+				this.excedeuTamanhoMaximoArquivo = true;
+			} else {
+				this.excedeuTamanhoMaximoArquivo = false;
+			}
+
+			return this.excedeuTamanhoMaximoArquivo;
+
 		},
 
 		uploadFile(e) {
-			// this.checkSize(e);
-			console.log(e.target.files);
-			e.target.files.forEach(file => {
-				if (file.size > 2000000) {
-					console.log(file.size);
-					return;
-				}
-			});
 			this.files = this.files.concat([...e.target.files]);
+			this.checaTamanhoArquivo();
 		},
 
 		checkForm() {
@@ -384,7 +394,7 @@ export default {
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
 				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
 				&& this.dados.especializacao !== null
-				&& this.files != null;
+				&& this.files.length > 0;
 
 		},
 
@@ -421,13 +431,19 @@ export default {
 		},
 
 		errorMessage(value) {
+
 			if (Array.isArray(value)){
-				console.log(value);
+
+				if (value.length == 0) {
+					return 'Obrigatório';
+				}
 				if (value.some(file => file.size > 2e6)) {
-					return 'Avatar size should be less than 2 MB!';
+					return 'Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB';
 				}
 			}
+
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
+
 		},
 
 		errorMessageOutroVinculo(value) {
