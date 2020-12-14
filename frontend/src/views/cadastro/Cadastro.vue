@@ -29,7 +29,7 @@
 					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Naturalidade:
-							span &nbsp;{{pessoa.naturalidade}}
+							span &nbsp;{{pessoa.naturalidade ? pessoa.naturalidade : '-'}}
 						v-col(cols="12")
 							v-label Número do RG:
 							span &nbsp;{{pessoa.rg && pessoa.rg.numero  ? pessoa.rg.numero : "-"}}
