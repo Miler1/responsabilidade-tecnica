@@ -48,11 +48,11 @@
 		div.mb-6
 			ExpansivePanel(titulo = 'Contatos')
 				v-row
-					v-col(cols="12", md="4")
+					v-col.pb-0(cols="12", md="4")
 						v-col(cols="12")
 							v-label E-mail principal:
 							span &nbsp;{{this.contatos.email1}}
-					v-col(cols="12", md="6")
+					v-col.pb-0(cols="12", md="6")
 						v-col(cols="12")
 							v-label E-mail secundário:
 							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
@@ -83,7 +83,7 @@
 							v-label Logradouro:
 							span &nbsp; &nbsp;{{pessoa.enderecos[0].logradouro}}
 						v-col(cols="12")
-							v-label Número:&nbsp;
+							v-label Número:
 							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].numero : "-"}}
 					v-col(cols="12", md="6")
 						v-col(cols="12")
@@ -452,7 +452,7 @@ export default {
 			console.log(erro);
 		},
 
-		preparaPraSalvar() {
+		prepararParaSalvar() {
 
 			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea === 'true' ? true : false;
 			delete this.dados.especializacao.textoExibicao;
@@ -462,8 +462,6 @@ export default {
 		salvarArquivos() {
 
 			this.files.forEach(file => {
-
-				console.log('TYPEOFFF', file);
 
 				let formData = new FormData();
 				formData.append('file', file);
@@ -483,8 +481,6 @@ export default {
 
 		salvar() {
 
-			this.preparaPraSalvar();
-
 			if (this.checkForm()) {
 
 				this.$fire({
@@ -497,23 +493,23 @@ export default {
 							<b>Tem certeza que deseja confirmar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
 						</p>`,
 					showCancelButton: true,
-					confirmButtonColor: item.ativo ? '#E6A23C' : '#67C23A',
+					confirmButtonColor: '#2196F3',
 					cancelButtonColor: '#FFF',
 					showCloseButton: true,
 					focusConfirm: false,
-					confirmButtonText: '<i class="fa fa-check-circle"></i> Confirmar',
-					cancelButtonText: '<i class="fa fa-close"></i> Cancelar',
+					confirmButtonText: '<i class="mdi mdi-check-bold"></i> Confirmar',
+					cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
 					reverseButtons: true
 
 				}).then((result) => {
 
-					if(result.value) {
+					if (result.value) {
 
 						var that = this;
 
-						that.preparaPraSalvar();
+						that.prepararParaSalvar();
 
-						ResponsavelTecnicoService.salvarSolicitacao(that.informacoes)
+						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
 							.then(() => {
 
 								this.salvarArquivos();
