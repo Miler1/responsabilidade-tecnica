@@ -22,33 +22,35 @@
 			)
 
 			template(v-slot:item.validade='{ item }')
-				span {{item.status.codigo == 'APROVADO' ? prepararData(item.validade) : " ‒"}}
+				span {{item.validade ? formatarData(item.validade) : " ‒"}}
 
 			template(v-slot:item.actions='{ item }')
 
-				v-tooltip(bottom, v-if="item.status.codigo !='REPROVADO' && item.status.codigo != 'APROVADO'")
+				v-tooltip(bottom, v-if="perfil === 'Usuario'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
-							| mdi-play-circle-outline
-					span Iniciar análise
+						v-icon.mr-2(small @click='visualizarItem(item)', v-on='on', color='#404040')
+							| mdi-eye
+					span Visualizar cadastro
 
-				v-tooltip(bottom, v-if="item.status.codigo == 'VENCIDO'")
-					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
-							| mdi-replay
-					span Revalidar cadastro
-
-				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
+				v-tooltip(bottom, v-if="perfil === 'Usuario' && item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-chat
 					span Visualizar justificativa
 
-				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO' || item.status.codigo == 'APROVADO'")
+				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo ==='AGUARDANDO_ANALISE'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
-							| mdi-eye
-					span Visualizar cadastro
+							| mdi-play-circle-outline
+					span Iniciar análise
+
+				v-tooltip(bottom, v-if="perfil === 'Administrador' &&item.status.codigo == 'VENCIDO'")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+							| mdi-replay
+					span Revalidar cadastro
+
+
 
 			template(v-slot:no-data, v-if="dadosListagem.content.length === 0")
 				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
@@ -114,6 +116,9 @@ export default {
 		editarItem: {
 			type: [Function]
 		},
+		visualizarItem: {
+			type: [Function]
+		},
 		ativarDesativarItem: {
 			type: [Function]
 		},
@@ -166,7 +171,7 @@ export default {
 
 	methods: {
 
-		prepararData(data) {
+		formatarData(data) {
 			return DataUtils.formatarData(data);
 		},
 

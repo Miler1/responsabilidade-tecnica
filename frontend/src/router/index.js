@@ -22,7 +22,7 @@ const routes = [
 			title: 'Gestão de Responsabilidade Técnica Ambiental'
 		},
 
-		component: () => import('../views/User.vue'),
+		component: () => import('@/views/usuario/User.vue'),
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'USUARIO');
@@ -45,7 +45,7 @@ const routes = [
 			title: 'Gestão de Responsabilidade Técnica'
 		},
 
-		component: () => import('../views/cadastro/Cadastro.vue'),
+		component: () => import('@/views/usuario/cadastro/Cadastro.vue'),
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'USUARIO');
@@ -58,7 +58,7 @@ const routes = [
 			title: 'Gestão de Responsabilidade Técnica Ambiental'
 		},
 
-		component: () => import('../views/Admin.vue'),
+		component: () => import('@/views/administrador/Admin.vue'),
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'ADMINISTRADOR');
