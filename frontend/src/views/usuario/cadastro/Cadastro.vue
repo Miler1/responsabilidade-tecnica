@@ -4,96 +4,11 @@
 
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
-		div.mb-6
-			ExpansivePanel(titulo = 'Dados pessoais')
-				v-row(v-if="pessoa != undefined")
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label Nome completo:
-							span &nbsp;{{pessoa.nome}}
-						v-col(cols="12")
-							v-label CPF:
-							span &nbsp; {{prepararCpf()}}
-						v-col(cols="12")
-							v-label Data de nascimento:
-							span &nbsp; {{prepararData(pessoa.dataNascimento)}}
-						v-col(cols="12")
-							v-label Sexo:
-							span &nbsp;{{ pessoa.sexo ? pessoa.sexo.descricao : "-"}}
-						v-col(cols="12")
-							v-label Nome da mãe:
-							span &nbsp;{{pessoa.nomeMae}}
-						v-col(cols="12")
-							v-label Estado civil:
-							span &nbsp;{{pessoa.estadoCivil ? pessoa.estadoCivil.descricao : "-"}}
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label Naturalidade:
-							span &nbsp;{{pessoa.naturalidade ? pessoa.naturalidade : '-'}}
-						v-col(cols="12")
-							v-label Número do RG:
-							span &nbsp;{{pessoa.rg && pessoa.rg.numero  ? pessoa.rg.numero : "-"}}
-						v-col(cols="12")
-							v-label Órgão expedidor:
-							span &nbsp;{{pessoa.rg && pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
-						v-col(cols="12")
-							v-label Título eleitoral:
-							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.numero : '-'}}
-						v-col(cols="12")
-							v-label Zona eleitoral:
-							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
-						v-col(cols="12")
-							v-label Seção eleitoral:
-							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
-		div.mb-6
-			ExpansivePanel(titulo = 'Contatos')
-				v-row
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label E-mail principal:
-							span &nbsp;{{this.contatos.email1}}
-						v-col(cols="12")
-							v-label E-mail secundário:
-							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
-						v-col(cols="12")
-							v-label Celular:
-							span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-" }}
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label Telefone residencial:&nbsp;
-							span &nbsp; {{this.contatos.tel1 ? prepararNumTelefone(this.contatos.tel1) : "-" }}
-						v-col(cols="12")
-							v-label Telefone comercial:&nbsp;
-							span &nbsp; {{this.contatos.tel2 ? prepararNumTelefone(this.contatos.tel2) : "-" }}
-		div.mb-6
-			ExpansivePanel(titulo = 'Endereço')
-				v-row(v-if="pessoa.enderecos")
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label Zona de localização:
-							span &nbsp; {{pessoa.enderecos[0].zonaLocalizacao.descricao}}
-						v-col(cols="12")
-							v-label CEP:
-							span &nbsp; {{prepararCep(pessoa.enderecos[0].cep)}}
-						v-col(cols="12")
-							v-label Logradouro:
-							span &nbsp; &nbsp;{{pessoa.enderecos[0].logradouro}}
-						v-col(cols="12")
-							v-label Número:
-							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].numero : "-"}}
-					v-col(cols="12", md="6")
-						v-col(cols="12")
-							v-label Complemento:
-							span &nbsp; {{pessoa.enderecos[0].complemento ? pessoa.enderecos[0].complemento : "-" }}
-						v-col(cols="12")
-							v-label Bairro:
-							span &nbsp; {{pessoa.enderecos[0].bairro}}
-						v-col(cols="12")
-							v-label UF:
-							span &nbsp; {{pessoa.enderecos[0].municipio.estado.sigla}}
-						v-col(cols="12")
-							v-label Município:
-							span &nbsp; {{pessoa.enderecos[0].municipio.nome}}
+		DadosPessoais(:pessoa="pessoa")
+
+		Contatos(:contatos="{...contatos}")
+
+		Endereco(:enderecos="pessoa.enderecos")
 
 		div.mb-6
 			ExpansivePanel(titulo = 'Informações técnicas')
@@ -243,11 +158,16 @@ import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import snackbar from '@/services/snack.service';
+import DataUtils from '@/utils/dataUtils';
+
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
+import DadosPessoais from '@/views/common/DadosPessoais';
+import Contatos from '@/views/common/Contatos';
+import Endereco from '@/views/common/Endereco';
+
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
-import DataUtils from '@/utils/dataUtils';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
@@ -256,7 +176,10 @@ export default {
 	components: {
 		ExpansivePanel,
 		GridListagemInclusao,
-		TextField
+		TextField,
+		DadosPessoais,
+		Contatos,
+		Endereco
 	},
 
 	data: () => {
@@ -294,20 +217,8 @@ export default {
 
 	methods: {
 
-		prepararCpf() {
-
-			if (this.pessoa.cpf) {
-				return DataUtils.formatarCpf(this.pessoa.cpf);
-			}
-
-		},
-
-		prepararData(milisegundos) {
-			return DataUtils.formatarData(milisegundos);
-		},
-
-		prepararCep(cep) {
-			return DataUtils.formatarCep(cep);
+		downloadAnexo() {
+			console.log("IMPLEMENTAR DOWNLOAD ANEXO");
 		},
 
 		prepararNumTelefone(numTelefone) {
