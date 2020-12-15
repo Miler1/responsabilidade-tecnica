@@ -55,7 +55,7 @@
 					span Revalidar cadastro
 
 			template(v-slot:no-data)
-				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
+				span {{dadosListagem.noData}}
 
 			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")
 				v-row
