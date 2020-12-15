@@ -12,38 +12,21 @@
 				dense,
 				@input='inputPesquisa'
 			)
-		//- v-col(cols='12' md='12')
-		//- 	v-btn#QA-btn-abrir-cadastro.float-right.ml-4(
-		//- 			@click="abrirTelaCadastro",
-		//- 			large,
-		//- 			dark,
-		//- 			color="#84A98C",
-		//- 			v-if="buttonCadastrar"
-		//- 		)
-		//- 		//- v-icon.font-cadastrar mdi-plus
-		//- 		span.font-cadastrar Cadastrar
-		//- v-col(cols='12' md='12')
-		//-     v-btn#QA-btn-gerar-relatorio.float-right(
-		//- 		    @click="gerarRelatorio",
-		//- 		    large,
-		//- 		    outlined,
-		//- 		    color="#84A98C"
-		//- 	   )
-		//- 	   v-icon mdi-download
-		//- 	   span Gerar relatório
-
 	template
 		v-data-table(
 				:headers="headers",
-				:items='dadosListagem.content',
+				:items="dadosListagem.content",
 				hide-default-footer,
 				:items-per-page="itensPerPage",
 				@update:options="sortBy"
 			)
 
+			template(v-slot:item.validade='{ item }')
+				span {{item.status.codigo == 'APROVADO' ? prepararData(item.validade) : " ‒"}}
+
 			template(v-slot:item.actions='{ item }')
 
-				v-tooltip(bottom, v-if="item.status.codigo!='REPROVADO' && item.status.codigo != 'APROVADO'")
+				v-tooltip(bottom, v-if="item.status.codigo !='REPROVADO' && item.status.codigo != 'APROVADO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-play-circle-outline
@@ -55,7 +38,7 @@
 							| mdi-replay
 					span Revalidar cadastro
 
-				v-tooltip(bottom, v-if="item.status.codigo=='REPROVADO'")
+				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-chat
@@ -67,10 +50,8 @@
 							| mdi-eye
 					span Visualizar cadastro
 
-			template(v-slot:no-data, v-if="checkNomeItem()")
+			template(v-slot:no-data, v-if="dadosListagem.content.length === 0")
 				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
-			template(v-slot:no-data, v-else)
-				span Não existem {{dadosListagem.nomeItem}} a serem exibidos.
 
 			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")
 				v-row
@@ -101,6 +82,8 @@
 
 <script>
 
+import DataUtils from '@/utils/dataUtils';
+
 export default {
 
 	name:'GridListagem',
@@ -123,7 +106,7 @@ export default {
 			type: [Array]
 		},
 		dadosListagem: {
-			type: [Array]
+			type: [Object]
 		},
 		updatePagination: {
 			type: [Function]
@@ -144,12 +127,6 @@ export default {
 			type: [Boolean]
 		},
 		abrirTelaCadastro: {
-			type: [Function]
-		},
-		continuarRascunho: {
-			type: [Function]
-		},
-		excluirRascunho: {
 			type: [Function]
 		},
 		perfil: {
@@ -175,19 +152,23 @@ export default {
 				this.page = this.dadosListagem.pageable.pageNumber + 1;
 			}
 
-			if (this.dadosListagem.content) {
+			// if (this.dadosListagem.content) {
 
-				this.dadosListagem.content.forEach((item) => {
-					item.model = false;
-				});
+			// 	this.dadosListagem.content.forEach((item) => {
+			// 		item.model = false;
+			// 	});
 
-			}
+			// }
 
 		}
 
 	},
 
 	methods: {
+
+		prepararData(data) {
+			return DataUtils.formatarData(data);
+		},
 
 		changeValue(itensPerPage) {
 
@@ -237,17 +218,6 @@ export default {
 		dadosListagemIsNull() {
 			return this.dadosListagem == null;
 		},
-
-		checkNomeItem() {
-			return this.dadosListagem.nomeItem === 'informacões técnicas';
-		},
-
-		ativarDesativar(item) {
-
-			item.model = false;
-
-			this.ativarDesativarItem(item);
-		}
 
 	},
 

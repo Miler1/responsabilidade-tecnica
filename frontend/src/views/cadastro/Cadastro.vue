@@ -552,21 +552,26 @@ export default {
 	},
 
 	created() {
-		PessoaService.buscaPessoalogada()
+
+		PessoaService.buscarPessoalogada()
 			.then((result) => {
+
 				this.pessoa = result.data;
 				this.prepararContatos();
+
 			})
 			.catch(error => {
-				console.log(error.message);
+				console.error(error.message);
 			});
 
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
+
 				this.especializacoes = result.data;
 				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
+
 			}).catch(error => {
-				console.log(error.message);
+				console.error(error.message);
 			});
 
 	}

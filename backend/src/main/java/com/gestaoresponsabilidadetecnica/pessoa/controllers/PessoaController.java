@@ -20,7 +20,7 @@ public class PessoaController extends DefaultController {
     @Autowired
     IPessoaService pessoaService;
 
-    @GetMapping(value = "buscaPessoaLogada")
+    @GetMapping(value = "buscarPessoaLogada")
     public ResponseEntity<Pessoa> buscarPessoaLogada(HttpServletRequest request) throws Exception {
 
         verificarPermissao(request, Acao.BUSCAR_INFORMACAO_PESSOA);
