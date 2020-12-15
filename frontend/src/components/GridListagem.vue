@@ -66,7 +66,7 @@
 								:page="page"
 								:total-visible="totalVisible",
 								@input="input",
-								color="#84A98C"
+								color="#2196F3"
 							)
 						span.float-left.exibicao-paginas.mt-4
 							| Exibindo {{dadosListagem.numberOfElements}} de {{dadosListagem.totalElements}} registros
