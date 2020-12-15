@@ -62,7 +62,7 @@ export default {
 				.then((response) => {
 
 					this.dadosListagem = response.data;
-					this.dadosListagem.nomeItem = "responsáveis técnicos";
+					this.dadosListagem.noData = "Não exixtem solicitações de responsáveis técnicos a serem listadas.";
 
 				})
 				.catch(erro => {

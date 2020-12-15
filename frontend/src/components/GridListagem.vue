@@ -61,7 +61,7 @@
 					span Editar cadastro
 
 			template(v-slot:no-data)
-				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
+				span {{dadosListagem.noData}}
 
 			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")
 				v-row
@@ -72,7 +72,7 @@
 								:page="page"
 								:total-visible="totalVisible",
 								@input="input",
-								color="#84A98C"
+								color="#2196F3"
 							)
 						span.float-left.exibicao-paginas.mt-4
 							| Exibindo {{dadosListagem.numberOfElements}} de {{dadosListagem.totalElements}} registros
