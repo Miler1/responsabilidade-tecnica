@@ -11,7 +11,8 @@
 		required,
 		dense,
 		outlined,
-		@blur="changeModel()"
+		@blur="changeModel()",
+		:resetErrorMessages="resetErrorMessages"
 	)
 
 </template>
@@ -33,6 +34,9 @@ export default {
 		errorMessages: {
 			type: [Function]
 		},
+		resetErrorMessages: {
+			type: [Function]
+		}
 	},
 
 	data: () => {

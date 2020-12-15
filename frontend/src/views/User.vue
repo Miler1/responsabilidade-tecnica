@@ -27,7 +27,7 @@
 
 import GridListagem from '@/components/GridListagem';
 import Panel from '@/components/Panel';
-import { HEADER } from '@/utils/dadosHeader/ListagemUsuarioHeader';
+import { HEADER } from '@/utils/dadosHeader/ListagemInformacoesTecnicas';
 
 export default {
 
@@ -44,32 +44,7 @@ export default {
 			tituloListagem: "Status solicitação",
 			placeholderPesquisa: "",
 			headerListagem: HEADER,
-			dadosListagem: {
-				content: [
-					{
-						solicitacao: {
-							nome: "Nome MOCK 2",
-							cod: "Um codigo mock 2"
-						},
-						status: {
-							codigo: "REPROVADO",
-							nome: "Reprovado"
-						},
-						validade: "-"
-					},
-					{
-						solicitacao: {
-							nome: "Nome MOCK 2",
-							cod: "Um codigo mock 2"
-						},
-						status: {
-							codigo: "APROVADO",
-							nome: "Aprovado"
-						},
-						validade: "31/06/2020"
-					}
-				]
-			},
+			dadosListagem: {},
 			parametrosFiltro: {},
 			perfil: 'Usuario'
 		};
@@ -77,7 +52,7 @@ export default {
 	methods: {
 
 		updatePagination() {
-			this.dadosListagem.nomeItem = 'usuarios';
+			this.dadosListagem.nomeItem = 'informacões técnicas';
 		},
 
 		abrirTelaCadastro() {
