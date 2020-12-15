@@ -211,8 +211,12 @@
 						@change="uploadFile"
 					)
 
-					div(v-if="files.length == 0 && !errorMessageEmpty" style="color: #ff5252 !important; caret-color: #ff5252 !important;flex: 1 1 auto;font-size: 12px;min-height: 14px;min-width: 1px;position: relative;") Obrigatório
-					div(v-if="excedeuTamanhoMaximoArquivo" style="color: #ff5252 !important; caret-color: #ff5252 !important;flex: 1 1 auto;font-size: 12px;min-height: 14px;min-width: 1px;position: relative;") Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
+					div.message-erro(
+						v-if="files.length == 0 && !errorMessageEmpty")
+							| Obrigatório
+					div.message-erro(
+						v-if="excedeuTamanhoMaximoArquivo")
+							| Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
 
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
@@ -267,7 +271,6 @@ export default {
 			errorMessageEmpty: true,
 			isSelecting: false,
 			files: [],
-			file: null,
 			url: window.location,
 			row: null,
 			excedeuTamanhoMaximoArquivo: false,
@@ -285,8 +288,7 @@ export default {
 				outroVinculoEmpregaticio: null,
 				especializacao: null,
 			},
-			contatos: {},
-			tamanho: []
+			contatos: {}
 		};
 	},
 
@@ -637,6 +639,16 @@ export default {
 		.v-label {
 			font-weight: 400;
 		}
+	}
+
+	.message-erro {
+		color: #ff5252 !important;
+		caret-color: #ff5252!important;
+		flex: 1 1 auto;
+		font-size: 12px;
+		min-height: 14px;
+		min-width: 1px;
+		position: relative;
 	}
 
 }

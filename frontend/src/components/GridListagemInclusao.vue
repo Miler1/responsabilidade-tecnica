@@ -63,7 +63,7 @@ export default {
 	}),
 
 	created() {
-		
+
 	},
 
 	methods: {
