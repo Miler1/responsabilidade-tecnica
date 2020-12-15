@@ -33,7 +33,6 @@ const routes = [
 		},
 
 		children: [
-			// CADASTRO
 			{
 				path: 'home',
 				name: 'Home',
@@ -44,7 +43,11 @@ const routes = [
 				name: 'Cadastro',
 				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
 			},
-
+			{
+				path: 'visualizar/:id',
+				name: 'VisualizarCadastro',
+				component: () => import('@/views/usuario/visualizacao/Visualizacao.vue')
+			},
 		],
 	},
 	{
