@@ -24,6 +24,6 @@ export default {
 
     upload: async (file) => ApiService.post('/responsavelTecnico/uploadFile', file),
 
-    buscarSolicitacao: async(idPessoa) => ApiService.get('/responsavelTecnico/buscarSolicitacao/' + idPessoa),
+    buscarSolicitacao: async() => ApiService.get('/responsavelTecnico/buscarSolicitacao/'),
 
 };

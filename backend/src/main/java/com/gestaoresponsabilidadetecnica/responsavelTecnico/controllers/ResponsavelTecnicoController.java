@@ -4,6 +4,8 @@ import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbien
 import com.gestaoresponsabilidadetecnica.configuracao.controllers.DefaultController;
 import com.gestaoresponsabilidadetecnica.configuracao.enums.Acao;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.FiltroPesquisa;
+import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
+import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
@@ -28,6 +30,9 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     @Autowired
     IResponsavelTecnicoService responsavelTecnicoService;
+
+    @Autowired
+    IPessoaService pessoaService;
 
     @PostMapping(value = "salvarSolicitacao")
     public ResponseEntity<ResponsavelTecnico> salvarSolicitacao(
@@ -67,13 +72,16 @@ public class ResponsavelTecnicoController extends DefaultController {
         return null;
     }
 
-    @GetMapping(value = "buscarSolicitacao/{idPessoa}")
-    public ResponseEntity<List<ResponsavelTecnico>> buscarSolicitacao(HttpServletRequest request,
-                                                                      @PathVariable("idPessoa") Integer idPessoa) throws Exception{
+    @GetMapping(value = "buscarSolicitacao")
+    public ResponseEntity<List<ResponsavelTecnico>> buscarSolicitacao(HttpServletRequest request) throws Exception{
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
-        List<ResponsavelTecnico> solicitacoes = responsavelTecnicoService.buscarSolicitacao(request, idPessoa);
+        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
+
+        Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
+
+        List<ResponsavelTecnico> solicitacoes = responsavelTecnicoService.findByPessoa(request, pessoa);
 
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())

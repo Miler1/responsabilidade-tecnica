@@ -2,7 +2,6 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
-import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
 import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -79,17 +78,17 @@ public class ResponsavelTecnico implements Serializable {
 
     public static class ResponsavelTecnicoBuilder {
 
-        public String formacao;
-        public String conselhoDeClasse;
-        public String registro;
-        public String nivelResponsabilidadeTecnica;
-        public Boolean possuiVinculoComGea;
-        public String vinculoEmpregaticio;
-        public String outroVinculoEmpregaticio;
-        public EspecializacaoTecnica especializacao;
-        public PessoaFisica pessoa;
-        public Date validade;
-        public StatusCadastroResponsavelTecnico status;
+        String formacao;
+        String conselhoDeClasse;
+        String registro;
+        String nivelResponsabilidadeTecnica;
+        Boolean possuiVinculoComGea;
+        String vinculoEmpregaticio;
+        String outroVinculoEmpregaticio;
+        EspecializacaoTecnica especializacao;
+        PessoaFisica pessoa;
+        Date validade;
+        StatusCadastroResponsavelTecnico status;
 
         public ResponsavelTecnicoBuilder() {}
 
