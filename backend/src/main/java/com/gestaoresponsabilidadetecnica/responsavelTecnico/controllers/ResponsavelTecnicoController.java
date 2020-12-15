@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/responsavelTecnico/")
@@ -64,6 +65,20 @@ public class ResponsavelTecnicoController extends DefaultController {
         RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.salvarAnexo(request, file);
 
         return null;
+    }
+
+    @GetMapping(value = "buscarSolicitacao/{idPessoa}")
+    public ResponseEntity<List<ResponsavelTecnico>> buscarSolicitacao(HttpServletRequest request,
+                                                                      @PathVariable("idPessoa") Integer idPessoa) throws Exception{
+
+        verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
+
+        List<ResponsavelTecnico> solicitacoes = responsavelTecnicoService.buscarSolicitacao(request, idPessoa);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(solicitacoes);
+
     }
 
 }

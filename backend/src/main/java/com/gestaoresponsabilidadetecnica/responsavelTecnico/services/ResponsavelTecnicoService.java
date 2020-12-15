@@ -115,15 +115,53 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
+    public List<ResponsavelTecnico> buscarNovosExpirados() {
+
+        StatusCadastroResponsavelTecnico statusAtivo = statusCadastroResponsavelTecnicoRepository.findByCodigo("APROVADO");
+
+        return responsavelTecnicoRespository.findAll(
+                Specification
+                        .where(ResponsavelTecnicoSpecification.vencidoPorData(new Date()))
+                        .and(ResponsavelTecnicoSpecification.status(statusAtivo))
+        );
+
+    }
+
+    public StatusCadastroResponsavelTecnico buscarStatusPorCodigo(String codigo) {
+        return statusCadastroResponsavelTecnicoRepository.findByCodigo(codigo);
+    }
+
+    public void mudarStatusResponsavelTecnico(ResponsavelTecnico responsavelTecnico, StatusCadastroResponsavelTecnico status) {
+
+        responsavelTecnico.setStatus(status);
+        responsavelTecnicoRespository.save(responsavelTecnico);
+
+    }
+
     private ResponsavelTecnico findByPessoaLogada(HttpServletRequest request) {
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        List<ResponsavelTecnico> responsaveis = responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+        List<ResponsavelTecnico> responsaveis = findByPessoa(request, pessoa);
 
         return responsaveis.get(responsaveis.size() - 1);
+
+    }
+
+    @Override
+
+    public List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa) {
+        return responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+    }
+
+    @Override
+    public List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa) {
+
+        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
+
+        return findByPessoa(request, pessoa);
 
     }
 
@@ -137,6 +175,11 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
 
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
+
+    }
+
+    public RetornoUploadArquivoDTO downloadAnexo(HttpServletRequest request, MultipartFile file) throws Exception {
+        return null;
     }
 
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {

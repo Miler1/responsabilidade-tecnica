@@ -5,7 +5,6 @@ import com.gestaoresponsabilidadetecnica.entradaUnica.services.EntradaUnicaWS;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
-import org.apache.commons.collections4.iterators.PeekingIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
