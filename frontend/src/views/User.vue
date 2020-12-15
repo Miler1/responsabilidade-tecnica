@@ -2,7 +2,7 @@
 
 	v-container.py-12.align-center.justify-center
 
-		h1.mb-12 Central do responsável técnico ambiental
+		h1.mb-12 Central do Responsável Técnico Ambiental
 
 		Panel(titulo = 'Situação do cadastro:')
 			GridListagem.pa-7(

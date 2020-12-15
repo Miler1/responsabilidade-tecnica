@@ -48,15 +48,13 @@
 		div.mb-6
 			ExpansivePanel(titulo = 'Contatos')
 				v-row
-					v-col.pb-0(cols="12", md="6")
+					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label E-mail principal:
 							span &nbsp;{{this.contatos.email1}}
-					v-col.pb-0(cols="12", md="6")
 						v-col(cols="12")
 							v-label E-mail secundário:
 							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
-					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Celular:
 							span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-" }}
@@ -64,7 +62,6 @@
 						v-col(cols="12")
 							v-label Telefone residencial:&nbsp;
 							span &nbsp; {{this.contatos.tel1 ? prepararNumTelefone(this.contatos.tel1) : "-" }}
-					v-col(cols="12", md="6")
 						v-col(cols="12")
 							v-label Telefone comercial:&nbsp;
 							span &nbsp; {{this.contatos.tel2 ? prepararNumTelefone(this.contatos.tel2) : "-" }}
@@ -154,7 +151,7 @@
 								:errorMessages="errorMessage"
 							)
 					v-row
-						v-col.py-0(cols="12", md="8")
+						v-col(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
 								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
