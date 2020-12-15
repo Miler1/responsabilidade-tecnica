@@ -6,7 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-public interface ResponsavelTecnicoRespository extends JpaRepository<ResponsavelTecnico, Integer> {
+import java.util.List;
+
+@Repository
+public interface ResponsavelTecnicoRespository extends JpaRepository<ResponsavelTecnico, Integer>, JpaSpecificationExecutor<ResponsavelTecnico> {
 
     List<ResponsavelTecnico> findByPessoaOrderById(Pessoa pessoa);
 
