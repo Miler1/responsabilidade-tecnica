@@ -452,7 +452,7 @@ export default {
 
 						console.error(error);
 
-						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 					});
 
@@ -504,7 +504,7 @@ export default {
 
 								console.error(error);
 
-								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 							});
 

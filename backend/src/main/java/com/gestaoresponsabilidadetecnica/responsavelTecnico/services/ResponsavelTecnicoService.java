@@ -157,15 +157,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
     }
 
     @Override
-    public List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa) {
-
-        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
-
-        return findByPessoa(request, pessoa);
-
-    }
-
-    @Override
     public RetornoUploadArquivoDTO salvarAnexo(HttpServletRequest request, MultipartFile multipartFile) throws Exception {
 
         File file = salvaArquivoDiretorio(multipartFile);
