@@ -21,7 +21,7 @@ public class ArquivoUtils {
 		File arquivoRetorno = pathArquivoRetorno.toFile();
 
 		if(!arquivoRetorno.exists()) {
-			Files.createDirectories(pathArquivoRetorno.getParent());
+			Files.createDirectories(pathArquivoRetorno);
 		}
 
 		FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), arquivoRetorno);
