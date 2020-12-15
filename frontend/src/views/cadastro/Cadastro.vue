@@ -321,37 +321,6 @@ export default {
 
 		},
 
-		downloadAnexoFront(item) {
-			var blob = new Blob([item], { type: item.type });
-			saveAs(blob, item.name);
-		},
-
-		downloadAnexo() {
-
-			this.$http({
-				method: 'get',
-				url: this.url,
-				responseType: 'arraybuffer'
-			})
-				.then(response => {
-					this.forceFileDownload(response);
-				})
-				.catch(() => console.log('error occured'));
-
-		},
-
-		forceFileDownload(response){
-
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-
-			link.href = url;
-			link.setAttribute('download', 'file.png'); //or any other extension
-			document.body.appendChild(link);
-			link.click();
-
-		},
-
 		onButtonClick() {
 
 			this.isSelecting = true;
