@@ -48,13 +48,13 @@
 							| mdi-play-circle-outline
 					span Iniciar análise
 
-				v-tooltip(bottom, v-if="perfil === 'Administrador' &&item.status.codigo == 'VENCIDO'")
+				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo == 'VENCIDO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-replay
 					span Revalidar cadastro
 
-				v-tooltip(bottom, v-if="perfil === 'Usuario' &&item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO'")
+				v-tooltip(bottom, v-if="perfil === 'Usuario' && item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-pencil
