@@ -24,6 +24,7 @@ import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import Panel from '@/components/Panel.vue';
 import GridListagem from '@/components/GridListagem';
 import { HEADER } from '@/utils/dadosHeader/ListagemSolicitacoes';
+import { ERROR_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
 
@@ -68,7 +69,7 @@ export default {
 
 					console.error(erro);
 
-					snackbar.alert(ERROR_MESSAGES.cnae.listagem);
+					snackbar.alert(ERROR_MESSAGES.responsavelTecnico.listagem);
 
 				});
 
