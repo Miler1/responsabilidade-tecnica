@@ -29,16 +29,27 @@
                     "nome": "Usuário"
                 }
            ]
-        }
+        },
         {
 
             "codigo": "BUSCAR_INFORMACAO_PESSOA",
-            "nome": "Solicitar cadastro",
+            "nome": "Buscar informaçoes da pessoa",
             "perfis": [
                 {
                     "codigo": "ADMINISTRADOR",
                     "nome": "Administrador"
                 },
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
+        },
+        {
+
+            "codigo": "SALVAR_ARQUIVOS",
+            "nome": "Salvar arquivos",
+            "perfis": [
                 {
                     "codigo": "USUARIO",
                     "nome": "Usuário"

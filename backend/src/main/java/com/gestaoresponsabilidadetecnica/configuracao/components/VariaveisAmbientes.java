@@ -57,5 +57,8 @@ public final class VariaveisAmbientes {
 		return environment.getProperty("job.validade.cron");
 	}
 
+	public static String pathSalvarArquivos() {
+		return environment.getProperty("path.arquivos.salvar");
+	}
 
 }
