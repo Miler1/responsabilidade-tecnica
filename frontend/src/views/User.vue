@@ -27,6 +27,8 @@
 
 import GridListagem from '@/components/GridListagem';
 import Panel from '@/components/Panel';
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
+import PessoaService from '@/services/pessoa.service';
 import { HEADER } from '@/utils/dadosHeader/ListagemUsuarioHeader';
 
 export default {
@@ -44,32 +46,7 @@ export default {
 			tituloListagem: "Status solicitação",
 			placeholderPesquisa: "",
 			headerListagem: HEADER,
-			dadosListagem: {
-				content: [
-					{
-						solicitacao: {
-							nome: "Nome MOCK 2",
-							cod: "Um codigo mock 2"
-						},
-						status: {
-							codigo: "REPROVADO",
-							nome: "Reprovado"
-						},
-						validade: "-"
-					},
-					{
-						solicitacao: {
-							nome: "Nome MOCK 2",
-							cod: "Um codigo mock 2"
-						},
-						status: {
-							codigo: "APROVADO",
-							nome: "Aprovado"
-						},
-						validade: "31/06/2020"
-					}
-				]
-			},
+			dadosListagem: {content:[]},
 			parametrosFiltro: {},
 			perfil: 'Usuario'
 		};
@@ -77,7 +54,27 @@ export default {
 	methods: {
 
 		updatePagination() {
-			this.dadosListagem.nomeItem = 'usuarios';
+
+			PessoaService.buscarPessoalogada()
+				.then((response) => {
+
+					let pessoa = response.data;
+
+					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
+						.then( (result) => {
+
+							this.dadosListagem.content = result.data;
+							this.dadosListagem.nomeItem = "solicitações";
+
+						})
+						.catch( error => {
+							console.error(error);
+						});
+				})
+				.catch(error => {
+					console.error(error.message);
+				});
+
 		},
 
 		abrirTelaCadastro() {

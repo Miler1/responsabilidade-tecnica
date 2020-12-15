@@ -78,17 +78,17 @@ public class ResponsavelTecnico implements Serializable {
 
     public static class ResponsavelTecnicoBuilder {
 
-        public String formacao;
-        public String conselhoDeClasse;
-        public String registro;
-        public String nivelResponsabilidadeTecnica;
-        public Boolean possuiVinculoComGea;
-        public String vinculoEmpregaticio;
-        public String outroVinculoEmpregaticio;
-        public EspecializacaoTecnica especializacao;
-        public Pessoa pessoa;
-        public Date validade;
-        public StatusCadastroResponsavelTecnico status;
+        String formacao;
+        String conselhoDeClasse;
+        String registro;
+        String nivelResponsabilidadeTecnica;
+        Boolean possuiVinculoComGea;
+        String vinculoEmpregaticio;
+        String outroVinculoEmpregaticio;
+        EspecializacaoTecnica especializacao;
+        Pessoa pessoa;
+        Date validade;
+        StatusCadastroResponsavelTecnico status;
 
         public ResponsavelTecnicoBuilder() {}
 
@@ -151,4 +151,5 @@ public class ResponsavelTecnico implements Serializable {
             return new ResponsavelTecnico(this);
         }
     }
+
 }
