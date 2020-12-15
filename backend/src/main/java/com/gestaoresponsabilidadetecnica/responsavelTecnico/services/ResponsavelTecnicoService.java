@@ -135,10 +135,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
     }
 
-    public RetornoUploadArquivoDTO downloadAnexo(HttpServletRequest request, MultipartFile file) throws Exception {
-        return null;
-    }
-
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
 
 //        validaTipoArquivo(multipartFile);
