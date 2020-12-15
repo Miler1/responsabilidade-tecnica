@@ -27,6 +27,8 @@
 
 import GridListagem from '@/components/GridListagem';
 import Panel from '@/components/Panel';
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
+import PessoaService from '@/services/pessoa.service';
 import { HEADER } from '@/utils/dadosHeader/ListagemInformacoesTecnicas';
 
 export default {
@@ -44,7 +46,7 @@ export default {
 			tituloListagem: "Status solicitação",
 			placeholderPesquisa: "",
 			headerListagem: HEADER,
-			dadosListagem: {},
+			dadosListagem: {content:[]},
 			parametrosFiltro: {},
 			perfil: 'Usuario'
 		};
@@ -52,7 +54,27 @@ export default {
 	methods: {
 
 		updatePagination() {
-			this.dadosListagem.nomeItem = 'informacões técnicas';
+
+			PessoaService.buscarPessoalogada()
+				.then((response) => {
+
+					let pessoa = response.data;
+
+					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
+						.then( (result) => {
+
+							this.dadosListagem.content = result.data;
+							this.dadosListagem.nomeItem = "informações técnicas";
+
+						})
+						.catch( error => {
+							console.error(error);
+						});
+				})
+				.catch(error => {
+					console.error(error.message);
+				});
+
 		},
 
 		abrirTelaCadastro() {

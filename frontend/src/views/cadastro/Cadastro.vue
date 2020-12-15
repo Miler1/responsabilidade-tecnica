@@ -130,7 +130,7 @@
 								@click.native="resetErrorMessage"
 							)
 					v-row
-						v-col(cols="12", md="8")
+						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
 								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
@@ -552,21 +552,26 @@ export default {
 	},
 
 	created() {
-		PessoaService.buscaPessoalogada()
+
+		PessoaService.buscarPessoalogada()
 			.then((result) => {
+
 				this.pessoa = result.data;
 				this.prepararContatos();
+
 			})
 			.catch(error => {
-				console.log(error.message);
+				console.error(error.message);
 			});
 
 		EspecializacaoTecnicaService.buscaEspecializacoesTecnicas()
 			.then((result) => {
+
 				this.especializacoes = result.data;
 				this.especializacoes.forEach(e => e.textoExibicao = e.codigo + ' - ' + e.nome);
+
 			}).catch(error => {
-				console.log(error.message);
+				console.error(error.message);
 			});
 
 	}
