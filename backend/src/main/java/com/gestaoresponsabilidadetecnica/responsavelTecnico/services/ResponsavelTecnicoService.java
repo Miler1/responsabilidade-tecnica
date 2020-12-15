@@ -3,10 +3,12 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.services;
 import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.ArquivoUtils;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.DateUtil;
+import com.gestaoresponsabilidadetecnica.configuracao.utils.FiltroPesquisa;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.repositories.EspecializacaoTecnicaRepository;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
@@ -19,6 +21,8 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.Respons
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.StatusCadastroResponsavelTecnicoRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.specifications.ResponsavelTecnicoSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,7 +65,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
-        Pessoa pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
+        PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
 
         StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
 
@@ -84,6 +88,30 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         responsavelTecnicoRespository.save(responsavelTecnico);
 
         return responsavelTecnico;
+
+    }
+
+    @Override
+    public Page<ResponsavelTecnico> listar(Pageable pageable, FiltroPesquisa filtro) {
+
+        Specification<ResponsavelTecnico> specification = prepararFiltro(filtro);
+
+        return responsavelTecnicoRespository.findAll(specification, pageable);
+
+    }
+
+    private Specification<ResponsavelTecnico> prepararFiltro(FiltroPesquisa filtro) {
+
+        Specification<ResponsavelTecnico> specification = Specification.where(ResponsavelTecnicoSpecification.padrao());
+
+        if (filtro.getStringPesquisa() != null) {
+
+            specification = specification.and(ResponsavelTecnicoSpecification.nome(filtro.getStringPesquisa())
+                    .or(ResponsavelTecnicoSpecification.status(filtro.getStringPesquisa())));
+
+        }
+
+        return specification;
 
     }
 

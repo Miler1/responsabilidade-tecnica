@@ -511,7 +511,10 @@ export default {
 					}
 
 				}).catch((error) => {
+
 					console.error(error);
+					this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea ? 'true' : 'false';
+
 				});
 
 			} else {

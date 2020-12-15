@@ -4,6 +4,12 @@ const ERROR_MESSAGES = {
 
 	logout: 'Erro ao realizar logout.',
 
+	responsavelTecnico: {
+		listagem: 'Erro ao listar os responsáveis técnicos!'
+	}
+
+
+
 };
 
 const SUCCESS_MESSAGES = {
