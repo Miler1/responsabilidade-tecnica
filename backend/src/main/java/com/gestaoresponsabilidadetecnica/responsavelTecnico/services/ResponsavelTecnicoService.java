@@ -149,7 +149,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
 
     }
-
+    
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
 
 //        validaTipoArquivo(multipartFile);
