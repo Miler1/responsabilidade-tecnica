@@ -46,7 +46,7 @@ export default {
 			tituloListagem: "Status solicitação",
 			placeholderPesquisa: "",
 			headerListagem: HEADER,
-			dadosListagem: {content:[]},
+			dadosListagem: {},
 			parametrosFiltro: {},
 			perfil: 'Usuario'
 		};
