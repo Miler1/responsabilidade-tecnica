@@ -28,28 +28,24 @@ const routes = [
 			ValidarRota(next, 'USUARIO');
 		},
 
-		// children: [
-		// 	// CADASTRO
-		// 	{
-		// 		path: 'cadastro',
-		// 		name: 'Cadastro',
-		// 		component: () => import('../views/cadastro/Cadastro.vue')
-		// 	},
-
-		// ],
-	},
-	{
-		path: '/user/cadastro',
-		name: 'Cadastro',
-		meta: {
-			title: 'Gestão de Responsabilidade Técnica'
+		redirect: to => {
+			return '/user/home';
 		},
 
-		component: () => import('@/views/usuario/cadastro/Cadastro.vue'),
+		children: [
+			// CADASTRO
+			{
+				path: 'home',
+				name: 'Home',
+				component: () => import('@/views/usuario/listagem/Listagem.vue')
+			},
+			{
+				path: 'cadastro',
+				name: 'Cadastro',
+				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
+			},
 
-		beforeEnter: (to, from, next) => {
-			ValidarRota(next, 'USUARIO');
-		},
+		],
 	},
 	{
 		path: '/admin',
