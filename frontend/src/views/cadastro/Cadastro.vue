@@ -151,7 +151,7 @@
 								:errorMessages="errorMessage"
 							)
 					v-row
-						v-col.py-0(cols="12", md="8")
+						v-col(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
 								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
