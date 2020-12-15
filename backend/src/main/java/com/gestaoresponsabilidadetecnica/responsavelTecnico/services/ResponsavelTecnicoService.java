@@ -28,7 +28,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,11 +99,11 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
-    public StatusCadastroResponsavelTecnico buscarStatusPorCodigo(String codigo){
+    public StatusCadastroResponsavelTecnico buscarStatusPorCodigo(String codigo) {
         return statusCadastroResponsavelTecnicoRepository.findByCodigo(codigo);
     }
 
-    public void mudarStatusResponsavelTecnico(ResponsavelTecnico responsavelTecnico, StatusCadastroResponsavelTecnico status){
+    public void mudarStatusResponsavelTecnico(ResponsavelTecnico responsavelTecnico, StatusCadastroResponsavelTecnico status) {
 
         responsavelTecnico.setStatus(status);
         responsavelTecnicoRespository.save(responsavelTecnico);
@@ -135,6 +134,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
 
         return findByPessoa(request, pessoa);
+
     }
 
     @Override
@@ -147,8 +147,8 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
 
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
-    }
 
+    }
 
     public RetornoUploadArquivoDTO downloadAnexo(HttpServletRequest request, MultipartFile file) throws Exception {
         return null;
