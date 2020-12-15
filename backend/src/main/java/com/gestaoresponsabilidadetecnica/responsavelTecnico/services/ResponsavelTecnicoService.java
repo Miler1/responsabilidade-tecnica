@@ -135,7 +135,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
     }
 
-    @Override
     public RetornoUploadArquivoDTO downloadAnexo(HttpServletRequest request, MultipartFile file) throws Exception {
         return null;
     }
