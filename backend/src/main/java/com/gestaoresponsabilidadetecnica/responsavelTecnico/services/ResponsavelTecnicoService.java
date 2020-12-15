@@ -26,6 +26,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,6 +83,29 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         responsavelTecnicoRespository.save(responsavelTecnico);
 
         return responsavelTecnico;
+
+    }
+
+    public List<ResponsavelTecnico> buscarNovosExpirados() {
+
+        StatusCadastroResponsavelTecnico statusAtivo = statusCadastroResponsavelTecnicoRepository.findByCodigo("APROVADO");
+
+        return responsavelTecnicoRespository.findAll(
+                Specification
+                        .where(ResponsavelTecnicoSpecification.vencidoPorData(new Date()))
+                        .and(ResponsavelTecnicoSpecification.status(statusAtivo))
+        );
+
+    }
+
+    public StatusCadastroResponsavelTecnico buscarStatusPorCodigo(String codigo){
+        return statusCadastroResponsavelTecnicoRepository.findByCodigo(codigo);
+    }
+
+    public void mudarStatusResponsavelTecnico(ResponsavelTecnico responsavelTecnico, StatusCadastroResponsavelTecnico status){
+
+        responsavelTecnico.setStatus(status);
+        responsavelTecnicoRespository.save(responsavelTecnico);
 
     }
 

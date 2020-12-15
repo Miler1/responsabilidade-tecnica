@@ -38,7 +38,7 @@ export default {
 }
 
 .v-expansion-panel-header {
-	color:  rgb(4, 82, 4);
+	color:  #777777;
 	cursor: pointer;
 
 	padding: 5px 24px;

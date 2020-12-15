@@ -45,6 +45,18 @@ public final class VariaveisAmbientes {
 		return environment.getProperty("entrada.unica.cadastro.unificado");
 	}
 
+	/* JOBS */
+	public static Boolean jobVerificacaoEnabled() {
+
+		String enabled = environment.getProperty("job.validade.enabled");
+		return enabled != null && enabled.equals("true");
+
+	}
+
+	public static String getCronJobVerificacao() {
+		return environment.getProperty("job.validade.cron");
+	}
+
 	public static String pathSalvarArquivos() {
 		return environment.getProperty("path.arquivos.salvar");
 	}
