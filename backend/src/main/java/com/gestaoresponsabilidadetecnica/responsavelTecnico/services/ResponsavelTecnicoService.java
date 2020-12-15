@@ -8,6 +8,7 @@ import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.Especializ
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.repositories.EspecializacaoTecnicaRepository;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
@@ -64,7 +65,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
-        Pessoa pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
+        PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
 
         StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
 

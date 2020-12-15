@@ -11,13 +11,13 @@ export default {
 			return ApiService.post(`responsavelTecnico/listar/?
 						page=${parametrosFiltro.pagina > 0 ? parametrosFiltro.pagina : 0}
 						&size=${parametrosFiltro.itemsPorPagina > 0 ? parametrosFiltro.itemsPorPagina : 10}
-						&sort=${parametrosFiltro.tipoOrdenacao ? parametrosFiltro.tipoOrdenacao : 'pessoa.nome,asc'}`,
+						&sort=${parametrosFiltro.tipoOrdenacao ? parametrosFiltro.tipoOrdenacao : 'id,asc'}`,
 
 			parametrosFiltro
 			);
 
 		} else {
-			return ApiService.post('responsavelTecnico/listar/?page=0&size=10&sort=pessoa.nome,asc', {});
+			return ApiService.post('responsavelTecnico/listar/?page=0&size=10&sort=id,asc', {});
 		}
 
 	},

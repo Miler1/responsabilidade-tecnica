@@ -41,6 +41,10 @@
 				@update:options="sortBy"
 			)
 
+
+			template(v-slot:item.justificativa='{ item }')
+				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
+
 			template(v-slot:item.actions='{ item }')
 
 				v-tooltip(bottom, v-if="item.status.codigo!='REPROVADO' && item.status.codigo != 'APROVADO'")

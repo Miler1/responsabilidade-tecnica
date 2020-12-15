@@ -3,6 +3,7 @@ package com.gestaoresponsabilidadetecnica.pessoa.services;
 import br.ufla.lemaf.beans.pessoa.Pessoa;
 import com.gestaoresponsabilidadetecnica.entradaUnica.services.EntradaUnicaWS;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
 import org.apache.commons.collections4.iterators.PeekingIterator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class PessoaService implements IPessoaService {
     }
 
     @Override
-    public com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa transformPessoaEUByPessoa(Pessoa pessoaEU) {
+    public PessoaFisica transformPessoaEUByPessoa(Pessoa pessoaEU) {
        return pessoaRepository.findById(pessoaEU.id).orElse(null);
     }
 
