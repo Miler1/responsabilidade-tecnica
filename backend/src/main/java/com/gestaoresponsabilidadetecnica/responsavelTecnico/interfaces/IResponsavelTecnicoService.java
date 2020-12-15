@@ -22,6 +22,4 @@ public interface IResponsavelTecnicoService {
 
     List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa);
 
-    List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa);
-
 }
