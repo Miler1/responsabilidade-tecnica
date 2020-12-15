@@ -16,6 +16,7 @@
 					v-row
 						v-col(cols="12", md="6")
 							TextField(
+								ref="textFieldFormacao",
 								v-model="dados.formacao",
 								labelOption = "Formação: *",
 								id = "QA-input-formacao",
@@ -26,6 +27,7 @@
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								ref="textFieldConcelhoDeClasse",
 								v-model="dados.conselhoDeClasse",
 								labelOption = "Conselho de classe: *",
 								id = "QA-input-conselho-classe",
@@ -36,6 +38,7 @@
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								ref="textFieldRegistro",
 								v-model="dados.registro",
 								labelOption = "Registro: *",
 								id = "QA-input-registro",
@@ -414,23 +417,47 @@ export default {
 
 						that.prepararParaSalvar();
 
-						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
-							.then(() => {
+						if (this.$route.params.idTecnicoResponsavel) {
 
-								this.salvarArquivos();
+							let id = this.$route.params.idTecnicoResponsavel;
 
-								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+							ResponsavelTecnicoService.editarSolicitacao(that.dados, id)
+								.then(() => {
 
-								this.$router.push({name: 'Usuario'});
+									this.salvarArquivos();
 
-							})
-							.catch(error => {
+									snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-								console.error(error);
+									this.$router.push({name: 'Usuario'});
 
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+								})
+								.catch(error => {
 
-							});
+									console.error(error);
+
+									// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+								});
+
+						} else {
+							ResponsavelTecnicoService.salvarSolicitacao(that.dados)
+								.then(() => {
+
+									this.salvarArquivos();
+
+									snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+
+									this.$router.push({name: 'Usuario'});
+
+								})
+								.catch(error => {
+
+									console.error(error);
+
+									// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+								});
+						}
 
 					}
 
@@ -475,6 +502,33 @@ export default {
 
 			});
 
+		}
+
+	},
+
+	mounted() {
+
+		if (this.$route.params.idPessoa) {
+
+			this.isCadastro = false;
+			console.log(this.$route.params.idPessoa);
+
+			ResponsavelTecnicoService.buscarSolicitacao(this.$route.params.idPessoa)
+				.then( (result) => {
+
+					this.dados = result.data[0];
+					this.$refs.textFieldFormacao.setModel(this.dados.formacao);
+					this.$refs.textFieldConcelhoDeClasse.setModel(this.dados.conselhoDeClasse);
+					this.$refs.textFieldRegistro.setModel(this.dados.registro);
+					console.log(this.dados);
+
+				})
+				.catch( error => {
+					console.error(error);
+				});
+
+		} else{
+			this.isCadastro = true;
 		}
 
 	},

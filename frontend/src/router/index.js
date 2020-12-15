@@ -45,7 +45,7 @@ const routes = [
 				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
 			},
 			{
-				path: 'edicao/:idTecnicoResponsavel',
+				path: 'edicao/:idPessoa',
 				name: 'Editar',
 				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
 			},
