@@ -44,6 +44,11 @@ const routes = [
 				name: 'Cadastro',
 				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
 			},
+			{
+				path: 'edicao',
+				name: 'Editar',
+				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
+			},
 
 		],
 	},

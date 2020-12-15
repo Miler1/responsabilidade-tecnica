@@ -71,7 +71,7 @@ export default {
 				.then((response) => {
 
 					let pessoa = response.data;
-
+					console.log(pessoa);
 					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
 						.then( (result) => {
 
