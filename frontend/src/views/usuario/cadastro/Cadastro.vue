@@ -139,7 +139,8 @@
 						:hideFooter="false",
 						:labelNoData="labelNoData",
 						:removerAnexo="removerAnexo",
-						:downloadAnexo="downloadAnexo"
+						:downloadAnexo="downloadAnexo",
+						:editarItem="editarItem"
 					)
 
 		div.d-flex.flex-row.justify-space-between
@@ -441,6 +442,10 @@ export default {
 				window.scrollTo(0, 0);
 				this.errorMessageEmpty = false;
 			}
+
+		},
+
+		editarItem(item) {
 
 		},
 

@@ -14,7 +14,8 @@
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
 				:perfil="perfil"
-				:visualizarItem="visualizarCadastro"
+				:visualizarItem="visualizarCadastro",
+				:editarItem="editarCadastro"
 			)
 
 		v-btn#QA-btn-cadastro.float-right.mt-6(@click='abrirTelaCadastro', large)
@@ -40,6 +41,12 @@ export default {
 		Panel
 	},
 
+	props: {
+		pessoa: {
+			type: [Object]
+		}
+	},
+
 	data: () => {
 		return {
 			tituloAba: "responsabilidade técnica",
@@ -59,7 +66,7 @@ export default {
 				return;
 			}
 
-			if (item.id) {
+			if(item.id){
 
 			}
 
@@ -67,16 +74,25 @@ export default {
 
 		updatePagination() {
 
-			ResponsavelTecnicoService.buscarSolicitacao()
-				.then( (result) => {
+			// PessoaService.buscarPessoalogada()
+			// 	.then((response) => {
 
-					this.dadosListagem.content = result.data;
-					this.dadosListagem.nomeItem = "informações técnicas";
+			// 		let pessoa = response.data;
+			// 		console.log(pessoa);
+			// 		ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
+			// 			.then( (result) => {
 
-				})
-				.catch( error => {
-					console.error(error);
-				});
+			// 				this.dadosListagem.content = result.data;
+			// 				this.dadosListagem.nomeItem = "informações técnicas";
+
+			// 			})
+			// 			.catch( error => {
+			// 				console.error(error);
+			// 			});
+			// 	})
+			// 	.catch(error => {
+			// 		console.error(error.message);
+			// 	});
 
 		},
 
@@ -84,10 +100,14 @@ export default {
 			this.$router.push({ name: 'Cadastro' });
 		},
 
+		editarCadastro(pessoa) {
+			this.$router.push({ name: 'Editar', params: { idTecnicoResponsavel: pessoa.id } });
+		}
 	},
 
 	created() {
-		this.updatePagination();
+		// this.updatePagination();
+		console.log(this.pessoa);
 	}
 };
 </script>
