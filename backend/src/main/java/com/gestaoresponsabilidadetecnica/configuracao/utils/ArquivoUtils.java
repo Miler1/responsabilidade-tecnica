@@ -20,9 +20,9 @@ public class ArquivoUtils {
 
 		File arquivoRetorno = pathArquivoRetorno.toFile();
 
-		if(!arquivoRetorno.exists()) {
-			Files.createDirectory(pathArquivoRetorno.getName(3));
-		}
+//		if(!arquivoRetorno.exists()) {
+//			Files.createDirectory(pathArquivoRetorno.getName(3));
+//		}
 
 		FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), arquivoRetorno);
 
