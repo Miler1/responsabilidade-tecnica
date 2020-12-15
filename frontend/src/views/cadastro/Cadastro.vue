@@ -515,7 +515,7 @@ export default {
 				});
 
 			} else {
-				// window.scrollTo(0, 0);
+				window.scrollTo(0, 0);
 				this.errorMessageEmpty = false;
 			}
 
