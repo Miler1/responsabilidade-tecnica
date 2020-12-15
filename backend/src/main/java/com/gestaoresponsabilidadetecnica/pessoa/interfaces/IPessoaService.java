@@ -10,4 +10,5 @@ public interface IPessoaService {
     Pessoa getPessoaLogada(HttpServletRequest request);
 
     com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa transformPessoaEUByPessoa(Pessoa pessoaEU);
+
 }
