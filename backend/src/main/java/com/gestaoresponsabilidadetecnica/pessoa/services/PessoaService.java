@@ -4,7 +4,6 @@ import br.ufla.lemaf.beans.pessoa.Pessoa;
 import com.gestaoresponsabilidadetecnica.entradaUnica.services.EntradaUnicaWS;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
-import org.apache.commons.collections4.iterators.PeekingIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class PessoaService implements IPessoaService {
 
     @Override
     public com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa transformPessoaEUByPessoa(Pessoa pessoaEU) {
-       return pessoaRepository.findById(pessoaEU.id).orElse(null);
+        return pessoaRepository.findById(pessoaEU.id).orElse(null);
     }
 
 }

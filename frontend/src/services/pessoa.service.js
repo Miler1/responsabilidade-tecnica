@@ -2,6 +2,6 @@ import ApiService from './api.service';
 
 export default {
 
-    buscaPessoalogada: async () => ApiService.get('/pessoa/buscaPessoaLogada')
+    buscarPessoalogada: async () => ApiService.get('/pessoa/buscarPessoaLogada')
 
 };

@@ -115,7 +115,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        List<ResponsavelTecnico> responsaveis = responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+        List<ResponsavelTecnico> responsaveis = findByPessoa(request, pessoa);
 
         return responsaveis.get(responsaveis.size() - 1);
 
@@ -131,6 +131,21 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
 
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
+    }
+
+    @Override
+    public List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa) {
+        return responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+    }
+
+    @Override
+    public List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa) {
+
+
+        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
+
+        return findByPessoa(request, pessoa);
+
     }
 
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
