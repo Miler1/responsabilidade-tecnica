@@ -99,63 +99,43 @@
 			ExpansivePanel(titulo = 'Informações técnicas')
 				v-form.px-2(ref="cadastro")
 					v-row
-						//- v-col.pb-0(cols="12", md="6")
-						//- 	TextField(
-						//- 		v-model="dados.formacao",
-						//- 		labelOption = "Formação: *",
-						//- 		id = "QA-input-formacao",
-						//- 		placeholder="Digite aqui",
-						//- 		:errorMessages="errorMessage",
-						//- 		@click="resetErrorMessage"
-						//- 	)
-						//- v-col.pb-0(cols="12", md="3")
-						//- 	TextField(
-						//- 		v-model="dados.conselho",
-						//- 		labelOption = "Conselho de classe: *",
-						//- 		id = "QA-input-conselho-classe",
-						//- 		placeholder="Digite aqui",
-						//- 		:errorMessages="errorMessage",
-						//- 		@click="resetErrorMessage"
-						//- 	)
-						//- v-col.pb-0(cols="12", md="3")
-						//- 	TextField(
-						//- 		v-model="dados.registro",
-						//- 		labelOption = "Registro: *",
-						//- 		id = "QA-input-registro",
-						//- 		placeholder="Digite aqui",
-						//- 		:errorMessages="errorMessage",
-						//- 		@click="resetErrorMessage"
-						//- 	)
 						v-col(cols="12", md="6")
 							TextField(
+								v-model="dados.formacao",
 								labelOption = "Formação: *",
 								id = "QA-input-formacao",
 								@changeModel="dados.formacao = $event",
 								placeholder="Digite aqui",
-								:errorMessages="errorMessage"
+								:errorMessages="errorMessage",
+								@click.native="resetErrorMessage"
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								v-model="dados.conselhoDeClasse",
 								labelOption = "Conselho de classe: *",
 								id = "QA-input-conselho-classe",
 								@changeModel="dados.conselhoDeClasse = $event",
 								placeholder="Digite aqui",
-								:errorMessages="errorMessage"
+								:errorMessages="errorMessage",
+								@click.native="resetErrorMessage"
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								v-model="dados.registro",
 								labelOption = "Registro: *",
 								id = "QA-input-registro",
 								@changeModel="dados.registro = $event",
 								placeholder="Digite aqui",
-								:errorMessages="errorMessage"
+								:errorMessages="errorMessage",
+								@click.native="resetErrorMessage"
 							)
 					v-row
-						v-col(cols="12", md="8")
+						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
 							div
 								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
 									v-model="dados.nivelResponsabilidadeTecnica",
+									:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
 									row
 								)
 									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
@@ -164,14 +144,14 @@
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", row)
+								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
 									v-radio(label='Sim' value='true')
 									v-radio(label='Não' value='false')
 					v-row
 						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row.align-baseline
-								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", row)
+								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
@@ -180,7 +160,7 @@
 								v-text-field#QA-input-outro-vinculo(
 									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
 									v-model="dados.outroVinculoEmpregaticio",
-									:errorMessages="errorMessage(dados.outroVinculoEmpregaticio)",
+									:errorMessages="errorMessageOutroVinculo(dados.outroVinculoEmpregaticio)",
 									color="#E0E0E0",
 									:placeholder="placeholder",
 									required,
@@ -222,17 +202,29 @@
 						span Adicionar anexo
 					input(
 						ref="uploader",
+						accept="image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 						class="d-none",
 						type="file",
 						multiple,
+						required,
+						:error-messages="errorMessage(files)",
 						@change="uploadFile"
 					)
+
+					div.message-erro(
+						v-if="files.length == 0 && !errorMessageEmpty")
+							| Obrigatório
+					div.message-erro(
+						v-if="excedeuTamanhoMaximoArquivo")
+							| Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
 
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
 						:dadosListagem="files",
 						:hideFooter="false",
-						:labelNoData="labelNoData"
+						:labelNoData="labelNoData",
+						:removerAnexo="removerAnexo",
+						:downloadAnexo="downloadAnexo"
 					)
 
 		div.d-flex.flex-row.justify-space-between
@@ -277,12 +269,12 @@ export default {
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
-			currentFile: [],
 			isSelecting: false,
 			files: [],
-			file: null,
 			url: window.location,
 			row: null,
+			excedeuTamanhoMaximoArquivo: false,
+			totalPermitido: 2000000,
 			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
@@ -329,32 +321,6 @@ export default {
 
 		},
 
-		downloadAnexo() {
-
-			this.$http({
-				method: 'get',
-				url: this.url,
-				responseType: 'arraybuffer'
-			})
-				.then(response => {
-					this.forceFileDownload(response);
-				})
-				.catch(() => console.log('error occured'));
-
-		},
-
-		forceFileDownload(response){
-
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-
-			link.href = url;
-			link.setAttribute('download', 'file.png'); //or any other extension
-			document.body.appendChild(link);
-			link.click();
-
-		},
-
 		onButtonClick() {
 
 			this.isSelecting = true;
@@ -367,31 +333,45 @@ export default {
 
 		},
 
+		checaTamanhoArquivo() {
+
+			if (this.files.some(file => file.size > this.totalPermitido)) {
+				this.files.splice(0,this.files.length);
+				this.excedeuTamanhoMaximoArquivo = true;
+			} else {
+				this.excedeuTamanhoMaximoArquivo = false;
+			}
+
+			return this.excedeuTamanhoMaximoArquivo;
+
+		},
+
 		uploadFile(e) {
 			this.files = this.files.concat([...e.target.files]);
+			this.checaTamanhoArquivo();
 		},
 
 		checkForm() {
 
 			return this.dados.formacao !== null
-				&& this.dados.conselho !== null
+				&& this.dados.conselhoDeClasse !== null
 				&& this.dados.registro !== null
-				&& this.dados.responsabilidade !== null
-				&& this.dados.vinculoGea !== null
+				&& this.dados.nivelResponsabilidadeTecnica !== null
+				&& this.dados.possuiVinculoComGea !== null
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
 				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
-				&& this.dados.vinculoEmpregaticio != " "
-				&& this.dados.especializacao !== null;
+				&& this.dados.especializacao !== null
+				&& this.files.length > 0;
 
 		},
 
 		clear() {
 
 			this.dados.formacao = null;
-			this.dados.conselho = null;
+			this.dados.conselhoDeClasse = null;
 			this.dados.registro = null;
-			this.dados.responsabilidade = null;
-			this.dados.vinculoGea = null;
+			this.dados.nivelResponsabilidadeTecnica = null;
+			this.dados.possuiVinculoComGea = null;
 			this.dados.vinculoEmpregaticio = null;
 			this.dados.outroVinculoEmpregaticio = null;
 			this.dados.especializacao = null;
@@ -418,7 +398,25 @@ export default {
 		},
 
 		errorMessage(value) {
+
+			if (Array.isArray(value)){
+
+				if (value.length == 0) {
+					return 'Obrigatório';
+				}
+				if (value.some(file => file.size > 2e6)) {
+					return 'Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB';
+				}
+			}
+
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
+
+		},
+
+		errorMessageOutroVinculo(value) {
+			if (this.isHabilitado) {
+				return this.errorMessageEmpty || value ? '' : 'Obrigatório';
+			}
 		},
 
 		permiteOutroVinculo(isChecked) {
@@ -517,7 +515,7 @@ export default {
 				});
 
 			} else {
-				window.scrollTo(0, 0);
+				// window.scrollTo(0, 0);
 				this.errorMessageEmpty = false;
 			}
 
@@ -615,6 +613,16 @@ export default {
 		.v-label {
 			font-weight: 400;
 		}
+	}
+
+	.message-erro {
+		color: #ff5252 !important;
+		caret-color: #ff5252!important;
+		flex: 1 1 auto;
+		font-size: 12px;
+		min-height: 14px;
+		min-width: 1px;
+		position: relative;
 	}
 
 }
