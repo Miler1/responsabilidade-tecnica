@@ -14,7 +14,7 @@
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
 				:perfil="perfil"
-
+				:visualizarItem="visualizarCadastro"
 			)
 
 		v-btn#QA-btn-cadastro.float-right.mt-6(@click='abrirTelaCadastro', large)
@@ -53,6 +53,10 @@ export default {
 	},
 	methods: {
 
+		visualizarCadastro() {
+			alert("TESTE!");
+		},
+
 		updatePagination() {
 
 			PessoaService.buscarPessoalogada()
@@ -90,7 +94,7 @@ export default {
 
 <style lang="less" scoped>
 
-@import "../assets/css/variaveis.less";
+@import "../../assets/css/variaveis.less";
 
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
