@@ -84,6 +84,7 @@ export default {
 
 							this.dadosListagem.content = result.data;
 							this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
+							this.dadosListagem.nomeItem = "informações técnicas";
 
 						})
 						.catch( error => {
