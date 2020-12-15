@@ -36,7 +36,7 @@
 					span Baixar anexo {{tituloTooltip}}
 				v-tooltip(bottom, v-if="exibirIconeEditar")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='excluirAnexo(item)', v-on='on', color='#F56C6C')
+						v-icon.mr-2(small @click='removerAnexo(item)', v-on='on', color='#F56C6C')
 							| mdi-delete
 					span Excluir anexo {{tituloTooltip}}
 
@@ -147,7 +147,7 @@ export default {
 			type: [Boolean],
 			default: false
 		},
-		excluirAnexo: {
+		removerAnexo: {
 			type: [Function]
 		},
 		downloadAnexo: {
