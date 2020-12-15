@@ -36,7 +36,7 @@
 							| mdi-eye
 					span Visualizar cadastro
 
-				v-tooltip(bottom, v-if="perfil === 'Usuario' && item.status.codigo == 'REPROVADO'")
+				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
 							| mdi-chat

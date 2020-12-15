@@ -55,36 +55,27 @@ export default {
 
 		visualizarCadastro(item) {
 
-			if(!item) {
+			if (!item) {
 				return;
 			}
 
-			if(item.id){
-				
+			if (item.id) {
+
 			}
 
 		},
 
 		updatePagination() {
 
-			PessoaService.buscarPessoalogada()
-				.then((response) => {
+			ResponsavelTecnicoService.buscarSolicitacao()
+				.then( (result) => {
 
-					let pessoa = response.data;
-					console.log(pessoa);
-					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
-						.then( (result) => {
+					this.dadosListagem.content = result.data;
+					this.dadosListagem.nomeItem = "informações técnicas";
 
-							this.dadosListagem.content = result.data;
-							this.dadosListagem.nomeItem = "informações técnicas";
-
-						})
-						.catch( error => {
-							console.error(error);
-						});
 				})
-				.catch(error => {
-					console.error(error.message);
+				.catch( error => {
+					console.error(error);
 				});
 
 		},
@@ -92,6 +83,7 @@ export default {
 		abrirTelaCadastro() {
 			this.$router.push({ name: 'Cadastro' });
 		},
+
 	},
 
 	created() {
