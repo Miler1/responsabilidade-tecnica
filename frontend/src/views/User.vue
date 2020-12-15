@@ -29,7 +29,7 @@ import GridListagem from '@/components/GridListagem';
 import Panel from '@/components/Panel';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import PessoaService from '@/services/pessoa.service';
-import { HEADER } from '@/utils/dadosHeader/ListagemUsuarioHeader';
+import { HEADER } from '@/utils/dadosHeader/ListagemInformacoesTecnicas';
 
 export default {
 
@@ -64,7 +64,7 @@ export default {
 						.then( (result) => {
 
 							this.dadosListagem.content = result.data;
-							this.dadosListagem.nomeItem = "solicitações";
+							this.dadosListagem.nomeItem = "informações técnicas";
 
 						})
 						.catch( error => {

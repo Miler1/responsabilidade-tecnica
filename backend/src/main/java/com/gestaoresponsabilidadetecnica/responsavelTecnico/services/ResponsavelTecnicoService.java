@@ -17,7 +17,9 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.StatusCadastr
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.DocumentoResponsavelTecnicoRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.ResponsavelTecnicoRespository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.StatusCadastroResponsavelTecnicoRepository;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.specifications.ResponsavelTecnicoSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -122,6 +124,20 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
     }
 
     @Override
+
+    public List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa) {
+        return responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+    }
+
+    @Override
+    public List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa) {
+
+        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
+
+        return findByPessoa(request, pessoa);
+    }
+
+    @Override
     public RetornoUploadArquivoDTO salvarAnexo(HttpServletRequest request, MultipartFile multipartFile) throws Exception {
 
         File file = salvaArquivoDiretorio(multipartFile);
@@ -133,19 +149,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
     }
 
-    @Override
-    public List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa) {
-        return responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
-    }
 
-    @Override
-    public List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa) {
-
-
-        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
-
-        return findByPessoa(request, pessoa);
-
+    public RetornoUploadArquivoDTO downloadAnexo(HttpServletRequest request, MultipartFile file) throws Exception {
+        return null;
     }
 
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
