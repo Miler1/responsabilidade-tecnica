@@ -239,7 +239,7 @@ export default {
 		},
 
 		checkNomeItem() {
-			return this.dadosListagem.nomeItem === 'usuarios';
+			return this.dadosListagem.nomeItem === 'informacões técnicas';
 		},
 
 		ativarDesativar(item) {
