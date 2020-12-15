@@ -19,13 +19,21 @@
 </template>
 
 <script>
+
+import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import Panel from '@/components/Panel.vue';
 import GridListagem from '@/components/GridListagem';
 import { HEADER } from '@/utils/dadosHeader/ListagemSolicitacoes';
+import { ERROR_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
 
 	name: 'Administrador',
+
+	components: {
+		Panel,
+		GridListagem
+	},
 
 	data: () => {
 
@@ -33,46 +41,40 @@ export default {
 			placeholderPesquisa: "Pesquisar pelo nome ou status do cadastro",
 			headerListagem: HEADER,
 
-			dadosListagem: {
-				content: [
-					{
-						responsavel: {
-							nome: "Nome MOCK 1",
-							cod: "Um codigo mock 1"
-						},
-						status: {
-							codigo: "STATUS MOCK 1",
-							nome: "Status Mock 1"
-						},
-						justificativa: "Justificativa mock 1",
-						validade: "31/03/2022"
-					},
-					{
-						responsavel: {
-							nome: "Nome MOCK 2",
-							cod: "Um codigo mock 2"
-						},
-						status: {
-							codigo: "VENCIDO",
-							nome: "Vencido"
-						},
-						justificativa: "Justificativa mock 2",
-						validade: "31/03/2020"
-					},
-				]
-			},
-			updatePagination: () => {},
+			dadosListagem: {},
 			editarItem: () => console.log("EDITAR"),
 			ativarDesativarItem: () => console.log("ATIVAR/DESATIVAR"),
-			parametrosFiltro: {},
+			parametrosFiltro: {
+				pagina: 0,
+				itemsPorPagina: 10,
+				tipoOrdenacao: 'id,asc',
+				stringPesquisa: ''
+			},
 			perfil: 'Administrador'
 		};
 	},
 
-	components: {
-		Panel,
-		GridListagem
-	}
+	methods: {
+
+		updatePagination(parametrosFiltro) {
+
+			ResponsavelTecnicoService.listar(parametrosFiltro)
+				.then((response) => {
+
+					this.dadosListagem = response.data;
+					this.dadosListagem.nomeItem = "responsáveis técnicos";
+
+				})
+				.catch(erro => {
+
+					console.error(erro);
+
+					snackbar.alert(ERROR_MESSAGES.responsavelTecnico.listagem);
+
+				});
+
+		},
+	},
 
 };
 </script>

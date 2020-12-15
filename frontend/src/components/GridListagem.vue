@@ -21,12 +21,16 @@
 				@update:options="sortBy"
 			)
 
+
+			template(v-slot:item.justificativa='{ item }')
+				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
+
 			template(v-slot:item.validade='{ item }')
 				span {{item.validade ? formatarData(item.validade) : " ‒"}}
 
 			template(v-slot:item.actions='{ item }')
 
-				v-tooltip(bottom, v-if="perfil === 'Usuario'")
+				v-tooltip(bottom)
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='visualizarItem(item)', v-on='on', color='#404040')
 							| mdi-eye
@@ -50,9 +54,7 @@
 							| mdi-replay
 					span Revalidar cadastro
 
-
-
-			template(v-slot:no-data, v-if="dadosListagem.content.length === 0")
+			template(v-slot:no-data)
 				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
 
 			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")

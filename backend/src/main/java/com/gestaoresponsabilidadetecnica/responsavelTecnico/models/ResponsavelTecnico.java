@@ -3,6 +3,7 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,8 +51,8 @@ public class ResponsavelTecnico implements Serializable {
     private EspecializacaoTecnica especializacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_pessoa", referencedColumnName = "id")
-    private Pessoa pessoa;
+    @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
+    private PessoaFisica pessoa;
 
     @NotNull(message = "{validacao.notnull}")
     private Date validade;
@@ -78,17 +79,17 @@ public class ResponsavelTecnico implements Serializable {
 
     public static class ResponsavelTecnicoBuilder {
 
-        String formacao;
-        String conselhoDeClasse;
-        String registro;
-        String nivelResponsabilidadeTecnica;
-        Boolean possuiVinculoComGea;
-        String vinculoEmpregaticio;
-        String outroVinculoEmpregaticio;
-        EspecializacaoTecnica especializacao;
-        Pessoa pessoa;
-        Date validade;
-        StatusCadastroResponsavelTecnico status;
+        public String formacao;
+        public String conselhoDeClasse;
+        public String registro;
+        public String nivelResponsabilidadeTecnica;
+        public Boolean possuiVinculoComGea;
+        public String vinculoEmpregaticio;
+        public String outroVinculoEmpregaticio;
+        public EspecializacaoTecnica especializacao;
+        public PessoaFisica pessoa;
+        public Date validade;
+        public StatusCadastroResponsavelTecnico status;
 
         public ResponsavelTecnicoBuilder() {}
 
@@ -132,7 +133,7 @@ public class ResponsavelTecnico implements Serializable {
             return this;
         }
 
-        public ResponsavelTecnicoBuilder setPessoa(Pessoa pessoa) {
+        public ResponsavelTecnicoBuilder setPessoa(PessoaFisica pessoa) {
             this.pessoa = pessoa;
             return this;
         }
