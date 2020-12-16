@@ -69,8 +69,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
 
-        Date validade = DateUtil.acrescentarUmAno(new Date());
-
         ResponsavelTecnico responsavelTecnico = new ResponsavelTecnico.ResponsavelTecnicoBuilder()
                 .setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse())
                 .setEspecializacao(especializacaoTecnica)
@@ -81,7 +79,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 .setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea())
                 .setRegistro(responsavelTecnicoDTO.getRegistro())
                 .setStatus(status)
-                .setValidade(validade)
                 .setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio())
                 .build();
 
