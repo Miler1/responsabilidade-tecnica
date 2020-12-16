@@ -69,6 +69,7 @@ export default {
 			if(item.id){
 
 			}
+			this.$router.push({ name: 'VisualizarCadastro', params: { id: item.id }});
 
 		},
 
@@ -82,9 +83,8 @@ export default {
 					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
 						.then( (result) => {
 
-							this.dadosListagem.content = result.data;
+							this.dadosListagem.content.push(result.data);
 							this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
-							this.dadosListagem.nomeItem = "informações técnicas";
 
 						})
 						.catch( error => {

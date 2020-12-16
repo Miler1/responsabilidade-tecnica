@@ -55,6 +55,21 @@
                     "nome": "Usuário"
                 }
             ]
+        },
+        {
+
+            "codigo": "BAIXAR_ARQUIVOS",
+            "nome": "Baixar arquivos",
+            "perfis": [
+                {
+                    "codigo": "ADMINISTRADOR",
+                    "nome": "Administrador"
+                },
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
         }
 	]
 }

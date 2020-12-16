@@ -22,8 +22,12 @@ export default {
 
 	},
 
-    upload: async (file) => ApiService.post('/responsavelTecnico/uploadFile', file),
+	upload: async (file) => ApiService.post('/responsavelTecnico/uploadFile', file),
+	
+	download: async (hash) => ApiService.get('/responsavelTecnico/downloadFile/' + hash),
 
-    buscarSolicitacao: async() => ApiService.get('/responsavelTecnico/buscarSolicitacao/'),
+	buscarSolicitacao: async() => ApiService.get('/responsavelTecnico/buscarSolicitacao/'),
+	
+    buscarSolicitacaoByID: async() => ApiService.get('/responsavelTecnico/buscarSolicitacaoByID/'),
 
 };

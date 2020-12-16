@@ -28,8 +28,11 @@
 				:no-results-text='labelNoResultset',
 			)
 
+			template(v-slot:item.name='{ item }')
+				span {{visualizacao ? item.nome : item.name}}
+
 			template(v-slot:item.actions='{ item }')
-				v-tooltip(bottom, v-if="exibirIconeRemover")
+				v-tooltip(bottom, v-if="exibirIconeDownload")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon(small @click.prevent='downloadAnexo(item)', v-on='on', color='#9EBAA4')
 							|  mdi-eye
@@ -99,12 +102,6 @@ export default {
 		dadosListagem: {
 			type: [Array]
 		},
-		editarItem: {
-			type: [Function]
-		},
-		excluirItem: {
-			type: [Function]
-		},
 		labelNoData: {
 			type: [String]
 		},
@@ -125,7 +122,7 @@ export default {
 			type: [Boolean],
 			default: true
 		},
-		exibirIconeEditar: {
+		exibirIconeDownload: {
 			type: [Boolean],
 			default: true
 		},
@@ -137,21 +134,15 @@ export default {
 			type: [Number],
 			default: 100
 		},
-		dadosSelect: {
-			type: [Array]
-		},
-		errorMessage: {
-			type: [Function]
-		},
-		resumo: {
-			type: [Boolean],
-			default: false
-		},
 		removerAnexo: {
 			type: [Function]
 		},
 		downloadAnexo: {
 			type: [Function]
+		},
+		visualizacao: {
+			type: [Boolean],
+			default: false
 		}
 
 	}
