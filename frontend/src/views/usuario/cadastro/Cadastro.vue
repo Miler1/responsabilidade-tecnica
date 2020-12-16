@@ -221,8 +221,14 @@ export default {
 
 	methods: {
 
-		downloadAnexo() {
-			console.log("IMPLEMENTAR DOWNLOAD ANEXO");
+		downloadAnexo(item) {
+
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(item);
+			link.target = '_blank';
+			link.click();
+			URL.revokeObjectURL(link.href);
+
 		},
 
 		prepararNumTelefone(numTelefone) {
@@ -332,7 +338,7 @@ export default {
 					return 'Obrigatório';
 				}
 				if (value.some(file => file.size > 2e6)) {
-					return 'Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB';
+					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
 				}
 			}
 
