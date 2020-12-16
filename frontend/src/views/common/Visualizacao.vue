@@ -1,6 +1,6 @@
 <template lang="pug">
 
-	v-container#container-cadastro.pa-12.align-center.justify-center
+	v-container#container-visualizar.pa-12.align-center.justify-center
 
 		h1.mb-12 Visualizar cadastro de Responsabilidade Técnica Ambiental
 
@@ -11,6 +11,11 @@
 		Endereco(:enderecos="pessoa.enderecos")
 
 		InformacoesTecnicas(:dados="dados")
+
+		div.d-flex.flex-row.justify-space-between
+			v-btn#QA-btn-voltar-visualizacao(@click='voltar', large, outlined)
+				v-icon mdi-arrow-left
+				span Voltar
 
 </template>
 
@@ -122,6 +127,10 @@ export default {
 
 			});
 
+		},
+
+		voltar() {
+			this.$router.push({path: '/'});
 		}
 
 	},
@@ -163,7 +172,7 @@ export default {
 
 <style lang="less">
 
-#container-cadastro {
+#container-visualizar {
 
 	.v-label {
 		color: #333;
@@ -207,6 +216,12 @@ export default {
 		position: relative;
 	}
 
+}
+
+#QA-btn-voltar-visualizacao {
+	color: #2196F3;
+	background-color: white;
+	width: 145px;
 }
 
 .theme--light.v-list-item .v-list-item__mask{

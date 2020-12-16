@@ -2,10 +2,10 @@
 
 	v-container.py-12.align-center.justify-center
 
-		h1.mb-12 Central do Responsável Técnico Ambiental {{dadosListagem.content.length === 0}}
+		h1.mb-12 Central do Responsável Técnico Ambiental
 
 		div.d-flex.flex-row-reverse
-			v-btn#QA-btn-cadastro.mb-6(@click='abrirTelaCadastro', large)
+			v-btn#QA-btn-cadastro.mb-6(@click='abrirTelaCadastro', large, v-if="dadosListagem.content.length === 0")
 				v-icon mdi-plus
 				span Cadastrar
 
