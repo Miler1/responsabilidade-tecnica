@@ -4,6 +4,10 @@
 
 		h1.mb-12 Central do Responsável Técnico Ambiental
 
+		v-btn#QA-btn-cadastro.mb-6(@click='abrirTelaCadastro', large, v-if="dadosListagem.content.length === 0")
+			v-icon mdi-plus
+			span Cadastrar
+
 		Panel(titulo = 'Situação do cadastro:')
 			GridListagem.pa-7(
 				:tituloAba="tituloAba",
@@ -16,10 +20,6 @@
 				:perfil="perfil"
 				:visualizarItem="visualizarCadastro"
 			)
-
-		v-btn#QA-btn-cadastro.float-right.mt-6(@click='abrirTelaCadastro', large)
-			v-icon mdi-plus
-			span Cadastrar
 
 </template>
 
@@ -55,36 +55,27 @@ export default {
 
 		visualizarCadastro(item) {
 
-			if(!item) {
+			if (!item) {
 				return;
 			}
 
-			if(item.id){
-				
+			if (item.id) {
+
 			}
 
 		},
 
 		updatePagination() {
 
-			PessoaService.buscarPessoalogada()
-				.then((response) => {
+			ResponsavelTecnicoService.buscarSolicitacao()
+				.then( (result) => {
 
-					let pessoa = response.data;
+					this.dadosListagem.content = result.data;
+					this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
 
-					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
-						.then( (result) => {
-
-							this.dadosListagem.content = result.data;
-							this.dadosListagem.nomeItem = "informações técnicas";
-
-						})
-						.catch( error => {
-							console.error(error);
-						});
 				})
-				.catch(error => {
-					console.error(error.message);
+				.catch( error => {
+					console.error(error);
 				});
 
 		},
@@ -92,6 +83,7 @@ export default {
 		abrirTelaCadastro() {
 			this.$router.push({ name: 'Cadastro' });
 		},
+
 	},
 
 	created() {

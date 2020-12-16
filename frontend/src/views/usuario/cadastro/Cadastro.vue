@@ -62,10 +62,10 @@
 								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
 									v-radio(label='Sim' value='true')
 									v-radio(label='Não' value='false')
-					v-row
-						v-col.pt-0.pb-0(cols="12", md="12")
+					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
+						v-col.pt-0.pb-0(cols="12")
 							v-label Vínculo empregatício: *
-							div.d-flex.flex-row.align-baseline
+							div.d-flex.flex-row
 								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
@@ -83,9 +83,9 @@
 									dense
 								)
 					v-row
-						v-col(cols="12", md="12")
+						v-col(cols="12")
 							v-label Área de especialização: *
-							div.d-flex.flex-row.align-baseline
+							div.d-flex.flex-row
 								v-autocomplete#QA-select-area-especializacao(
 									outlined,
 									dense,
@@ -217,8 +217,14 @@ export default {
 
 	methods: {
 
-		downloadAnexo() {
-			console.log("IMPLEMENTAR DOWNLOAD ANEXO");
+		downloadAnexo(item) {
+
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(item);
+			link.target = '_blank';
+			link.click();
+			URL.revokeObjectURL(link.href);
+
 		},
 
 		prepararNumTelefone(numTelefone) {
@@ -263,6 +269,18 @@ export default {
 		},
 
 		checkForm() {
+
+			if (this.dados.possuiVinculoComGea === 'false') {
+
+				return this.dados.formacao !== null
+					&& this.dados.conselhoDeClasse !== null
+					&& this.dados.registro !== null
+					&& this.dados.nivelResponsabilidadeTecnica !== null
+					&& this.dados.possuiVinculoComGea !== null
+					&& this.dados.especializacao !== null
+					&& this.files.length > 0;
+
+			}
 
 			return this.dados.formacao !== null
 				&& this.dados.conselhoDeClasse !== null
@@ -316,7 +334,7 @@ export default {
 					return 'Obrigatório';
 				}
 				if (value.some(file => file.size > 2e6)) {
-					return 'Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB';
+					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
 				}
 			}
 
@@ -363,7 +381,7 @@ export default {
 
 						console.error(error);
 
-						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 					});
 
@@ -415,7 +433,7 @@ export default {
 
 								console.error(error);
 
-								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 							});
 

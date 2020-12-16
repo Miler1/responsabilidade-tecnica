@@ -2,7 +2,7 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
-import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,8 +50,8 @@ public class ResponsavelTecnico implements Serializable {
     private EspecializacaoTecnica especializacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_pessoa", referencedColumnName = "id")
-    private Pessoa pessoa;
+    @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
+    private PessoaFisica pessoa;
 
     @NotNull(message = "{validacao.notnull}")
     private Date validade;
@@ -86,7 +86,7 @@ public class ResponsavelTecnico implements Serializable {
         String vinculoEmpregaticio;
         String outroVinculoEmpregaticio;
         EspecializacaoTecnica especializacao;
-        Pessoa pessoa;
+        PessoaFisica pessoa;
         Date validade;
         StatusCadastroResponsavelTecnico status;
 
@@ -132,7 +132,7 @@ public class ResponsavelTecnico implements Serializable {
             return this;
         }
 
-        public ResponsavelTecnicoBuilder setPessoa(Pessoa pessoa) {
+        public ResponsavelTecnicoBuilder setPessoa(PessoaFisica pessoa) {
             this.pessoa = pessoa;
             return this;
         }

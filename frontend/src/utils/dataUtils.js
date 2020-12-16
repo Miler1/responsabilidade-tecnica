@@ -1,4 +1,4 @@
-const DateUtil = {
+const DataUtil = {
 
     formatarData:(date) => {
         return new Date(date).toLocaleDateString();
@@ -27,4 +27,4 @@ const DateUtil = {
 
 };
 
-export default DateUtil;
+export default DataUtil;

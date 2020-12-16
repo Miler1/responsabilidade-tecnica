@@ -452,7 +452,7 @@ export default {
 
 						console.error(error);
 
-						snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 					});
 
@@ -504,14 +504,17 @@ export default {
 
 								console.error(error);
 
-								snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 							});
 
 					}
 
 				}).catch((error) => {
+
 					console.error(error);
+					this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea ? 'true' : 'false';
+
 				});
 
 			} else {
