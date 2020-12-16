@@ -5,12 +5,12 @@ import com.gestaoresponsabilidadetecnica.configuracao.controllers.DefaultControl
 import com.gestaoresponsabilidadetecnica.configuracao.enums.Acao;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.FiltroPesquisa;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
-import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.ResponsavelTecnico;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,7 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.io.File;
 
 @RestController
 @RequestMapping("/responsavelTecnico/")
@@ -63,29 +64,50 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @PostMapping(value = "uploadFile")
-    public ResponseStatus uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<RetornoUploadArquivoDTO> uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
 
         verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
 
         RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.salvarAnexo(request, file);
 
-        return null;
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(retornoUploadArquivoDTO);
+    }
+
+    @GetMapping(value = "downloadFile/{hash}")
+    public ResponseEntity<InputStreamResource> download(HttpServletRequest request, @NotNull @PathVariable("hash") String hash) throws Exception {
+
+        verificarPermissao(request, Acao.BAIXAR_ARQUIVOS);
+
+        File file = responsavelTecnicoService.recuperaArquivo(hash);
+
+        return downloadDocumento(file, file.getName());
     }
 
     @GetMapping(value = "buscarSolicitacao")
-    public ResponseEntity<List<ResponsavelTecnico>> buscarSolicitacao(HttpServletRequest request) throws Exception{
+    public ResponseEntity<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request) throws Exception{
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
-        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
-
-        Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
-
-        List<ResponsavelTecnico> solicitacoes = responsavelTecnicoService.findByPessoa(request, pessoa);
+        ResponsavelTecnico solicitacao = responsavelTecnicoService.findByPessoaLogada(request);
 
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
-                .body(solicitacoes);
+                .body(solicitacao);
+
+    }
+
+    @GetMapping(value = "buscarSolicitacaoByID")
+    public ResponseEntity<ResponsavelTecnico> buscarSolicitacaoByID(HttpServletRequest request, @Valid @RequestBody Integer id) throws Exception{
+
+        verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
+
+        ResponsavelTecnico solicitacao = responsavelTecnicoService.findByID(id);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(solicitacao);
 
     }
 

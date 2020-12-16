@@ -2,7 +2,6 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.services;
 
 import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.ArquivoUtils;
-import com.gestaoresponsabilidadetecnica.configuracao.utils.DateUtil;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.FiltroPesquisa;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.repositories.EspecializacaoTecnicaRepository;
@@ -135,22 +134,37 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
-    private ResponsavelTecnico findByPessoaLogada(HttpServletRequest request) {
+    @Override
+    public ResponsavelTecnico findByPessoaLogada(HttpServletRequest request) {
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        List<ResponsavelTecnico> responsaveis = findByPessoa(request, pessoa);
+        List<ResponsavelTecnico> responsaveis = findByPessoa(pessoa);
 
         return responsaveis.get(responsaveis.size() - 1);
 
     }
 
-    @Override
-
-    public List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa) {
+    private List<ResponsavelTecnico> findByPessoa(Pessoa pessoa) {
         return responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+    }
+
+    @Override
+    public ResponsavelTecnico findByID(Integer id) {
+        return responsavelTecnicoRespository.findById(id).orElse(null);
+    }
+
+    @Override
+    public File recuperaArquivo(String hash) {
+
+        DocumentoResponsavelTecnico documentoResponsavelTecnico = documentoResponsavelTecnicoRepository.findByHash(hash);
+
+        File file = new File(documentoResponsavelTecnico.getCaminho());
+
+        return file;
+
     }
 
     @Override

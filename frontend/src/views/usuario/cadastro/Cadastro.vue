@@ -136,7 +136,6 @@
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
 						:dadosListagem="files",
-						:hideFooter="false",
 						:labelNoData="labelNoData",
 						:removerAnexo="removerAnexo",
 						:downloadAnexo="downloadAnexo"
@@ -186,9 +185,8 @@ export default {
 
 		return {
 			placeholder: "Digite aqui...",
-			labelNoData: 'Não há nenhum anexo a ser exibido',
 			placeholderSelect: "Selecione",
-			labelNoData: "Nenhum anexo adicionado",
+			labelNoData: "Não há nenhum anexo adicionado",
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
