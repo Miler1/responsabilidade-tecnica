@@ -4,4 +4,7 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.DocumentoResp
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DocumentoResponsavelTecnicoRepository extends JpaRepository<DocumentoResponsavelTecnico, Integer> {
+
+    DocumentoResponsavelTecnico findByHash(String hash);
+
 }
