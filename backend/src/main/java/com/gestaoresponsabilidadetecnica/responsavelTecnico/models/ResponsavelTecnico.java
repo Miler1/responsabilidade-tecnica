@@ -1,5 +1,6 @@
 package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -59,6 +61,10 @@ public class ResponsavelTecnico implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_status", referencedColumnName = "id")
     private StatusCadastroResponsavelTecnico status;
+
+    @OneToMany(mappedBy="responsavelTecnico")
+    @JsonManagedReference
+    private List<DocumentoResponsavelTecnico> documentos;
 
     public ResponsavelTecnico(ResponsavelTecnicoBuilder responsavelTecnicoBuilder) {
 
