@@ -7,18 +7,43 @@
 
 			v-container
 				router-view
+			
+				//- Elemento para exibir mensagens de alertas globais
+				v-snackbar(v-for='(snackbar, index) in snackbars.filter(s => s.showing)'
+							:key='snackbar.text + Math.random()'
+							v-model='snackbar.showing'
+							:timeout='snackbar.timeout'
+							:color='snackbar.color',
+							top,
+							:style='`padding-top: ${(index * 60) + 8}px;`')
+
+					v-icon.mr-4 {{snackbar.icon}}
+
+					span {{snackbar.text}}
+
+					template(v-slot:action=	'{ attrs }')
+						v-btn(text @click='snackbar.showing = false' v-bind="attrs")
+							| Fechar
 
 </template>
 
 <script>
 
+import { mapGetters } from 'vuex';
 import MenuSuperior from '@/components/MenuSuperior.vue';
+import Snackbar from '@/components/Snackbar';
 
 export default {
 
 	name: "App",
+
 	components: {
-		MenuSuperior
+		MenuSuperior,
+		Snackbar
+	},
+
+	computed: {
+		...mapGetters(['snackbars'])
 	},
 
 };
@@ -70,6 +95,10 @@ html {
 			.swal2-close {
 				margin-top: 4px;
 			}
+		}
+
+		.v-snack__wrapper {
+			max-width: 80%;
 		}
 	}
 }

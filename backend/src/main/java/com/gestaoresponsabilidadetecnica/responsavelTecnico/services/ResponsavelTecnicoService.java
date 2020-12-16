@@ -143,7 +143,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         List<ResponsavelTecnico> responsaveis = findByPessoa(pessoa);
 
-        return responsaveis.get(responsaveis.size() - 1);
+        return responsaveis.size() == 0 ? null : responsaveis.get(0);
 
     }
 

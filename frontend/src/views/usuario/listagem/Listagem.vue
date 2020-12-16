@@ -4,9 +4,10 @@
 
 		h1.mb-12 Central do Responsável Técnico Ambiental
 
-		v-btn#QA-btn-cadastro.mb-6(@click='abrirTelaCadastro', large, v-if="dadosListagem.content.length === 0")
-			v-icon mdi-plus
-			span Cadastrar
+		div.d-flex.flex-row-reverse
+			v-btn#QA-btn-cadastro.mb-6(@click='abrirTelaCadastro', large, v-if="dadosListagem.content.length === 0")
+				v-icon mdi-plus
+				span Cadastrar
 
 		Panel(titulo = 'Situação do cadastro:')
 			GridListagem.pa-7(
@@ -83,7 +84,7 @@ export default {
 					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
 						.then( (result) => {
 
-							this.dadosListagem.content = [result.data];
+							this.dadosListagem.content = result.data === "" ? [] : [result.data];
 							this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
 
 						})
