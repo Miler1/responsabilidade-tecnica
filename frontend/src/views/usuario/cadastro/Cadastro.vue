@@ -539,6 +539,7 @@ export default {
 
 		.v-label {
 			font-weight: 400;
+			margin-top: 6px;
 		}
 	}
 
