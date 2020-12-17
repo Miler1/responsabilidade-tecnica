@@ -128,7 +128,7 @@
 							| Obrigatório
 					div.message-erro(
 						v-if="excedeuTamanhoMaximoArquivo")
-							| Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
+							| Tamanho de arquivo inválido. O arquivo deve conter menos de 10MB
 
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
@@ -193,7 +193,7 @@ export default {
 			url: window.location,
 			row: null,
 			excedeuTamanhoMaximoArquivo: false,
-			totalPermitido: 2000000,
+			totalPermitido: 10000000,
 			isHabilitado: false,
 			especializacoes: [],
 			dados: {
@@ -352,7 +352,7 @@ export default {
 				if (value.length == 0) {
 					return 'Obrigatório';
 				}
-				if (value.some(file => file.size > 2e6)) {
+				if (value.some(file => file.size > 1e7)) {
 					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
 				}
 			}
@@ -558,7 +558,6 @@ export default {
 
 		.v-label {
 			font-weight: 400;
-			margin-top: 6px;
 		}
 	}
 
