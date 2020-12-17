@@ -1,7 +1,7 @@
 package com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
+import com.gestaoresponsabilidadetecnica.especializacaoTecnica.dtos.EspecializacaoTecnicaDTO;
 import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.StatusCadastroResponsavelTecnico;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class ResponsavelTecnicoDTO {
 
     private String conselhoDeClasse;
 
-    private EspecializacaoTecnica especializacao;
+    private EspecializacaoTecnicaDTO especializacao;
 
     private String formacao;
 

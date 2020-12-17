@@ -75,7 +75,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 .setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio())
                 .setPessoa(pessoa)
                 .setStatus(status)
-                .setJustificativa(null)
                 .setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea())
                 .setRegistro(responsavelTecnicoDTO.getRegistro())
                 .setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio())
@@ -90,6 +89,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
     @Override
     public ResponsavelTecnico editar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) {
 
+        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(
+                responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
+
         String codigoStatus = responsavelTecnicoDTO.getStatus().getCodigo();
 
         StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo(codigoStatus);
@@ -99,7 +101,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         if (responsavelTecnico != null) {
 
             responsavelTecnico.setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse());
-            responsavelTecnico.setEspecializacao(responsavelTecnicoDTO.getEspecializacao());
+            responsavelTecnico.setEspecializacao(especializacaoTecnica);
             responsavelTecnico.setFormacao(responsavelTecnicoDTO.getFormacao());
             responsavelTecnico.setNivelResponsabilidadeTecnica(responsavelTecnicoDTO.getNivelResponsabilidadeTecnica());
             responsavelTecnico.setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio());
