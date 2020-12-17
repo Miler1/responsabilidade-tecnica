@@ -70,7 +70,7 @@
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
 									v-radio(label='Outro' value='OUTRO')
 
-								v-text-field#QA-input-outro-vinculo(
+								v-text-field.mt-5#QA-input-outro-vinculo(
 									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
 									v-model="dados.outroVinculoEmpregaticio",
 									:errorMessages="errorMessageOutroVinculo(dados.outroVinculoEmpregaticio)",
