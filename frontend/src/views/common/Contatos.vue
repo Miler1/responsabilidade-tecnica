@@ -15,10 +15,10 @@
 						span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-"}}
 				v-col(cols="12", md="6")
 					v-col(cols="12")
-						v-label Telefone residencial:&nbsp;
+						v-label Telefone residencial:
 						span &nbsp; {{this.contatos.tel1 ? prepararNumTelefone(this.contatos.tel1) : "-"}}
 					v-col(cols="12")
-						v-label Telefone comercial:&nbsp;
+						v-label Telefone comercial:
 						span &nbsp; {{this.contatos.tel2 ? prepararNumTelefone(this.contatos.tel2) : "-"}}
 
 </template>
@@ -51,33 +51,6 @@ export default {
 			return DataUtils.formatarTelefone(num);
 		},
 
-		prepararContatos() {
-
-			let objetoContatos = {};
-
-			this.contatos.forEach( (contato) => {
-
-				if (contato.tipo.descricao === 'Email') {
-
-					if (contato.principal) {
-						objetoContatos.email1 = contato.valor;
-					} else {
-						objetoContatos.email2 = contato.valor;
-					}
-
-				} else if (contato.tipo.descricao === 'Telefone celular') {
-					objetoContatos.cel = contato.valor;
-				} else if (contato.tipo.descricao === 'Telefone residencial') {
-					objetoContatos.tel1 = contato.valor;
-				} else  {
-					objetoContatos.tel2 = contato.valor;
-				}
-
-			});
-
-			this.objetoContatos = objetoContatos;
-
-		}
 	},
 };
 

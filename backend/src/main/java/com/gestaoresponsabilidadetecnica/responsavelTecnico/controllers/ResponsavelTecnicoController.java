@@ -46,12 +46,27 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(responsavelTecnico);
+
+    }
+
+    @PostMapping(value = "editarSolicitacao")
+    public ResponseEntity<ResponsavelTecnico> editarSolicitacao(
+            HttpServletRequest request, @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
+
+        verificarPermissao(request, Acao.SOLICITAR_CADASTRO);
+
+        ResponsavelTecnico responsavelTecnico = responsavelTecnicoService.editar(request, responsavelTecnicoDTO);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(responsavelTecnico);
+
     }
 
     @PostMapping(value = "listar")
     public ResponseEntity<Page<ResponsavelTecnico>> listar(HttpServletRequest request,
-                                                  @PageableDefault(size = 20) Pageable pageable,
-                                                  @RequestBody FiltroPesquisa filtroPesquisa) throws Exception {
+                                                           @PageableDefault(size = 20) Pageable pageable,
+                                                           @RequestBody FiltroPesquisa filtroPesquisa) throws Exception {
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
@@ -64,7 +79,8 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @PostMapping(value = "uploadFile")
-    public ResponseEntity<RetornoUploadArquivoDTO> uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<RetornoUploadArquivoDTO> uploadFile(HttpServletRequest request,
+                                                              @RequestParam("file") MultipartFile file) throws Exception {
 
         verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
 
@@ -73,16 +89,19 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(retornoUploadArquivoDTO);
+
     }
 
     @GetMapping(value = "downloadFile/{hash}")
-    public ResponseEntity<InputStreamResource> download(HttpServletRequest request, @NotNull @PathVariable("hash") String hash) throws Exception {
+    public ResponseEntity<InputStreamResource> download(HttpServletRequest request,
+                                                        @NotNull @PathVariable("hash") String hash) throws Exception {
 
         verificarPermissao(request, Acao.BAIXAR_ARQUIVOS);
 
         File file = responsavelTecnicoService.recuperaArquivo(hash);
 
         return downloadDocumento(file, file.getName());
+
     }
 
     @GetMapping(value = "buscarSolicitacao")
@@ -98,8 +117,9 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     }
 
-    @GetMapping(value = "buscarSolicitacaoByID")
-    public ResponseEntity<ResponsavelTecnico> buscarSolicitacaoByID(HttpServletRequest request, @Valid @RequestBody Integer id) throws Exception{
+    @GetMapping(value = "buscarSolicitacaoById/{id}")
+    public ResponseEntity<ResponsavelTecnico> buscarSolicitacaoById(HttpServletRequest request,
+                                                                    @PathVariable("id") Integer id) throws Exception{
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
