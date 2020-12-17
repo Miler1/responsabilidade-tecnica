@@ -4,11 +4,96 @@
 
 		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
 
-		DadosPessoais(:pessoa="pessoa")
-
-		Contatos(:contatos="{...contatos}")
-
-		Endereco(:enderecos="pessoa.enderecos")
+		div.mb-6
+			ExpansivePanel(titulo = 'Dados pessoais')
+				v-row(v-if="pessoa != undefined")
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label Nome completo:
+							span &nbsp;{{pessoa.nome}}
+						v-col(cols="12")
+							v-label CPF:
+							span &nbsp; {{prepararCpf()}}
+						v-col(cols="12")
+							v-label Data de nascimento:
+							span &nbsp; {{prepararData(pessoa.dataNascimento)}}
+						v-col(cols="12")
+							v-label Sexo:
+							span &nbsp;{{ pessoa.sexo ? pessoa.sexo.descricao : "-"}}
+						v-col(cols="12")
+							v-label Nome da mãe:
+							span &nbsp;{{pessoa.nomeMae}}
+						v-col(cols="12")
+							v-label Estado civil:
+							span &nbsp;{{pessoa.estadoCivil ? pessoa.estadoCivil.descricao : "-"}}
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label Naturalidade:
+							span &nbsp;{{pessoa.naturalidade ? pessoa.naturalidade : '-'}}
+						v-col(cols="12")
+							v-label Número do RG:
+							span &nbsp;{{pessoa.rg && pessoa.rg.numero  ? pessoa.rg.numero : "-"}}
+						v-col(cols="12")
+							v-label Órgão expedidor:
+							span &nbsp;{{pessoa.rg && pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
+						v-col(cols="12")
+							v-label Título eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.numeroTituloEleitoral : '-'}}
+						v-col(cols="12")
+							v-label Zona eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
+						v-col(cols="12")
+							v-label Seção eleitoral:
+							span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
+		div.mb-6
+			ExpansivePanel(titulo = 'Contatos')
+				v-row
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label E-mail principal:
+							span &nbsp;{{this.contatos.email1}}
+						v-col(cols="12")
+							v-label E-mail secundário:
+							span &nbsp;{{this.contatos.email2 ? this.contatos.email2 : "-"}}
+						v-col(cols="12")
+							v-label Celular:
+							span &nbsp; {{this.contatos.cel ? prepararNumTelefone(this.contatos.cel) : "-" }}
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label Telefone residencial:&nbsp;
+							span &nbsp; {{this.contatos.tel1 ? prepararNumTelefone(this.contatos.tel1) : "-" }}
+						v-col(cols="12")
+							v-label Telefone comercial:&nbsp;
+							span &nbsp; {{this.contatos.tel2 ? prepararNumTelefone(this.contatos.tel2) : "-" }}
+		div.mb-6
+			ExpansivePanel(titulo = 'Endereço')
+				v-row(v-if="pessoa.enderecos")
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label Zona de localização:
+							span &nbsp; {{pessoa.enderecos[0].zonaLocalizacao.descricao}}
+						v-col(cols="12")
+							v-label CEP:
+							span &nbsp; {{prepararCep(pessoa.enderecos[0].cep)}}
+						v-col(cols="12")
+							v-label Logradouro:
+							span &nbsp; &nbsp;{{pessoa.enderecos[0].logradouro}}
+						v-col(cols="12")
+							v-label Número:
+							span &nbsp; {{pessoa.enderecos[0].numero ? pessoa.enderecos[0].numero : "-"}}
+					v-col(cols="12", md="6")
+						v-col(cols="12")
+							v-label Complemento:
+							span &nbsp; {{pessoa.enderecos[0].complemento ? pessoa.enderecos[0].complemento : "-" }}
+						v-col(cols="12")
+							v-label Bairro:
+							span &nbsp; {{pessoa.enderecos[0].bairro}}
+						v-col(cols="12")
+							v-label UF:
+							span &nbsp; {{pessoa.enderecos[0].municipio.estado.sigla}}
+						v-col(cols="12")
+							v-label Município:
+							span &nbsp; {{pessoa.enderecos[0].municipio.nome}}
 
 		div.mb-6
 			ExpansivePanel(titulo = 'Informações técnicas')
@@ -62,10 +147,10 @@
 								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
 									v-radio(label='Sim' value='true')
 									v-radio(label='Não' value='false')
-					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
-						v-col.pt-0.pb-0(cols="12")
+					v-row
+						v-col.pt-0.pb-0(cols="12", md="12")
 							v-label Vínculo empregatício: *
-							div.d-flex.flex-row
+							div.d-flex.flex-row.align-baseline
 								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
@@ -83,9 +168,9 @@
 									dense
 								)
 					v-row
-						v-col(cols="12")
+						v-col(cols="12", md="12")
 							v-label Área de especialização: *
-							div.d-flex.flex-row
+							div.d-flex.flex-row.align-baseline
 								v-autocomplete#QA-select-area-especializacao(
 									outlined,
 									dense,
@@ -136,16 +221,17 @@
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
 						:dadosListagem="files",
+						:hideFooter="false",
 						:labelNoData="labelNoData",
 						:removerAnexo="removerAnexo",
 						:downloadAnexo="downloadAnexo"
 					)
 
 		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#2196F3", width="145px")
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined)
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", width="145px", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
 				v-icon mdi-plus
 				span Cadastrar
 
@@ -157,16 +243,11 @@ import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import snackbar from '@/services/snack.service';
-import DataUtils from '@/utils/dataUtils';
-
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
-import DadosPessoais from '@/views/common/DadosPessoais';
-import Contatos from '@/views/common/Contatos';
-import Endereco from '@/views/common/Endereco';
-
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
+import DataUtils from '@/utils/dataUtils';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 
 export default {
@@ -175,18 +256,16 @@ export default {
 	components: {
 		ExpansivePanel,
 		GridListagemInclusao,
-		TextField,
-		DadosPessoais,
-		Contatos,
-		Endereco
+		TextField
 	},
 
 	data: () => {
 
 		return {
 			placeholder: "Digite aqui...",
+			labelNoData: 'Não há nenhum anexo a ser exibido',
 			placeholderSelect: "Selecione",
-			labelNoData: "Não há nenhum anexo adicionado",
+			labelNoData: "Nenhum anexo adicionado",
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
@@ -196,6 +275,7 @@ export default {
 			row: null,
 			excedeuTamanhoMaximoArquivo: false,
 			totalPermitido: 2000000,
+			pessoa: {},
 			isHabilitado: false,
 			especializacoes: [],
 			dados: {
@@ -206,23 +286,30 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
+				justificativa: null,
+				status: {},
 			},
-			contatos: {},
-			pessoa: {},
+			contatos: {}
 		};
 	},
 
 	methods: {
 
-		downloadAnexo(item) {
+		prepararCpf() {
 
-			const link = document.createElement('a');
-			link.href = URL.createObjectURL(item);
-			link.target = '_blank';
-			link.click();
-			URL.revokeObjectURL(link.href);
+			if (this.pessoa.cpf) {
+				return DataUtils.formatarCpf(this.pessoa.cpf);
+			}
 
+		},
+
+		prepararData(milisegundos) {
+			return DataUtils.formatarData(milisegundos);
+		},
+
+		prepararCep(cep) {
+			return DataUtils.formatarCep(cep);
 		},
 
 		prepararNumTelefone(numTelefone) {
@@ -267,18 +354,6 @@ export default {
 		},
 
 		checkForm() {
-
-			if (this.dados.possuiVinculoComGea === 'false') {
-
-				return this.dados.formacao !== null
-					&& this.dados.conselhoDeClasse !== null
-					&& this.dados.registro !== null
-					&& this.dados.nivelResponsabilidadeTecnica !== null
-					&& this.dados.possuiVinculoComGea !== null
-					&& this.dados.especializacao !== null
-					&& this.files.length > 0;
-
-			}
 
 			return this.dados.formacao !== null
 				&& this.dados.conselhoDeClasse !== null
@@ -332,7 +407,7 @@ export default {
 					return 'Obrigatório';
 				}
 				if (value.some(file => file.size > 2e6)) {
-					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
+					return 'Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB';
 				}
 			}
 
@@ -438,7 +513,10 @@ export default {
 					}
 
 				}).catch((error) => {
+
 					console.error(error);
+					this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea ? 'true' : 'false';
+
 				});
 
 			} else {
@@ -521,7 +599,6 @@ export default {
 		font-size: 16px;
 	}
 
-
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
 	}
@@ -531,21 +608,14 @@ export default {
 	}
 
 	#QA-btn-cancelar-cadastro {
+		color: #2196F3;
 		background-color: white;
+		width: 145px;
 	}
 
 	.v-radio {
 		.v-label {
 			font-weight: 400;
-		}
-
-
-	}
-
-	.v-input--selection-controls.v-input {
-
-		.v-messages {
-			padding-left: 12px;
 		}
 	}
 

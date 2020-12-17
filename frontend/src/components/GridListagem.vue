@@ -21,7 +21,6 @@
 				@update:options="sortBy"
 			)
 
-
 			template(v-slot:item.justificativa='{ item }')
 				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
 
@@ -44,7 +43,7 @@
 
 				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo ==='AGUARDANDO_ANALISE'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='iniciarAnalise(item)', v-on='on', color='#404040')
 							| mdi-play-circle-outline
 					span Iniciar análise
 
@@ -121,7 +120,7 @@ export default {
 		updatePagination: {
 			type: [Function]
 		},
-		editarItem: {
+		iniciarAnalise: {
 			type: [Function]
 		},
 		visualizarItem: {
