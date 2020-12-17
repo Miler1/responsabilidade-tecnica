@@ -14,6 +14,7 @@
 				:parametrosFiltro="parametrosFiltro",
 				:perfil="perfil",
 				:visualizarItem="visualizarCadastro"
+				:visualizarJustificativa="visualizarJustificativa"
 
 			)
 
@@ -55,6 +56,28 @@ export default {
 
 	methods: {
 
+		visualizarJustificativa(item) {
+
+			this.$fire({
+
+				title:
+					'<p class="title-modal-confirm">Justificativa</p>',
+				html:
+					`<p class="message-modal-confirm">Justificativa:</p>
+					<p class="message-modal-confirm" style="text-align: justify; text-justify: inter-word; padding-bottom: 16px">
+						<b>` + item.justificativa + `</b>
+					</p>`,
+
+				confirmButtonColor: '#327C32',
+				showCloseButton: true,
+				focusConfirm: false,
+				confirmButtonText: '<i class="mdi mdi-close"></i> Fechar',
+				reverseButtons: true,
+
+			});
+
+		},
+
 		updatePagination(parametrosFiltro) {
 
 			ResponsavelTecnicoService.listar(parametrosFiltro)
@@ -93,7 +116,7 @@ export default {
 			this.$router.push({ name: 'VisualizarCadastroAdministrador', params: { id: item.id }});
 
 		},
-	
+
 	},
 
 };

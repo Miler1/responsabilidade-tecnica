@@ -47,26 +47,24 @@
 					v-row
 						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
-							div
-								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
-									v-model="dados.nivelResponsabilidadeTecnica",
-									:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
-									row
-								)
-									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
-									v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
-									v-radio(label='Funcionário' value='FUNCIONARIO')
+							v-radio-group#QA-radio-nivel-responsabilidade-tecnica.d-flex.align-center(
+								v-model="dados.nivelResponsabilidadeTecnica",
+								:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
+								row
+							)
+								v-radio(label='Consultor pessoa física' value='CONSULTORPF')
+								v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
+								v-radio(label='Funcionário' value='FUNCIONARIO')
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
-							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
-									v-radio(label='Sim' value='true')
-									v-radio(label='Não' value='false')
+							v-radio-group#QA-radio-vinculo-gea.d-flex.align-center(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
+								v-radio(label='Sim' value='true')
+								v-radio(label='Não' value='false')
 					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
 						v-col.pt-0.pb-0(cols="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row
-								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
+								v-radio-group#QA-radio-vinculo.d-flex.align-center(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
@@ -85,22 +83,21 @@
 					v-row
 						v-col(cols="12")
 							v-label Área de especialização: *
-							div.d-flex.flex-row
-								v-autocomplete#QA-select-area-especializacao(
-									outlined,
-									dense,
-									:placeholder="placeholderSelect"
-									item-color="grey darken-3",
-									v-model="dados.especializacao",
-									:items="especializacoes",
-									:filter="filtroSelect",
-									item-text="textoExibicao",
-									:error-messages="errorMessage(dados.especializacao)",
-									no-data-text="Nenhuma área de especialização encontrada",
-									@click.native="resetErrorMessage",
-									required,
-									return-object=true
-								)
+							v-autocomplete#QA-select-area-especializacao(
+								outlined,
+								dense,
+								:placeholder="placeholderSelect"
+								item-color="grey darken-3",
+								v-model="dados.especializacao",
+								:items="especializacoes",
+								:filter="filtroSelect",
+								item-text="textoExibicao",
+								:error-messages="errorMessage(dados.especializacao)",
+								no-data-text="Nenhuma área de especialização encontrada",
+								@click.native="resetErrorMessage",
+								required,
+								return-object=true
+							)
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
 
@@ -142,10 +139,10 @@
 					)
 
 		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#2196F3", width="145px")
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", width="145px", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
 				v-icon mdi-plus
 				span Cadastrar
 
@@ -425,11 +422,11 @@ export default {
 						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
 							.then(() => {
 
-								this.salvarArquivos();
+								that.salvarArquivos();
 
 								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-								this.$router.push({name: 'Usuario'});
+								that.$router.push({name: 'Usuario'});
 
 							})
 							.catch(error => {
