@@ -66,6 +66,8 @@ public class ResponsavelTecnico implements Serializable {
     @JsonManagedReference
     private List<DocumentoResponsavelTecnico> documentos;
 
+    private String justificativa;
+
     public ResponsavelTecnico(ResponsavelTecnicoBuilder responsavelTecnicoBuilder) {
 
         this.formacao = responsavelTecnicoBuilder.formacao;
@@ -79,6 +81,7 @@ public class ResponsavelTecnico implements Serializable {
         this.pessoa = responsavelTecnicoBuilder.pessoa;
         this.validade = responsavelTecnicoBuilder.validade;
         this.status = responsavelTecnicoBuilder.status;
+        this.justificativa = responsavelTecnicoBuilder.justificativa;
 
     }
 
@@ -95,6 +98,7 @@ public class ResponsavelTecnico implements Serializable {
         PessoaFisica pessoa;
         Date validade;
         StatusCadastroResponsavelTecnico status;
+        String justificativa;
 
         public ResponsavelTecnicoBuilder() {}
 
@@ -150,6 +154,11 @@ public class ResponsavelTecnico implements Serializable {
 
         public ResponsavelTecnicoBuilder setStatus(StatusCadastroResponsavelTecnico status) {
             this.status = status;
+            return this;
+        }
+
+        public ResponsavelTecnicoBuilder setJustificativa(String justificativa) {
+            this.justificativa = justificativa;
             return this;
         }
 

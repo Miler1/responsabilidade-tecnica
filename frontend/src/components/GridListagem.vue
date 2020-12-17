@@ -21,7 +21,6 @@
 				@update:options="sortBy"
 			)
 
-
 			template(v-slot:item.justificativa='{ item }')
 				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
 

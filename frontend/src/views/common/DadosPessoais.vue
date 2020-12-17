@@ -15,7 +15,7 @@
 						span &nbsp; {{prepararData(pessoa.dataNascimento)}}
 					v-col(cols="12")
 						v-label Sexo:
-						span &nbsp;{{ pessoa.sexo ? pessoa.sexo.descricao : "-"}}
+						span &nbsp;{{pessoa.sexo == 0 ? "Masculino" : "Feminino"}}
 					v-col(cols="12")
 						v-label Nome da mãe:
 						span &nbsp;{{pessoa.nomeMae}}
@@ -34,13 +34,13 @@
 						span &nbsp;{{pessoa.rg && pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
 					v-col(cols="12")
 						v-label Título eleitoral:
-						span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.numero : '-'}}
+						span &nbsp;{{pessoa.tituloEleitoral && pessoa.tituloEleitoral.numero ? pessoa.tituloEleitoral.numero : '-'}}
 					v-col(cols="12")
 						v-label Zona eleitoral:
-						span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.zona : '-'}}
+						span &nbsp;{{pessoa.tituloEleitoral && pessoa.tituloEleitoral.zona ? pessoa.tituloEleitoral.zona : '-'}}
 					v-col(cols="12")
 						v-label Seção eleitoral:
-						span &nbsp;{{pessoa.tituloEleitoral ? pessoa.tituloEleitoral.secao : '-'}}
+						span &nbsp;{{pessoa.tituloEleitoral && pessoa.tituloEleitoral.secao ? pessoa.tituloEleitoral.secao : '-'}}
 
 </template>
 
