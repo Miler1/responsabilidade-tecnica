@@ -288,8 +288,10 @@ export default {
 				&& this.dados.registro !== ''
 				&& this.dados.nivelResponsabilidadeTecnica !== null
 				&& this.dados.possuiVinculoComGea !== null
-				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
-				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
+				&& this.dados.vinculoEmpregaticio !== null
+				&& (this.dados.vinculoEmpregaticio !== 'OUTRO' 
+					|| this.dados.outroVinculoEmpregaticio !== null 
+					&& this.dados.outroVinculoEmpregaticio !== "")
 				&& this.dados.especializacao !== null
 				&& this.files.length > 0;
 
