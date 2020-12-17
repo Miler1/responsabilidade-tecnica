@@ -61,7 +61,26 @@ const routes = [
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'ADMINISTRADOR');
-		}
+		},
+
+		redirect: to => {
+			return '/admin/home';
+		},
+
+		children: [
+			// CADASTRO
+			{
+				path: 'home',
+				name: 'Home',
+				component: () => import('@/views/administrador/listagem/Listagem.vue')
+			},
+			{
+				path: 'analise/:id',
+				name: 'AnalisarRelatorio',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+
+		],
 	},
 	{
 		path:'*',

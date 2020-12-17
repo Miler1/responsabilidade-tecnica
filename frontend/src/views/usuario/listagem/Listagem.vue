@@ -51,6 +51,7 @@ export default {
 			perfil: 'Usuario'
 		};
 	},
+
 	methods: {
 
 		visualizarCadastro(item) {

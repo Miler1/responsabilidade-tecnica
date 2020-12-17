@@ -41,4 +41,14 @@ public class DateUtil {
 		return new SimpleDateFormat(Constants.DATA_FORMATO_BR_SIMPLES).format(data);
 	}
 
+	public static Date calcularValidade() {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.YEAR, 1);
+
+		return cal.getTime();
+
+	}
+
 }

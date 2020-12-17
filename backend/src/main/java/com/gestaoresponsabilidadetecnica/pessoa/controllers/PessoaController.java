@@ -31,6 +31,21 @@ public class PessoaController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(pessoa);
+
+    }
+
+    @GetMapping(value = "buscarPessoa/{idPessoa}")
+    public ResponseEntity<Pessoa> buscarPessoa(HttpServletRequest request,
+                                                                                               @PathVariable("idPessoa") Integer idPessoa) throws Exception {
+
+        verificarPermissao(request, Acao.BUSCAR_INFORMACAO_PESSOA);
+
+        Pessoa pessoa = pessoaService.buscarPessoaById(request, idPessoa);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(pessoa);
+
     }
 
 }
