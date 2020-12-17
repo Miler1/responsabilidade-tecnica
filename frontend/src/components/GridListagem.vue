@@ -21,7 +21,6 @@
 				@update:options="sortBy"
 			)
 
-
 			template(v-slot:item.justificativa='{ item }')
 				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
 
@@ -32,31 +31,31 @@
 
 				v-tooltip(bottom)
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='visualizarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='visualizarItem(item)', v-on='on', color='#327C32')
 							| mdi-eye
 					span Visualizar cadastro
 
 				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='visualizarJustificativa(item)', v-on='on', color='#327C32')
 							| mdi-chat
 					span Visualizar justificativa
 
 				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo ==='AGUARDANDO_ANALISE'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
 							| mdi-play-circle-outline
 					span Iniciar análise
 
 				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo == 'VENCIDO'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
 							| mdi-replay
 					span Revalidar cadastro
 
 				v-tooltip(bottom, v-if="perfil === 'Usuario' && item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
 							| mdi-pencil
 					span Editar cadastro
 
@@ -72,7 +71,7 @@
 								:page="page"
 								:total-visible="totalVisible",
 								@input="input",
-								color="#2196F3"
+								color="#327C32"
 							)
 						span.float-left.exibicao-paginas.mt-4
 							| Exibindo {{dadosListagem.numberOfElements}} de {{dadosListagem.totalElements}} registros
@@ -83,7 +82,8 @@
 								solo,
 								dense,
 								@input="changeValue",
-								v-model="itensPerPage"
+								v-model="itensPerPage",
+								color="#327C32"
 							)
 						span.float-right.exibicao-paginas.mt-2.ml-1
 							| Resultados por página
@@ -144,7 +144,10 @@ export default {
 		},
 		perfil: {
 			type: [String]
-		}
+		},
+		visualizarJustificativa: {
+			type: [Function]
+		},
 
 	},
 

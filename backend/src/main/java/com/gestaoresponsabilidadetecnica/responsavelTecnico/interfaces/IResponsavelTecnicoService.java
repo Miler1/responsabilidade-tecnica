@@ -28,4 +28,5 @@ public interface IResponsavelTecnicoService {
     ResponsavelTecnico findByID(Integer id);
 
     File recuperaArquivo(String hash);
+
 }

@@ -4,7 +4,7 @@ export default {
 
     salvarSolicitacao: async (informacoes) => ApiService.post('/responsavelTecnico/salvarSolicitacao', informacoes),
 
-	editarSolicitacao: async (informacoes) => ApiService.post('/responsavelTecnico/editarSolicitacao', informacoes),
+    editarSolicitacao: async (informacoes) => ApiService.post('/responsavelTecnico/editarSolicitacao', informacoes),
 
 	listar: async (parametrosFiltro) => {
 
@@ -32,6 +32,6 @@ export default {
 
 	buscarSolicitacao: async() => ApiService.get('/responsavelTecnico/buscarSolicitacao/'),
 
-    buscarSolicitacaoByID: async() => ApiService.get('/responsavelTecnico/buscarSolicitacaoByID/'),
+    buscarSolicitacaoById: async(id) => ApiService.get('/responsavelTecnico/buscarSolicitacaoById/' + id)
 
 };

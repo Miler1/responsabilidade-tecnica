@@ -50,7 +50,7 @@ const routes = [
 			},
 			{
 				path: 'visualizar/:id',
-				name: 'VisualizarCadastro',
+				name: 'VisualizarCadastroUsuario',
 				component: () => import('@/views/common/Visualizacao.vue')
 			},
 		],
@@ -66,7 +66,31 @@ const routes = [
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'ADMINISTRADOR');
-		}
+		},
+
+		redirect: to => {
+			return '/admin/home';
+		},
+
+		children: [
+			// CADASTRO
+			{
+				path: 'home',
+				name: 'Home',
+				component: () => import('@/views/administrador/listagem/Listagem.vue')
+			},
+			{
+				path: 'analisar/:id',
+				name: 'AnalisarRelatorio',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+			{
+				path: 'visualizar/:id',
+				name: 'VisualizarCadastroAdministrador',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+
+		],
 	},
 	{
 		path:'*',

@@ -46,6 +46,7 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(responsavelTecnico);
+
     }
 
     @PostMapping(value = "editarSolicitacao")
@@ -63,8 +64,8 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     @PostMapping(value = "listar")
     public ResponseEntity<Page<ResponsavelTecnico>> listar(HttpServletRequest request,
-                                                  @PageableDefault(size = 20) Pageable pageable,
-                                                  @RequestBody FiltroPesquisa filtroPesquisa) throws Exception {
+                                                           @PageableDefault(size = 20) Pageable pageable,
+                                                           @RequestBody FiltroPesquisa filtroPesquisa) throws Exception {
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
@@ -77,7 +78,8 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @PostMapping(value = "uploadFile")
-    public ResponseEntity<RetornoUploadArquivoDTO> uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<RetornoUploadArquivoDTO> uploadFile(HttpServletRequest request,
+                                                              @RequestParam("file") MultipartFile file) throws Exception {
 
         verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
 
@@ -86,6 +88,7 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(retornoUploadArquivoDTO);
+
     }
 
     @PostMapping(value = "reuploadFile")
@@ -101,17 +104,19 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @GetMapping(value = "downloadFile/{hash}")
-    public ResponseEntity<InputStreamResource> download(HttpServletRequest request, @NotNull @PathVariable("hash") String hash) throws Exception {
+    public ResponseEntity<InputStreamResource> download(HttpServletRequest request,
+                                                        @NotNull @PathVariable("hash") String hash) throws Exception {
 
         verificarPermissao(request, Acao.BAIXAR_ARQUIVOS);
 
         File file = responsavelTecnicoService.recuperaArquivo(hash);
 
         return downloadDocumento(file, file.getName());
+
     }
 
     @GetMapping(value = "buscarSolicitacao")
-    public ResponseEntity<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request) throws Exception{
+    public ResponseEntity<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request) throws Exception {
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
@@ -123,8 +128,9 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     }
 
-    @GetMapping(value = "buscarSolicitacaoByID")
-    public ResponseEntity<ResponsavelTecnico> buscarSolicitacaoByID(HttpServletRequest request, @Valid @RequestBody Integer id) throws Exception{
+    @GetMapping(value = "buscarSolicitacaoById/{id}")
+    public ResponseEntity<ResponsavelTecnico> buscarSolicitacaoById(HttpServletRequest request,
+                                                                    @PathVariable("id") Integer id) throws Exception {
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 

@@ -2,6 +2,7 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.services;
 
 import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.ArquivoUtils;
+import com.gestaoresponsabilidadetecnica.configuracao.utils.DateUtil;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.FiltroPesquisa;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.repositories.EspecializacaoTecnicaRepository;
@@ -74,9 +75,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 .setNivelResponsabilidadeTecnica(responsavelTecnicoDTO.getNivelResponsabilidadeTecnica())
                 .setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio())
                 .setPessoa(pessoa)
+                .setStatus(status)
                 .setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea())
                 .setRegistro(responsavelTecnicoDTO.getRegistro())
-                .setStatus(status)
                 .setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio())
                 .build();
 
@@ -89,31 +90,32 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
     @Override
     public ResponsavelTecnico editar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) {
 
-        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
+        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(
+                responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
 
-        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
+        String codigoStatus = responsavelTecnicoDTO.getStatus().getCodigo();
 
-        PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
+        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo(codigoStatus);
 
-        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
+        ResponsavelTecnico responsavelTecnico = responsavelTecnicoRespository.findById(responsavelTecnicoDTO.getId()).orElse(null);
 
-        ResponsavelTecnico responsavelTecnico = new ResponsavelTecnico();
+        if (responsavelTecnico != null) {
 
-        Optional<ResponsavelTecnico> buscaResponsavelTecnico = responsavelTecnicoRespository.findById(responsavelTecnicoDTO.getId());
-
-        if (buscaResponsavelTecnico.isPresent()) {
-
-            responsavelTecnico = buscaResponsavelTecnico.get();
             responsavelTecnico.setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse());
             responsavelTecnico.setEspecializacao(especializacaoTecnica);
             responsavelTecnico.setFormacao(responsavelTecnicoDTO.getFormacao());
             responsavelTecnico.setNivelResponsabilidadeTecnica(responsavelTecnicoDTO.getNivelResponsabilidadeTecnica());
             responsavelTecnico.setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio());
-            responsavelTecnico.setPessoa(pessoa);
+            responsavelTecnico.setPessoa(responsavelTecnicoDTO.getPessoaFisica());
+            responsavelTecnico.setStatus(status);
+            responsavelTecnico.setJustificativa(responsavelTecnicoDTO.getJustificativa());
             responsavelTecnico.setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea());
             responsavelTecnico.setRegistro(responsavelTecnicoDTO.getRegistro());
-            responsavelTecnico.setStatus(status);
             responsavelTecnico.setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio());
+
+            if (status.getCodigo().equals("APROVADO")) {
+                responsavelTecnico.setValidade(DateUtil.calcularValidade());
+            }
 
             responsavelTecnicoRespository.save(responsavelTecnico);
 
@@ -211,9 +213,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         DocumentoResponsavelTecnico documentoResponsavelTecnico = documentoResponsavelTecnicoRepository.findByHash(hash);
 
-        File file = new File(documentoResponsavelTecnico.getCaminho());
-
-        return file;
+        return new File(documentoResponsavelTecnico.getCaminho());
 
     }
 
@@ -271,18 +271,20 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
-    private File apagaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
 
-//        validaTipoArquivo(multipartFile);
+    private StatusCadastroResponsavelTecnico getStatus(ResponsavelTecnicoDTO responsavelTecnicoDTO) {
 
-        final DateTimeFormatter FORMATO_DATA_MES_ANO = DateTimeFormatter.ofPattern("MM-YYYY");
+        StatusCadastroResponsavelTecnico status;
 
-        String pathSalvarArquivo = VariaveisAmbientes.pathSalvarArquivos() +
-                File.separator + DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA +
-                File.separator + LocalDate.now().format(FORMATO_DATA_MES_ANO) +
-                File.separator + UUID.randomUUID() + "." + multipartFile.getContentType().split("/")[1];
+        if (responsavelTecnicoDTO.getJustificativa() != null) {
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("REPROVADO");
+        } else if (responsavelTecnicoDTO.getId() == null) {
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
+        } else {
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("APROVADO");
+        }
 
-        return ArquivoUtils.salvaArquivoDiretorio(multipartFile, pathSalvarArquivo);
+        return status;
 
     }
 
@@ -293,5 +295,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 //        }
 //
 //    }
+
 
 }

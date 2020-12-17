@@ -18,9 +18,10 @@
 				:dadosListagem="dadosListagem",
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
-				:perfil="perfil",
 				:visualizarItem="visualizarCadastro",
 				:editarItem="editarCadastro"
+				:perfil="perfil"
+				:visualizarJustificativa="visualizarJustificativa",
 			)
 
 </template>
@@ -53,6 +54,7 @@ export default {
 			perfil: 'Usuario'
 		};
 	},
+
 	methods: {
 
 		visualizarCadastro(item) {
@@ -61,10 +63,29 @@ export default {
 				return;
 			}
 
-			if(item.id){
+			this.$router.push({ name: 'VisualizarCadastroUsuario', params: { id: item.id }});
 
-			}
-			this.$router.push({ name: 'VisualizarCadastro', params: { id: item.id }});
+		},
+
+		visualizarJustificativa(item) {
+
+			this.$fire({
+
+				title:
+					'<p class="title-modal-confirm">Justificativa</p>',
+				html:
+					`<p class="message-modal-confirm">Justificativa:</p>
+					<p class="message-modal-confirm" style="text-align: justify; text-justify: inter-word; padding-bottom: 16px">
+						<b>` + item.justificativa + `</b>
+					</p>`,
+
+				confirmButtonColor: '#327C32',
+				showCloseButton: true,
+				focusConfirm: false,
+				confirmButtonText: '<i class="mdi mdi-close"></i> Fechar',
+				reverseButtons: true,
+
+			});
 
 		},
 
@@ -109,7 +130,7 @@ export default {
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
 		font-size: 16px;
-		background: @blue-primary;
+		background: @green-primary;
 		color: white;
 	}
 

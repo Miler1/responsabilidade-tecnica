@@ -30,4 +30,12 @@ public class PessoaService implements IPessoaService {
        return pessoaRepository.findById(pessoaEU.id).orElse(null);
     }
 
+    @Override
+    public Pessoa buscarPessoaById(HttpServletRequest request, Integer idPessoa) {
+
+       PessoaFisica pessoaFisica =  pessoaRepository.findById(idPessoa).orElse(null);
+
+       return EntradaUnicaWS.ws.buscarPessoaFisicaPeloCpf(pessoaFisica.getCpf());
+    }
+
 }
