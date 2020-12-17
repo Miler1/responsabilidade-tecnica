@@ -15,9 +15,13 @@ public interface IResponsavelTecnicoService {
 
     ResponsavelTecnico salvar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO);
 
+    ResponsavelTecnico editar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO);
+
     Page<ResponsavelTecnico> listar(Pageable pageable, FiltroPesquisa filtro);
 
     RetornoUploadArquivoDTO salvarAnexo(HttpServletRequest request, MultipartFile file) throws Exception;
+
+    RetornoUploadArquivoDTO editarAnexo(HttpServletRequest request, MultipartFile file) throws Exception;
 
     ResponsavelTecnico findByPessoaLogada(HttpServletRequest request);
 

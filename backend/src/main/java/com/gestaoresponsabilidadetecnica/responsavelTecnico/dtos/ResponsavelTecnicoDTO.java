@@ -11,6 +11,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponsavelTecnicoDTO {
 
+    private Integer id;
+
     private String conselhoDeClasse;
 
     private EspecializacaoTecnicaDTO especializacao;

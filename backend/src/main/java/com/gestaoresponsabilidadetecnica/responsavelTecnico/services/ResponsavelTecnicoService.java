@@ -28,11 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
@@ -82,6 +81,43 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 .build();
 
         responsavelTecnicoRespository.save(responsavelTecnico);
+
+        return responsavelTecnico;
+
+    }
+
+    @Override
+    public ResponsavelTecnico editar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) {
+
+        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
+
+        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
+
+        PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
+
+        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
+
+        ResponsavelTecnico responsavelTecnico = new ResponsavelTecnico();
+
+        Optional<ResponsavelTecnico> buscaResponsavelTecnico = responsavelTecnicoRespository.findById(responsavelTecnicoDTO.getId());
+
+        if (buscaResponsavelTecnico.isPresent()) {
+
+            responsavelTecnico = buscaResponsavelTecnico.get();
+            responsavelTecnico.setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse());
+            responsavelTecnico.setEspecializacao(especializacaoTecnica);
+            responsavelTecnico.setFormacao(responsavelTecnicoDTO.getFormacao());
+            responsavelTecnico.setNivelResponsabilidadeTecnica(responsavelTecnicoDTO.getNivelResponsabilidadeTecnica());
+            responsavelTecnico.setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio());
+            responsavelTecnico.setPessoa(pessoa);
+            responsavelTecnico.setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea());
+            responsavelTecnico.setRegistro(responsavelTecnicoDTO.getRegistro());
+            responsavelTecnico.setStatus(status);
+            responsavelTecnico.setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio());
+
+            responsavelTecnicoRespository.save(responsavelTecnico);
+
+        }
 
         return responsavelTecnico;
 
@@ -141,9 +177,23 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        List<ResponsavelTecnico> responsaveis = findByPessoa(pessoa);
+        List<ResponsavelTecnico> responsaveis = new ArrayList<>(findByPessoa(pessoa));
 
-        return responsaveis.size() == 0 ? null : responsaveis.get(0);
+        responsaveis.forEach(responsavelTecnico -> {
+            if (!responsavelTecnico.getDocumentos().isEmpty()) {
+                responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
+                    File file = recuperaArquivo(documentoResponsavelTecnico.getHash());
+                    try {
+                        String stringao = ArquivoUtils.codificaParaBase64(file);
+                        documentoResponsavelTecnico.imagemBase64 = stringao;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
+
+        return responsaveis.isEmpty() ? null : responsaveis.get(0);
 
     }
 
@@ -179,8 +229,49 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
 
     }
-    
+
+    @Override
+    public RetornoUploadArquivoDTO editarAnexo(HttpServletRequest request, MultipartFile multipartFile) throws Exception {
+
+        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
+
+        PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
+
+        List<ResponsavelTecnico> responsavelTecnicoList = responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
+
+        responsavelTecnicoList.forEach(responsavelTecnico -> {
+            List<DocumentoResponsavelTecnico> documentoResponsavelTecnicoList = documentoResponsavelTecnicoRepository.findByResponsavelTecnico(responsavelTecnico);
+            documentoResponsavelTecnicoList.forEach(documentoResponsavelTecnicoSalvo -> {
+                documentoResponsavelTecnicoRepository.delete(documentoResponsavelTecnicoSalvo);
+            });
+        });
+
+        File file = salvaArquivoDiretorio(multipartFile);
+
+        DocumentoResponsavelTecnico documentoResponsavelTecnico = new DocumentoResponsavelTecnico(file, multipartFile.getOriginalFilename(), findByPessoaLogada(request));
+
+        documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
+
+        return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
+
+    }
+
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
+
+//        validaTipoArquivo(multipartFile);
+
+        final DateTimeFormatter FORMATO_DATA_MES_ANO = DateTimeFormatter.ofPattern("MM-YYYY");
+
+        String pathSalvarArquivo = VariaveisAmbientes.pathSalvarArquivos() +
+                File.separator + DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA +
+                File.separator + LocalDate.now().format(FORMATO_DATA_MES_ANO) +
+                File.separator + UUID.randomUUID() + "." + multipartFile.getContentType().split("/")[1];
+
+        return ArquivoUtils.salvaArquivoDiretorio(multipartFile, pathSalvarArquivo);
+
+    }
+
+    private File apagaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
 
 //        validaTipoArquivo(multipartFile);
 

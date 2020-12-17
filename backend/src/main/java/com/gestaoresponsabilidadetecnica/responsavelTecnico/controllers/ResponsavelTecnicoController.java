@@ -48,6 +48,19 @@ public class ResponsavelTecnicoController extends DefaultController {
                 .body(responsavelTecnico);
     }
 
+    @PostMapping(value = "editarSolicitacao")
+    public ResponseEntity<ResponsavelTecnico> editarSolicitacao(
+            HttpServletRequest request, @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
+
+        verificarPermissao(request, Acao.SOLICITAR_CADASTRO);
+
+        ResponsavelTecnico responsavelTecnico = responsavelTecnicoService.editar(request, responsavelTecnicoDTO);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(responsavelTecnico);
+    }
+
     @PostMapping(value = "listar")
     public ResponseEntity<Page<ResponsavelTecnico>> listar(HttpServletRequest request,
                                                   @PageableDefault(size = 20) Pageable pageable,
@@ -69,6 +82,18 @@ public class ResponsavelTecnicoController extends DefaultController {
         verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
 
         RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.salvarAnexo(request, file);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(retornoUploadArquivoDTO);
+    }
+
+    @PostMapping(value = "reuploadFile")
+    public ResponseEntity<RetornoUploadArquivoDTO> reuploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
+
+        verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
+
+        RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.editarAnexo(request, file);
 
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())

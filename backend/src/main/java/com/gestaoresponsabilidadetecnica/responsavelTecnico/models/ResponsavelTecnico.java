@@ -95,6 +95,7 @@ public class ResponsavelTecnico implements Serializable {
         PessoaFisica pessoa;
         Date validade;
         StatusCadastroResponsavelTecnico status;
+        String imagemDecodificada;
 
         public ResponsavelTecnicoBuilder() {}
 
@@ -150,6 +151,11 @@ public class ResponsavelTecnico implements Serializable {
 
         public ResponsavelTecnicoBuilder setStatus(StatusCadastroResponsavelTecnico status) {
             this.status = status;
+            return this;
+        }
+
+        public ResponsavelTecnicoBuilder setImagemDecodificada(String imagem) {
+            this.imagemDecodificada = imagem;
             return this;
         }
 

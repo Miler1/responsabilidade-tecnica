@@ -141,17 +141,19 @@
 						:dadosListagem="files",
 						:labelNoData="labelNoData",
 						:removerAnexo="removerAnexo",
-						:downloadAnexo="downloadAnexo",
-						:editarItem="editarItem"
+						:downloadAnexo="downloadAnexo"
 					)
 
 		div.d-flex.flex-row.justify-space-between
 			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined)
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark, v-if="isInclusao")
 				v-icon mdi-plus
 				span Cadastrar
+			v-btn#QA-btn-editar-responsabilidade-tecnica(@click='editar', large, color="#2196F3", dark, v-if="!isInclusao")
+				v-icon mdi-check
+				span Salvar e enviar
 
 </template>
 
@@ -196,8 +198,8 @@ export default {
 			errorMessageEmpty: true,
 			isSelecting: false,
 			files: [],
-			url: window.location,
 			row: null,
+			mimetype: "data:image/data:application;",
 			excedeuTamanhoMaximoArquivo: false,
 			totalPermitido: 2000000,
 			pessoa: {},
@@ -220,9 +222,11 @@ export default {
 	methods: {
 
 		downloadAnexo(item) {
-
 			const link = document.createElement('a');
-			link.href = URL.createObjectURL(item);
+			let header = this.mimetype + 'base64,' + item.imagemBase64;
+			let extensao = item.name.split('.');
+			link.href = header;
+			link.download = item.name + '.' + extensao[1];
 			link.target = '_blank';
 			link.click();
 			URL.revokeObjectURL(link.href);
@@ -234,14 +238,11 @@ export default {
 		},
 
 		removerAnexo(item) {
-
-			let pos = this.files.map(function(e) { return e.name; }).indexOf(item);
+			let pos = this.files.map(function(e) { return e.name; }).indexOf(item.name);
 			let deletedFile = this.files.splice(pos, 1);
-
 		},
 
 		onButtonClick() {
-
 			this.isSelecting = true;
 
 			window.addEventListener('focus', () => {
@@ -253,7 +254,6 @@ export default {
 		},
 
 		checaTamanhoArquivo() {
-
 			if (this.files.some(file => file.size > this.totalPermitido)) {
 				this.files.splice(0,this.files.length);
 				this.excedeuTamanhoMaximoArquivo = true;
@@ -275,8 +275,11 @@ export default {
 			if (this.dados.possuiVinculoComGea === 'false') {
 
 				return this.dados.formacao !== null
+					&& this.dados.formacao !== ''
 					&& this.dados.conselhoDeClasse !== null
+					&& this.dados.conselhoDeClasse !== ''
 					&& this.dados.registro !== null
+					&& this.dados.registro !== ''
 					&& this.dados.nivelResponsabilidadeTecnica !== null
 					&& this.dados.possuiVinculoComGea !== null
 					&& this.dados.especializacao !== null
@@ -293,7 +296,7 @@ export default {
 				&& this.dados.nivelResponsabilidadeTecnica !== null
 				&& this.dados.possuiVinculoComGea !== null
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
-				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
+				&& (this.dados.vinculoEmpregaticio !== '' || this.dados.outroVinculoEmpregaticio !== '')
 				&& this.dados.especializacao !== null
 				&& this.files.length > 0;
 
@@ -332,16 +335,6 @@ export default {
 		},
 
 		errorMessage(value) {
-
-			if (Array.isArray(value)){
-
-				if (value.length == 0) {
-					return 'Obrigatório';
-				}
-				if (value.some(file => file.size > 2e6)) {
-					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
-				}
-			}
 
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
 
@@ -394,6 +387,25 @@ export default {
 
 		},
 
+		editarArquivos() {
+			this.files.forEach(file => {
+
+				let formData = new FormData();
+				formData.append('file', file);
+
+				ResponsavelTecnicoService.reupload(formData)
+					.catch(error => {
+
+						console.error(error);
+
+						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					});
+
+			});
+
+		},
+
 		salvar() {
 
 			if (this.checkForm()) {
@@ -424,47 +436,23 @@ export default {
 
 						that.prepararParaSalvar();
 
-						if (this.$route.params.idTecnicoResponsavel) {
+						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
+							.then(() => {
 
-							let id = this.$route.params.idTecnicoResponsavel;
+								this.salvarArquivos();
 
-							ResponsavelTecnicoService.editarSolicitacao(that.dados, id)
-								.then(() => {
+								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-									this.salvarArquivos();
+								this.$router.push({name: 'Usuario'});
 
-									snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+							})
+							.catch(error => {
 
-									this.$router.push({name: 'Usuario'});
+								console.error(error);
 
-								})
-								.catch(error => {
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
-									console.error(error);
-
-									// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-
-								});
-
-						} else {
-							ResponsavelTecnicoService.salvarSolicitacao(that.dados)
-								.then(() => {
-
-									this.salvarArquivos();
-
-									snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
-
-									this.$router.push({name: 'Usuario'});
-
-								})
-								.catch(error => {
-
-									console.error(error);
-
-									// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-
-								});
-						}
+							});
 
 					}
 
@@ -479,8 +467,64 @@ export default {
 
 		},
 
-		editarItem(item) {
+		editar() {
 
+			if (this.checkForm()) {
+
+				this.$fire({
+
+					title:
+						'<p class="title-modal-confirm">Confirmar edição</p>',
+					html:
+						`<p class="message-modal-confirm">Ao confirmar a edição, todas as informações serão salvas e enviadas para análise.</p>
+						<p class="message-modal-confirm">
+							<b>Tem certeza que deseja confirmar a edição? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
+						</p>`,
+					showCancelButton: true,
+					confirmButtonColor: '#2196F3',
+					cancelButtonColor: '#FFF',
+					showCloseButton: true,
+					focusConfirm: false,
+					confirmButtonText: '<i class="mdi mdi-check-bold"></i> Confirmar',
+					cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
+					reverseButtons: true
+
+				}).then((result) => {
+
+					if (result.value) {
+
+						var that = this;
+
+						that.prepararParaSalvar();
+
+						ResponsavelTecnicoService.editarSolicitacao(that.dados)
+							.then(() => {
+
+								this.editarArquivos();
+
+								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
+
+								this.$router.push({name: 'Usuario'});
+
+							})
+							.catch(error => {
+
+								console.error(error);
+
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+							});
+
+					}
+
+				}).catch((error) => {
+					console.error(error);
+				});
+
+			} else {
+				window.scrollTo(0, 0);
+				this.errorMessageEmpty = false;
+			}
 		},
 
 		cancelar() {
@@ -509,33 +553,37 @@ export default {
 
 			});
 
-		}
+		},
+
+		prepararDadosParaEdicao(informacaoTecnica) {
+
+			this.dados = informacaoTecnica;
+
+			this.$refs.textFieldFormacao.setModel(this.dados.formacao);
+			this.$refs.textFieldConcelhoDeClasse.setModel(this.dados.conselhoDeClasse);
+			this.$refs.textFieldRegistro.setModel(this.dados.registro);
+
+			this.dados.possuiVinculoComGea ? this.dados.possuiVinculoComGea = 'true' : this.dados.possuiVinculoComGea = 'false';
+
+			if (this.dados.especializacao != null) {
+				this.dados.especializacao.textoExibicao = this.dados.especializacao.codigo + ' - ' + this.dados.especializacao.nome;
+			}
+
+			this.dados.documentos.forEach(documento => {
+				var file = new File([documento], documento.nome, {type: this.mimetype});
+				file.imagemBase64 = documento.imagemBase64;
+				this.files.push(file);
+			});
+		},
 
 	},
 
 	mounted() {
 
-		if (this.$route.params.idPessoa) {
-
-			this.isCadastro = false;
-			console.log(this.$route.params.idPessoa);
-
-			ResponsavelTecnicoService.buscarSolicitacao(this.$route.params.idPessoa)
-				.then( (result) => {
-
-					this.dados = result.data[0];
-					this.$refs.textFieldFormacao.setModel(this.dados.formacao);
-					this.$refs.textFieldConcelhoDeClasse.setModel(this.dados.conselhoDeClasse);
-					this.$refs.textFieldRegistro.setModel(this.dados.registro);
-					console.log(this.dados);
-
-				})
-				.catch( error => {
-					console.error(error);
-				});
-
-		} else{
-			this.isCadastro = true;
+		if (this.$route.params.id) {
+			this.isInclusao = false;
+		} else {
+			this.isInclusao = true;
 		}
 
 	},
@@ -547,6 +595,16 @@ export default {
 
 				this.pessoa = result.data;
 				this.prepararContatos();
+
+				ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
+					.then( (result) => {
+
+						this.prepararDadosParaEdicao(result.data);
+
+					})
+					.catch( error => {
+						console.error(error);
+					});
 
 			})
 			.catch(error => {

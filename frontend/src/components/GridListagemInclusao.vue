@@ -35,7 +35,7 @@
 				v-tooltip(bottom, v-if="exibirIconeDownload")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon(small @click.prevent='downloadAnexo(item)', v-on='on', color='#9EBAA4')
-							|  mdi-eye
+							|  mdi-download
 					span Visualizar anexo {{tituloTooltip}}
 				v-tooltip(bottom, v-if="exibirIconeRemover")
 					template(v-slot:activator="{ on, attrs }")

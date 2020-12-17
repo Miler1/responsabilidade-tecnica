@@ -18,7 +18,7 @@
 				:dadosListagem="dadosListagem",
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
-				:perfil="perfil"
+				:perfil="perfil",
 				:visualizarItem="visualizarCadastro",
 				:editarItem="editarCadastro"
 			)
@@ -40,12 +40,6 @@ export default {
 	components: {
 		GridListagem,
 		Panel
-	},
-
-	props: {
-		pessoa: {
-			type: [Object]
-		}
 	},
 
 	data: () => {
@@ -80,10 +74,9 @@ export default {
 				.then((response) => {
 
 					let pessoa = response.data;
-					console.log(pessoa);
+
 					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
 						.then( (result) => {
-
 							this.dadosListagem.content = result.data === "" ? [] : [result.data];
 							this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
 
@@ -95,22 +88,17 @@ export default {
 				.catch(error => {
 					console.error(error.message);
 				});
-
 		},
 
 		abrirTelaCadastro() {
 			this.$router.push({ name: 'Cadastro' });
 		},
 
-		editarCadastro(pessoa) {
-			this.$router.push({ name: 'Editar', params: { idPessoa: pessoa.id } });
+		editarCadastro(item) {
+			this.$router.push({ name: 'Editar', params: { id : item.id } });
 		}
 	},
 
-	created() {
-		// this.updatePagination();
-		console.log(this.pessoa);
-	}
 };
 </script>
 
