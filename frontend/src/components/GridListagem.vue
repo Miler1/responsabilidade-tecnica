@@ -37,7 +37,7 @@
 
 				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
+						v-icon.mr-2(small @click='visualizarJustificativa(item)', v-on='on', color='#327C32')
 							| mdi-chat
 					span Visualizar justificativa
 
@@ -82,7 +82,8 @@
 								solo,
 								dense,
 								@input="changeValue",
-								v-model="itensPerPage"
+								v-model="itensPerPage",
+								color="#327C32"
 							)
 						span.float-right.exibicao-paginas.mt-2.ml-1
 							| Resultados por página
@@ -143,7 +144,10 @@ export default {
 		},
 		perfil: {
 			type: [String]
-		}
+		},
+		visualizarJustificativa: {
+			type: [Function]
+		},
 
 	},
 
