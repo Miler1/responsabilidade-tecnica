@@ -4,7 +4,7 @@
 	v-app-bar(app, flat, tile, outlined=true)
 		v-row
 			v-col.d-flex.flex-column.align-center(cols="12", md="8")
-				v-img.cursor-pointer.align-self-start(contain :src="require('@/assets/img/Logo_GRT_Horizontal.png')" height="40px", width="180px", @click="clickHome")
+				v-img.cursor-pointer.align-self-start(contain :src="require('@/assets/img/Logo_GRT_Horizontal_Preta.png')" height="40px", width="180px", @click="clickHome")
 			v-col.d-flex.flex-column.align-center(cols="12", md="4")
 				div.align-self-end
 					div#div-toolbar.d-flex.flex-row.justify-center.align-center
