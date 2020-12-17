@@ -106,7 +106,7 @@
 
 				div.px-3.pt-7
 					v-btn#QA-btn-adicionar-anexo.float-right(
-						color="#2196F3",
+						color="#327C32",
 						class="text-none",
 						depressed,
 						outlined,
@@ -145,7 +145,7 @@
 			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined)
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", dark)
 				v-icon mdi-plus
 				span Cadastrar
 
@@ -404,7 +404,7 @@ export default {
 							<b>Tem certeza que deseja confirmar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
 						</p>`,
 					showCancelButton: true,
-					confirmButtonColor: '#2196F3',
+					confirmButtonColor: '#327C32',
 					cancelButtonColor: '#FFF',
 					showCloseButton: true,
 					focusConfirm: false,
@@ -534,7 +534,7 @@ export default {
 	}
 
 	#QA-btn-cancelar-cadastro {
-		color: #2196F3;
+		color: #327C32;
 		background-color: white;
 		width: 145px;
 	}
