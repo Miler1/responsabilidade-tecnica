@@ -235,7 +235,7 @@ export default {
 						<b>Tem certeza que deseja aprovar o cadastro? Esta opção não poderá ser desfeita e o cadastro permanecerá ativo por 1 ano.</b>
 					</p>`,
 				showCancelButton: true,
-				confirmButtonColor: '#2196F3',
+				confirmButtonColor: '#327C32',
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
@@ -284,7 +284,7 @@ export default {
 					</div>
 					`,
 				showCancelButton: true,
-				confirmButtonColor:'#2196F3',
+				confirmButtonColor:'#327C32',
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
