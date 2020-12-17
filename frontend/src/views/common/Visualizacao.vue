@@ -16,7 +16,7 @@
 			v-row
 				v-col(cols="12", md="9")
 					v-btn#QA-btn-voltar-visualizacao.float-left(@click='voltar', large, color="#2196F3", width="145px", outlined)
-						v-icon mdi-close
+						v-icon {{acao === 'analisar' ? "mdi-close" : "mdi-arrow-left"}}
 						span {{acao === 'analisar' ? "Cancelar" : "Voltar"}}
 				v-col.d-flex.flex-row.justify-space-between(v-if="acao === 'analisar'", cols="12", md="3")
 					v-btn#QA-btn-reprovar-analise(@click='reprovar', large, color="red", width="145px", outlined)

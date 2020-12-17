@@ -36,6 +36,13 @@ export default {
 
 	name: 'MenuSuperior',
 
+	data: () => {
+
+		return {
+			perfil: null
+		};
+	},
+
 	methods: {
 		logout () {
 			this.$store.dispatch(USUARIO_LOGOUT)
@@ -55,8 +62,19 @@ export default {
 		},
 
 		clickHome () {
-			this.$router.push({path: '/'});
+			this.$router.push({name: (this.perfil).normalize('NFD').replace(/[\u0300-\u036f]/g, "")});
+		},
+
+		getUsuarioLogado() {
+
+			return this.usuarioLogado == null ? '' :
+				this.usuarioLogado.principal.authorities.filter(function(e) { return e.authority === 'ADMINISTRADOR'; }).length > 0 ? 'Administrador' : 'Usuário';
+
 		}
+	},
+
+	mounted() {
+		this.perfil = this.getUsuarioLogado();
 	},
 
 	computed: {
