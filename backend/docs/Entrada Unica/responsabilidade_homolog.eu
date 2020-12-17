@@ -1,0 +1,75 @@
+{
+	"nome": "Gestão de Responsabilidade Técnica Ambiental",
+	"sigla": "GRT",
+	"url": "http://homologacao.sistemas.sema.ap.gov.br/responsabilidade-tecnica/autenticacao/entradaUnica",
+	"descricao": "Módulo de cadastro e gestão de responsáveis técnicos ambientais",
+	"cadastrarPerfis": true,
+	"ips": "127.0.0.1,0:0:0:0:0:0:0:1",
+	"permissoes": [
+	    {
+            "codigo": "LISTAR_SOLICITACOES",
+            "nome": "Listar Solicitações",
+            "perfis": [
+                {
+                    "codigo": "ADMINISTRADOR",
+                    "nome": "Administrador"
+                },
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
+        },
+        {
+            "codigo": "SOLICITAR_CADASTRO",
+            "nome": "Solicitar cadastro",
+            "perfis": [
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
+        }
+        {
+
+            "codigo": "BUSCAR_INFORMACAO_PESSOA",
+            "nome": "Buscar informaçoes da pessoa",
+            "perfis": [
+                {
+                    "codigo": "ADMINISTRADOR",
+                    "nome": "Administrador"
+                },
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
+        },
+        {
+
+            "codigo": "SALVAR_ARQUIVOS",
+            "nome": "Salvar arquivos",
+            "perfis": [
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
+        },
+        {
+
+            "codigo": "BAIXAR_ARQUIVOS",
+            "nome": "Baixar arquivos",
+            "perfis": [
+                {
+                    "codigo": "ADMINISTRADOR",
+                    "nome": "Administrador"
+                },
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
+        }
+	]
+}
