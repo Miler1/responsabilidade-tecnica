@@ -7,7 +7,7 @@ stages:
 build:
     only:
         - development
-        #- homologation
+        - homologation
         #- production
     stage: build
     script:
@@ -41,31 +41,31 @@ deploy_dev:
         - sshpass -p "$SSH_HOST_TESTE_SENHA" scp -v -o StrictHostKeyChecking=no /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/target/*.jar $SSH_HOST_TESTE_USER@$SSH_HOST_TESTE:/var/spring/responsabilidade-tecnica/gestaoresponsabilidadetecnica-0.0.1.jar;
         - sshpass -p "$SSH_HOST_TESTE_SENHA" ssh -tt -o StrictHostKeyChecking=no $SSH_HOST_TESTE_USER@$SSH_HOST_TESTE 'sudo /usr/bin/systemctl restart responsabilidade-tecnica.service;'
 
-# deploy_homologation:
-#     only:
-#         - homologation
-#     stage: deploy
-#     script:
-#         #Frontend
-#         - bash /n 14.6.0
-#         - cd /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/frontend
-#         - rm -f package-lock.json
-#         - npm install
-#         - npm run homolog
-#         #Backend
-#         - update-alternatives --set java /opt/jdk-14.0.1/bin/java
-#         - export JAVA_HOME=/opt/jdk-14.0.1
-#         - cd /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend
-#         - echo "" >> /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/src/main/resources/application-homolog.properties
-#         - echo "server.update=$(TZ='America/Sao_Paulo' date +%d-%m-%Y\ %H:%M:%S)" >> /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/src/main/resources/application-homolog.properties
-#         - mvn clean
-#         - mvn compile
-#         - mvn package
+deploy_homologation:
+    only:
+        - homologation
+    stage: deploy
+    script:
+        #Frontend
+        - bash /n 14.6.0
+        - cd /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/frontend
+        - rm -f package-lock.json
+        - npm install
+        - npm run homolog
+        #Backend
+        - update-alternatives --set java /opt/jdk-14.0.1/bin/java
+        - export JAVA_HOME=/opt/jdk-14.0.1
+        - cd /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend
+        - echo "" >> /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/src/main/resources/application-homolog.properties
+        - echo "server.update=$(TZ='America/Sao_Paulo' date +%d-%m-%Y\ %H:%M:%S)" >> /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/src/main/resources/application-homolog.properties
+        - mvn clean
+        - mvn compile
+        - mvn package
 
-#         - vpnc-connect /etc/vpnc/vpn-prodap
-#         - sshpass -p "$SSH_HOST_HOMOLOG_SENHA" scp -P 15012 -v -o StrictHostKeyChecking=no /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/target/*.jar $SSH_HOST_HOMOLOG_USER@$SSH_HOST_HOMOLOG:/dados/var/spring/responsabilidade-tecnica/gestaoresponsabilidadetecnica-0.0.1.jar;
-#         - sshpass -p "$SSH_HOST_HOMOLOG_SENHA" ssh -p 15012 -tt -o StrictHostKeyChecking=no $SSH_HOST_HOMOLOG_USER@$SSH_HOST_HOMOLOG 'sudo /usr/bin/systemctl restart responsabilidade-tecnica.service;'
-#         - vpnc-disconnect
+        - vpnc-connect /etc/vpnc/vpn-prodap
+        - sshpass -p "$SSH_HOST_HOMOLOG_SENHA" scp -P 15012 -v -o StrictHostKeyChecking=no /builds/amapa/utilitarios-ap/gestao-de-responsabilidade-tecnica/backend/target/*.jar $SSH_HOST_HOMOLOG_USER@$SSH_HOST_HOMOLOG:/dados/var/spring/responsabilidade-tecnica/gestaoresponsabilidadetecnica-0.0.1.jar;
+        - sshpass -p "$SSH_HOST_HOMOLOG_SENHA" ssh -p 15012 -tt -o StrictHostKeyChecking=no $SSH_HOST_HOMOLOG_USER@$SSH_HOST_HOMOLOG 'sudo /usr/bin/systemctl restart responsabilidade-tecnica.service;'
+        - vpnc-disconnect
 
 # deploy_production:
 #     only:

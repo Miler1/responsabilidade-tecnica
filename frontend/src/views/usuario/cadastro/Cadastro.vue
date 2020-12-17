@@ -106,7 +106,7 @@
 
 				div.px-3.pt-7
 					v-btn#QA-btn-adicionar-anexo.float-right(
-						color="#2196F3",
+						color="#327C32",
 						class="text-none",
 						depressed,
 						outlined,
@@ -404,7 +404,7 @@ export default {
 							<b>Tem certeza que deseja confirmar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
 						</p>`,
 					showCancelButton: true,
-					confirmButtonColor: '#2196F3',
+					confirmButtonColor: '#327C32',
 					cancelButtonColor: '#FFF',
 					showCloseButton: true,
 					focusConfirm: false,
@@ -433,7 +433,6 @@ export default {
 							.catch(error => {
 
 								console.error(error);
-
 								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 							});
@@ -538,11 +537,10 @@ export default {
 	}
 
 	.v-radio {
+
 		.v-label {
 			font-weight: 400;
 		}
-
-
 	}
 
 	.v-input--selection-controls.v-input {
