@@ -52,6 +52,7 @@ export default {
 			perfil: 'Usuario'
 		};
 	},
+
 	methods: {
 
 		visualizarCadastro(item) {
@@ -60,7 +61,7 @@ export default {
 				return;
 			}
 
-			this.$router.push({ name: 'VisualizarCadastro', params: { id: item.id }});
+			this.$router.push({ name: 'VisualizarCadastroUsuario', params: { id: item.id }});
 
 		},
 
