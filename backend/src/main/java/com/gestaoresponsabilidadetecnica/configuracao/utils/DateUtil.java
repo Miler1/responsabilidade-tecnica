@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 
 public class DateUtil {
 
+	DateUtil(){};
+
 	public static Date setHours(Date date, int horas, int minutos, int segundos, int milisegundos) {
 
 		Date data = DateUtils.setHours(date, horas);

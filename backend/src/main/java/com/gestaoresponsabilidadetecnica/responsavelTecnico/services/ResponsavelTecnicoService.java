@@ -178,9 +178,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        List<ResponsavelTecnico> responsaveis = findByPessoa(pessoa);
+        List<ResponsavelTecnico> responsaveis = new ArrayList<>(findByPessoa(pessoa));
 
-        return responsaveis.get(responsaveis.size() - 1);
+        return responsaveis.isEmpty() ? null : responsaveis.get(0);
 
     }
 

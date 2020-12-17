@@ -10,9 +10,11 @@
 				:dadosListagem="dadosListagem",
 				:placeholderPesquisa="placeholderPesquisa",
 				:updatePagination="updatePagination",
-				:iniciarAnalise="iniciarAnalise",
+				:editarItem="editarItem",
 				:parametrosFiltro="parametrosFiltro",
-				:perfil="perfil"
+				:perfil="perfil",
+				:visualizarItem="visualizarCadastro"
+
 			)
 
 </template>
@@ -72,17 +74,26 @@ export default {
 
 		},
 
-		iniciarAnalise(item) {
+		editarItem(item) {
 
 			if (!item) {
 				return;
 			}
 
-			console.log(item);
-
 			this.$router.push({name: 'AnalisarRelatorio', params: { id: item.id}});
 
-		}
+		},
+
+		visualizarCadastro(item) {
+
+			if (!item) {
+				return;
+			}
+
+			this.$router.push({ name: 'VisualizarCadastroAdministrador', params: { id: item.id }});
+
+		},
+	
 	},
 
 };

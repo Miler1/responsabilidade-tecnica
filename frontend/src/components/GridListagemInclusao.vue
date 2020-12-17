@@ -34,10 +34,10 @@
 			template(v-slot:item.actions='{ item }')
 				v-tooltip(bottom, v-if="exibirIconeDownload")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon(small @click.prevent='downloadAnexo(item)', v-on='on', color='#9EBAA4')
+						v-icon(small @click.prevent='downloadAnexo(item)', v-on='on', color='#327C32')
 							|  mdi-eye
 					span Visualizar anexo {{tituloTooltip}}
-				v-tooltip(bottom, v-if="exibirIconeEditar")
+				v-tooltip(bottom, v-if="exibirIconeRemover")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='removerAnexo(item)', v-on='on', color='#F56C6C')
 							| mdi-delete

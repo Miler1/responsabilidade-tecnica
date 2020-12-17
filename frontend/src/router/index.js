@@ -45,7 +45,7 @@ const routes = [
 			},
 			{
 				path: 'visualizar/:id',
-				name: 'VisualizarCadastro',
+				name: 'VisualizarCadastroUsuario',
 				component: () => import('@/views/common/Visualizacao.vue')
 			},
 		],
@@ -75,8 +75,13 @@ const routes = [
 				component: () => import('@/views/administrador/listagem/Listagem.vue')
 			},
 			{
-				path: 'analise/:id',
+				path: 'analisar/:id',
 				name: 'AnalisarRelatorio',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+			{
+				path: 'visualizar/:id',
+				name: 'VisualizarCadastroAdministrador',
 				component: () => import('@/views/common/Visualizacao.vue')
 			},
 

@@ -281,8 +281,11 @@ export default {
 			}
 
 			return this.dados.formacao !== null
+				&& this.dados.formacao !== ''
 				&& this.dados.conselhoDeClasse !== null
+				&& this.dados.conselhoDeClasse !== ''
 				&& this.dados.registro !== null
+				&& this.dados.registro !== ''
 				&& this.dados.nivelResponsabilidadeTecnica !== null
 				&& this.dados.possuiVinculoComGea !== null
 				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)

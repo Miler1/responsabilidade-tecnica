@@ -1,6 +1,6 @@
 <template lang="pug">
 
-	v-container#container-visualizacao.pa-12.align-center.justify-center
+	v-container#container-visualizar.pa-12.align-center.justify-center
 
 		h1.mb-12 Visualização do cadastro de responsabilidade técnica ambiental
 
@@ -15,10 +15,10 @@
 		div
 			v-row
 				v-col(cols="12", md="9")
-					v-btn#QA-btn-cancelar-analise.float-left(@click='cancelar', large, color="#2196F3", width="145px", outlined)
+					v-btn#QA-btn-voltar-visualizacao.float-left(@click='voltar', large, color="#2196F3", width="145px", outlined)
 						v-icon mdi-close
-						span Cancelar
-				v-col.d-flex.flex-row.justify-space-between(v-if="perfil === 'Administrador'", cols="12", md="3")
+						span {{acao === 'analisar' ? "Cancelar" : "Voltar"}}
+				v-col.d-flex.flex-row.justify-space-between(v-if="acao === 'analisar'", cols="12", md="3")
 					v-btn#QA-btn-reprovar-analise(@click='reprovar', large, color="red", width="145px", outlined)
 						v-icon mdi-close-circle-outline
 						span Reprovar
@@ -48,6 +48,7 @@ import Endereco from '@/views/common/Endereco';
 import InformacoesTecnicas from '@/views/common/InformacoesTecnicas';
 
 export default {
+
 	name: 'Cadastro',
 
 	components: {
@@ -94,7 +95,8 @@ export default {
 			pessoa: {},
 			pessoaEU:{},
 			contatos: {},
-			perfil: null
+			perfil: null,
+			acao: null,
 		};
 	},
 
@@ -148,11 +150,11 @@ export default {
 
 		},
 
-		cancelar() {
+		voltar() {
 			this.$router.push({name: (this.perfil).normalize('NFD').replace(/[\u0300-\u036f]/g, "")});
 		},
 
-		aprovar(){
+		aprovar() {
 
 			let acao = {};
 
@@ -168,7 +170,7 @@ export default {
 					ResponsavelTecnicoService.editarSolicitacao(that.dados)
 						.then(() => {
 							// this.handleSuccess(true);
-							that.cancelar();
+							that.voltar();
 						})
 						.catch(error => {
 
@@ -197,15 +199,19 @@ export default {
 					this.dados.pessoaFisica = this.pessoaEU;
 					this.dados.status.codigo = "REPROVADO";
 
+					let that = this;
+
 					ResponsavelTecnicoService.editarSolicitacao(this.dados)
 						.then( (response) => {
+
 							// that.handleSuccess(true);
-							that.cancelar();
+							that.voltar();
+
 						})
 						.catch(error => {
 
 							console.error(error);
-							that.handleError(error, true);
+							// that.handleError(error, true);
 
 						});
 
@@ -334,6 +340,18 @@ export default {
 		...mapGetters(['usuarioLogado'])
 	},
 
+	created() {
+
+		let href = (window.location.hash).toString();
+
+		if (href.indexOf('analisar') > -1) {
+			this.acao = 'analisar';
+		} else {
+			this.acao = 'visualizar';
+		}
+
+	},
+
 	mounted() {
 
 		if (this.$route.params.id) {
@@ -403,7 +421,7 @@ export default {
 
 <style lang="less">
 
-#container-visualizacao {
+#container-visualizar {
 
 	.v-label {
 		color: #333;
@@ -446,6 +464,10 @@ export default {
 		}
 	}
 
+}
+
+#QA-btn-voltar-visualizacao {
+	background-color: white;
 }
 
 .theme--light.v-list-item .v-list-item__mask{
