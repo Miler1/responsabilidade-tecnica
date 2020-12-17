@@ -25,7 +25,9 @@ public class VerificacaoValidade {
     @Scheduled(cron = "${job.validade.cron}")
     public void verificarValidadeResponsabilidades() {
 
-        if(VariaveisAmbientes.jobVerificacaoEnabled()) {
+        boolean jobAtivado = VariaveisAmbientes.jobVerificacaoEnabled();
+
+        if (jobAtivado) {
 
             log.info(LOG_PREFIX + "Iniciando Job");
 
@@ -50,5 +52,7 @@ public class VerificacaoValidade {
             log.info(LOG_PREFIX + "Encerrando Job");
 
         }
+
     }
+
 }
