@@ -114,7 +114,7 @@
 						span Adicionar anexo
 					input(
 						ref="uploader",
-						accept="image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
+						accept=filesAccept,
 						class="d-none",
 						type="file",
 						multiple,
@@ -184,6 +184,7 @@ export default {
 			placeholder: "Digite aqui...",
 			placeholderSelect: "Selecione",
 			labelNoData: "Não há nenhum anexo adicionado",
+			filesAccept: "image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
@@ -259,6 +260,24 @@ export default {
 		},
 
 		uploadFile(e) {
+			
+			var invalido = false;
+
+			e.target.files.forEach(file => {
+
+				if(file.type == '' || !this.filesAccept.includes(file.type)) {
+					invalido = true;
+				}
+
+			});
+
+			if(invalido) {
+
+				snackbar.alert(ERROR_MESSAGES.tipoInvalido);
+				return;
+
+			}
+
 			this.files = this.files.concat([...e.target.files]);
 			this.checaTamanhoArquivo();
 		},

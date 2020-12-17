@@ -6,9 +6,9 @@ const ERROR_MESSAGES = {
 
 	responsavelTecnico: {
 		listagem: 'Erro ao listar os responsáveis técnicos!'
-	}
+	},
 
-
+	tipoInvalido: 'Erro! esse tipo de arquivo é inválido! O upload aceita somente imagens e PDF!'
 
 };
 
