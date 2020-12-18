@@ -596,11 +596,6 @@ export default {
 		font-size: 16px;
 	}
 
-	span {
-		font-weight: 400;
-		font-size: 16px;
-	}
-
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
 	}

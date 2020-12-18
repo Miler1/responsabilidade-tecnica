@@ -429,11 +429,9 @@ export default {
 		font-size: 16px;
 	}
 
-	span {
-		font-weight: 400;
-		font-size: 16px;
+	table > thead > tr > th {
+		font-size: 14px !important;
 	}
-
 
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
@@ -443,11 +441,7 @@ export default {
 		display: none;
 	}
 
-	#QA-btn-cancelar-analise {
-		background-color: white;
-	}
-
-	#QA-btn-reprovar-analise {
+	#QA-btn-voltar-visualizacao, #QA-btn-reprovar-analise {
 		background-color: white;
 	}
 
@@ -464,10 +458,6 @@ export default {
 		}
 	}
 
-}
-
-#QA-btn-voltar-visualizacao {
-	background-color: white;
 }
 
 .theme--light.v-list-item .v-list-item__mask{

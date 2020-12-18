@@ -546,12 +546,6 @@ export default {
 		color: @color-secondary;
 	}
 
-	span {
-		font-weight: 400;
-		font-size: 16px;
-	}
-
-
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
 	}
@@ -570,13 +564,23 @@ export default {
 			font-weight: 400;
 			margin: 0 !important;
 		}
-
 	}
 
 	.v-input--selection-controls.v-input {
 
 		.v-messages {
 			padding-left: 12px;
+		}
+	}
+
+	table > thead > tr > th {
+		font-size: 14px !important;
+	}
+
+	table > tbody > tr > td {
+
+		button {
+			margin-right: 8px !important;
 		}
 	}
 
