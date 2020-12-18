@@ -122,7 +122,7 @@ export default {
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
 		font-size: 16px;
-		background: @green-primary;
+		background: @color-primary;
 		color: white;
 	}
 

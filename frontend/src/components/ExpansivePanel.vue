@@ -33,14 +33,15 @@ export default {
 
 <style lang="less" scoped>
 
+@import "../assets/css/variaveis.less";
+
 .spacer {
 	padding-bottom: 1%;
 }
 
 .v-expansion-panel-header {
-	color:  #777777;
+	color:  @color-primary;
 	cursor: pointer;
-
 	padding: 5px 24px;
 
 	span {

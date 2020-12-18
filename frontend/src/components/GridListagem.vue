@@ -83,7 +83,7 @@
 								dense,
 								@input="changeValue",
 								v-model="itensPerPage",
-								color="#327C32"
+								item-color="green darken-3"
 							)
 						span.float-right.exibicao-paginas.mt-2.ml-1
 							| Resultados por página
