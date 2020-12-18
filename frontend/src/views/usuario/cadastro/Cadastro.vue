@@ -2,7 +2,7 @@
 
 	v-container#container-cadastro.pa-12.align-center.justify-center
 
-		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
+		h1.mb-4 Cadastro de Responsabilidade Técnica Ambiental
 
 		DadosPessoais(:pessoa="pessoa")
 
@@ -52,23 +52,23 @@
 								:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
 								row
 							)
-								v-radio(label='Consultor pessoa física' value='CONSULTORPF')
-								v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
-								v-radio(label='Funcionário' value='FUNCIONARIO')
+								v-radio(label='Consultor pessoa física', value='CONSULTORPF', color="#327C32")
+								v-radio(label='Empresa consultora', value='EMPRESA_CONSULTORA', color="#327C32")
+								v-radio(label='Funcionário', value='FUNCIONARIO', color="#327C32")
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
 							v-radio-group#QA-radio-vinculo-gea.d-flex.align-center(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
-								v-radio(label='Sim' value='true')
-								v-radio(label='Não' value='false')
+								v-radio(label='Sim' value='true', color="#327C32")
+								v-radio(label='Não' value='false', color="#327C32")
 					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
 						v-col.pt-0.pb-0(cols="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row
 								v-radio-group#QA-radio-vinculo.d-flex.align-center(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
-									v-radio(label='Efetivo' value='EFETIVO')
-									v-radio(label='Contrato' value='CONTRATO')
-									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
-									v-radio(label='Outro' value='OUTRO')
+									v-radio(label='Efetivo' value='EFETIVO', color="#327C32")
+									v-radio(label='Contrato' value='CONTRATO', color="#327C32")
+									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO', color="#327C32")
+									v-radio(label='Outro' value='OUTRO', color="#327C32" )
 
 								v-text-field.mt-5#QA-input-outro-vinculo(
 									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
@@ -86,8 +86,9 @@
 							v-autocomplete#QA-select-area-especializacao(
 								outlined,
 								dense,
-								:placeholder="placeholderSelect"
-								item-color="grey darken-3",
+								:placeholder="placeholderSelect",
+								color="#E0E0E0",
+								item-color="green darken-3",
 								v-model="dados.especializacao",
 								:items="especializacoes",
 								:filter="filtroSelect",
@@ -137,24 +138,27 @@
 						:removerAnexo="removerAnexo",
 						:downloadAnexo="downloadAnexo"
 					)
-
-		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
-				v-icon mdi-close
-				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
-				v-icon mdi-plus
-				span Cadastrar
+		div
+			v-row
+				v-col(cols="12", md="12")
+					div.d-flex.flex-row.justify-space-between
+						v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
+							v-icon mdi-close
+							span Cancelar
+						v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
+							v-icon mdi-plus
+							span Cadastrar
 
 </template>
 
 <script>
 
+import DataUtils from '@/utils/dataUtils';
+
 import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import snackbar from '@/services/snack.service';
-import DataUtils from '@/utils/dataUtils';
 
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
@@ -260,18 +264,18 @@ export default {
 		},
 
 		uploadFile(e) {
-			
+
 			var invalido = false;
 
 			e.target.files.forEach(file => {
 
-				if(file.type == '' || !this.filesAccept.includes(file.type)) {
+				if (file.type == '' || !this.filesAccept.includes(file.type)) {
 					invalido = true;
 				}
 
 			});
 
-			if(invalido) {
+			if (invalido) {
 
 				snackbar.alert(ERROR_MESSAGES.tipoInvalido);
 				return;
@@ -287,13 +291,15 @@ export default {
 			if (this.dados.possuiVinculoComGea === 'false') {
 
 				return this.dados.formacao !== null
+					&& this.dados.formacao !== ''
 					&& this.dados.conselhoDeClasse !== null
+					&& this.dados.conselhoDeClasse !== ''
 					&& this.dados.registro !== null
+					&& this.dados.registro !== ''
 					&& this.dados.nivelResponsabilidadeTecnica !== null
 					&& this.dados.possuiVinculoComGea !== null
 					&& this.dados.especializacao !== null
 					&& this.files.length > 0;
-
 			}
 
 			return this.dados.formacao !== null
@@ -305,11 +311,23 @@ export default {
 				&& this.dados.nivelResponsabilidadeTecnica !== null
 				&& this.dados.possuiVinculoComGea !== null
 				&& this.dados.vinculoEmpregaticio !== null
-				&& (this.dados.vinculoEmpregaticio !== 'OUTRO' 
-					|| this.dados.outroVinculoEmpregaticio !== null 
+				&& (this.dados.vinculoEmpregaticio !== 'OUTRO'
+					|| this.dados.outroVinculoEmpregaticio !== null
 					&& this.dados.outroVinculoEmpregaticio !== "")
 				&& this.dados.especializacao !== null
 				&& this.files.length > 0;
+
+		},
+
+		checkFormReverse() {
+
+			return (this.dados.formacao == null || this.dados.formacao == '')
+				&& (this.dados.conselhoDeClasse == null || this.dados.conselhoDeClasse == '')
+				&& (this.dados.registro == null || this.dados.registro == '')
+				&& this.dados.nivelResponsabilidadeTecnica == null
+				&& this.dados.possuiVinculoComGea == null
+				&& this.dados.especializacao == null
+				&& this.files.length == 0;
 
 		},
 
@@ -410,6 +428,41 @@ export default {
 
 		salvar() {
 
+			let acao = {};
+
+			acao.confirmar = (result) => {
+
+				if (result.value) {
+
+					var that = this;
+
+					that.prepararParaSalvar();
+
+					ResponsavelTecnicoService.salvarSolicitacao(that.dados)
+						.then(() => {
+
+							that.salvarArquivos();
+
+							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+
+							that.$router.push({name: 'Usuario'});
+
+						})
+						.catch(error => {
+							console.error(error);
+							// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+						});
+
+				}
+
+			};
+
+			this.modalSalvar(acao);
+
+		},
+
+		modalSalvar(acao) {
+
 			if (this.checkForm()) {
 
 				this.$fire({
@@ -431,32 +484,7 @@ export default {
 					reverseButtons: true
 
 				}).then((result) => {
-
-					if (result.value) {
-
-						var that = this;
-
-						that.prepararParaSalvar();
-
-						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
-							.then(() => {
-
-								that.salvarArquivos();
-
-								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
-
-								that.$router.push({name: 'Usuario'});
-
-							})
-							.catch(error => {
-
-								console.error(error);
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-
-							});
-
-					}
-
+					acao.confirmar(result);
 				}).catch((error) => {
 					console.error(error);
 				});
@@ -469,7 +497,41 @@ export default {
 		},
 
 		cancelar() {
-			this.$router.push({name: 'Usuario'});
+
+			if (!this.checkFormReverse()) {
+
+				this.$fire({
+
+					title:
+						'<p class="title-modal-confirm">Confirmar cancelamento</p>',
+					html:
+						`<p class="message-modal-confirm">Ao confirmar o cancelamento do cadastro, todas as informações serão perdidas.</p>
+						<p class="message-modal-confirm">
+							<b>Tem certeza que deseja cancelar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão perdidas.</b>
+						</p>`,
+					showCancelButton: true,
+					confirmButtonColor: '#327C32',
+					cancelButtonColor: '#FFF',
+					showCloseButton: true,
+					focusConfirm: false,
+					confirmButtonText: '<i class="mdi mdi-check-bold"></i> Confirmar',
+					cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
+					reverseButtons: true
+
+				}).then((result) => {
+
+					if (result.value) {
+						this.$router.push({name: 'Usuario'});
+					}
+
+				}).catch((error) => {
+					console.error(error);
+				});
+
+			} else {
+				this.$router.push({name: 'Usuario'});
+			}
+
 		},
 
 		prepararContatos() {
@@ -528,6 +590,8 @@ export default {
 
 <style lang="less">
 
+@import "../../../assets/css/variaveis.less";
+
 #container-cadastro {
 
 	.v-label {
@@ -536,11 +600,9 @@ export default {
 		font-size: 16px;
 	}
 
-	span {
-		font-weight: 400;
-		font-size: 16px;
+	.v-input--selection-controls__ripple{
+		color: @color-secondary;
 	}
-
 
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
@@ -569,11 +631,22 @@ export default {
 		}
 	}
 
+	table > thead > tr > th {
+		font-size: 14px !important;
+	}
+
+	table > tbody > tr > td {
+
+		button {
+			margin-right: 8px !important;
+		}
+	}
+
 }
 
 .theme--light.v-list-item .v-list-item__mask{
 	color:white;
-	background: #65afef;
+	background: @color-secondary;
 }
 
 </style>

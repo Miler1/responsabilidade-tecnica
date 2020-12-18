@@ -70,6 +70,20 @@
                     "nome": "Usuário"
                 }
             ]
+        },
+        {
+            "codigo": "EDITAR_CADASTRO",
+            "nome": "Editar cadastro",
+            "perfis": [
+                {
+                    "codigo": "ADMINISTRADOR",
+                    "nome": "Administrador"
+                },
+                {
+                    "codigo": "USUARIO",
+                    "nome": "Usuário"
+                }
+            ]
         }
 	]
 }
