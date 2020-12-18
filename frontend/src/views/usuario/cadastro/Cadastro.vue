@@ -196,7 +196,6 @@ export default {
 			errorMessageEmpty: true,
 			isSelecting: false,
 			files: [],
-			fileschange: [],
 			row: null,
 			mimetype: "application/pdf",
 			excedeuTamanhoMaximoArquivo: false,
@@ -224,7 +223,6 @@ export default {
 	methods: {
 
 		downloadAnexo(item) {
-			console.log(item);
 			const link = document.createElement('a');
 			if (this.imagemBase64 != null) {
 				let header = this.mimetype + 'base64,' + this.imagemBase64;
@@ -393,7 +391,6 @@ export default {
 		},
 
 		editarArquivos(item) {
-			console.log(item);
 
 			this.files.forEach(file => {
 				ResponsavelTecnicoService.apagarArquivos(item)
@@ -581,23 +578,8 @@ export default {
 
 			if (this.dados.documentos != null) {
 				this.dados.documentos.forEach(documento => {
-					console.log(documento);
-					let extensao = documento.nome.split('.');
-					console.log(extensao);
-					let tipo = '';
-					if (extensao[1] == 'pdf') {
-						tipo = 'application/pdf';
-
-					} else if (extensao[1] == 'jpg'){
-						tipo = 'image/jpg';
-					}
 					let blob = this.b64toBlob(documento.imagemBase64, this.mimetype);
-					// let blob = this.dataURLToBlob(documento.caminho);
-					// let file = this.blobToFile(blob, documento.nome);
-					console.log(blob);
-					// console.log(file);
 					var file = new File([blob], documento.nome, {type: this.mimetype});
-					// this.imagemBase64 = documento.imagemBase64;
 					this.files.push(file);
 				});
 			};
@@ -635,25 +617,6 @@ export default {
 			theBlob.lastModifiedDate = new Date();
 			theBlob.name = fileName;
 			return theBlob;
-		},
-
-		dataURLToBlob: function(dataURL) {
-			var BASE64_MARKER = ';base64,';
-			if (dataURL.indexOf(BASE64_MARKER) == -1) {
-				var parts = dataURL.split(',');
-				var contentType = parts[0].split(':')[1];
-				var raw = decodeURIComponent(parts[1]);
-				return new Blob([raw], {type: contentType});
-			}
-			var parts = dataURL.split(BASE64_MARKER);
-			var contentType = parts[0].split(':')[1];
-			var raw = window.atob(parts[1]);
-			var rawLength = raw.length;
-			var uInt8Array = new Uint8Array(rawLength);
-			for (var i = 0; i < rawLength; ++i) {
-				uInt8Array[i] = raw.charCodeAt(i);
-			}
-			return new Blob([uInt8Array], {type: contentType});
 		}
 
 	},
