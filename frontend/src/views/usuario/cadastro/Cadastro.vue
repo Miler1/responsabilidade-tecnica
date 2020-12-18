@@ -16,6 +16,7 @@
 					v-row
 						v-col(cols="12", md="6")
 							TextField(
+								ref="textFieldFormacao",
 								v-model="dados.formacao",
 								labelOption = "Formação: *",
 								id = "QA-input-formacao",
@@ -26,6 +27,7 @@
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								ref="textFieldConcelhoDeClasse",
 								v-model="dados.conselhoDeClasse",
 								labelOption = "Conselho de classe: *",
 								id = "QA-input-conselho-classe",
@@ -36,6 +38,7 @@
 							)
 						v-col(cols="12", md="3")
 							TextField(
+								ref="textFieldRegistro",
 								v-model="dados.registro",
 								labelOption = "Registro: *",
 								id = "QA-input-registro",
@@ -73,7 +76,7 @@
 								v-text-field.mt-5#QA-input-outro-vinculo(
 									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
 									v-model="dados.outroVinculoEmpregaticio",
-									:errorMessages="errorMessageOutroVinculo(dados.outroVinculoEmpregaticio)",
+									:errorMessages="errorMessage(dados.outroVinculoEmpregaticio)",
 									color="#E0E0E0",
 									:placeholder="placeholder",
 									required,
@@ -138,16 +141,17 @@
 						:removerAnexo="removerAnexo",
 						:downloadAnexo="downloadAnexo"
 					)
-		div
-			v-row
-				v-col(cols="12", md="12")
-					div.d-flex.flex-row.justify-space-between
-						v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
-							v-icon mdi-close
-							span Cancelar
-						v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
-							v-icon mdi-plus
-							span Cadastrar
+
+		div.d-flex.flex-row.justify-space-between
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
+				v-icon mdi-close
+				span Cancelar
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark, v-if="isInclusao")
+				v-icon mdi-plus
+				span Cadastrar
+			v-btn#QA-btn-editar-responsabilidade-tecnica(@click='editar', large, color="#2196F3", dark, v-if="!isInclusao")
+				v-icon mdi-check
+				span Salvar e enviar
 
 </template>
 
@@ -194,8 +198,8 @@ export default {
 			errorMessageEmpty: true,
 			isSelecting: false,
 			files: [],
-			url: window.location,
 			row: null,
+			mimetype: "application/pdf",
 			excedeuTamanhoMaximoArquivo: false,
 			totalPermitido: 10000000,
 			isHabilitado: false,
@@ -208,19 +212,27 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
+				pessoaFisica: null,
+				documentos: null
 			},
 			contatos: {},
 			pessoa: {},
+			imagemBase64: null
 		};
 	},
 
 	methods: {
 
 		downloadAnexo(item) {
-
 			const link = document.createElement('a');
-			link.href = URL.createObjectURL(item);
+			if (this.imagemBase64 != null) {
+				let header = this.mimetype + 'base64,' + this.imagemBase64;
+				link.href = header;
+			} else {
+				link.href = URL.createObjectURL(item);
+			}
+			link.download = item.name;
 			link.target = '_blank';
 			link.click();
 			URL.revokeObjectURL(link.href);
@@ -232,14 +244,11 @@ export default {
 		},
 
 		removerAnexo(item) {
-
-			let pos = this.files.map(function(e) { return e.name; }).indexOf(item);
+			let pos = this.files.map(function(e) { return e.name; }).indexOf(item.name);
 			let deletedFile = this.files.splice(pos, 1);
-
 		},
 
 		onButtonClick() {
-
 			this.isSelecting = true;
 
 			window.addEventListener('focus', () => {
@@ -251,7 +260,6 @@ export default {
 		},
 
 		checaTamanhoArquivo() {
-
 			if (this.files.some(file => file.size > this.totalPermitido)) {
 				this.files.splice(0,this.files.length);
 				this.excedeuTamanhoMaximoArquivo = true;
@@ -365,24 +373,8 @@ export default {
 
 		errorMessage(value) {
 
-			if (Array.isArray(value)){
-
-				if (value.length == 0) {
-					return 'Obrigatório';
-				}
-				if (value.some(file => file.size > 1e7)) {
-					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
-				}
-			}
-
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
 
-		},
-
-		errorMessageOutroVinculo(value) {
-			if (this.isHabilitado) {
-				return this.errorMessageEmpty || value ? '' : 'Obrigatório';
-			}
 		},
 
 		permiteOutroVinculo(isChecked) {
@@ -419,6 +411,29 @@ export default {
 						console.error(error);
 
 						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+					});
+
+			});
+
+		},
+
+		editarArquivos(item) {
+
+			this.files.forEach(file => {
+				ResponsavelTecnicoService.apagarArquivos(item)
+					.catch(error => {
+						console.log(error);
+					});
+			});
+
+			this.files.forEach(file => {
+				let formData = new FormData();
+				formData.append('file', file);
+				ResponsavelTecnicoService.reupload(formData)
+					.catch(error => {
+
+						console.error(error);
 
 					});
 
@@ -534,6 +549,69 @@ export default {
 
 		},
 
+		editar() {
+
+			if (this.checkForm()) {
+
+				this.$fire({
+
+					title:
+						'<p class="title-modal-confirm">Confirmar edição</p>',
+					html:
+						`<p class="message-modal-confirm">Ao confirmar a edição, todas as informações serão salvas e enviadas para análise.</p>
+						<p class="message-modal-confirm">
+							<b>Tem certeza que deseja confirmar a edição? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
+						</p>`,
+					showCancelButton: true,
+					confirmButtonColor: '#2196F3',
+					cancelButtonColor: '#FFF',
+					showCloseButton: true,
+					focusConfirm: false,
+					confirmButtonText: '<i class="mdi mdi-check-bold"></i> Confirmar',
+					cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
+					reverseButtons: true
+
+				}).then((result) => {
+
+					if (result.value) {
+
+						var that = this;
+
+						that.prepararParaSalvar();
+						ResponsavelTecnicoService.editarSolicitacao(that.dados)
+							.then(() => {
+
+								this.editarArquivos(that.dados);
+
+								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
+
+								this.$router.push({name: 'Usuario'});
+
+							})
+							.catch(error => {
+
+								console.error(error);
+
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+
+							});
+
+					}
+
+				}).catch((error) => {
+					console.error(error);
+				});
+
+			} else {
+				window.scrollTo(0, 0);
+				this.errorMessageEmpty = false;
+			}
+		},
+
+		cancelar() {
+			this.$router.push({name: 'Usuario'});
+		},
+
 		prepararContatos() {
 
 			this.pessoa.contatos.forEach( (contato) => {
@@ -556,6 +634,75 @@ export default {
 
 			});
 
+		},
+
+		prepararDadosParaEdicao(informacaoTecnica) {
+			this.dados = informacaoTecnica;
+
+			this.$refs.textFieldFormacao.setModel(this.dados.formacao);
+			this.$refs.textFieldConcelhoDeClasse.setModel(this.dados.conselhoDeClasse);
+			this.$refs.textFieldRegistro.setModel(this.dados.registro);
+
+			this.dados.possuiVinculoComGea ? this.dados.possuiVinculoComGea = 'true' : this.dados.possuiVinculoComGea = 'false';
+
+			if (this.dados.especializacao != null) {
+				this.dados.especializacao.textoExibicao = this.dados.especializacao.codigo + ' - ' + this.dados.especializacao.nome;
+			}
+
+			this.dados.pessoaFisica = JSON.parse(JSON.stringify(informacaoTecnica.pessoa));
+			delete this.dados.pessoa;
+
+			if (this.dados.documentos != null) {
+				this.dados.documentos.forEach(documento => {
+					let blob = this.b64toBlob(documento.imagemBase64, this.mimetype);
+					var file = new File([blob], documento.nome, {type: this.mimetype});
+					this.files.push(file);
+				});
+			};
+
+		},
+
+		b64toBlob(b64Data, contentType) {
+			contentType = contentType || '';
+			var sliceSize = 512;
+			b64Data = b64Data.replace(/^[^,]+,/, '');
+			b64Data = b64Data.replace(/\s/g, '');
+			var byteCharacters = window.atob(b64Data);
+			var byteArrays = [];
+
+			for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+				var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+				var byteNumbers = new Array(slice.length);
+				for (var i = 0; i < slice.length; i++) {
+					byteNumbers[i] = slice.charCodeAt(i);
+				}
+
+				var byteArray = new Uint8Array(byteNumbers);
+
+				byteArrays.push(byteArray);
+			}
+
+			var blob = new Blob(byteArrays, {type: contentType});
+			return blob;
+
+		},
+
+		blobToFile(theBlob, fileName){
+			//A Blob() is almost a File() - it's just missing the two properties below which we will add
+			theBlob.lastModifiedDate = new Date();
+			theBlob.name = fileName;
+			return theBlob;
+		}
+
+	},
+
+	mounted() {
+
+		if (this.$route.params.id) {
+			this.isInclusao = false;
+		} else {
+			this.isInclusao = true;
 		}
 
 	},
@@ -567,6 +714,16 @@ export default {
 
 				this.pessoa = result.data;
 				this.prepararContatos();
+
+				ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
+					.then( (result) => {
+
+						this.prepararDadosParaEdicao(result.data);
+
+					})
+					.catch( error => {
+						console.error(error);
+					});
 
 			})
 			.catch(error => {
@@ -629,6 +786,16 @@ export default {
 		.v-messages {
 			padding-left: 12px;
 		}
+	}
+
+	.message-erro {
+		flex: 1 1 auto;
+		font-size: 12px;
+		min-height: 14px;
+		min-width: 1px;
+		position: relative;
+		color: #ff5252 !important;
+		caret-color: #ff5252 !important;
 	}
 
 	table > thead > tr > th {
