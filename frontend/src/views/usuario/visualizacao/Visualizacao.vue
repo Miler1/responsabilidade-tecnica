@@ -2,7 +2,7 @@
 
 	v-container#container-cadastro.pa-12.align-center.justify-center
 
-		h1.mb-12 Cadastro de Responsabilidade Técnica Ambiental
+		h1.mb-4 Cadastro de Responsabilidade Técnica Ambiental
 
 		div.mb-6
 			ExpansivePanel(titulo = 'Dados pessoais')
