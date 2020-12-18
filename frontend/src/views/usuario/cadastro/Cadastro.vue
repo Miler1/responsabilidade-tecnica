@@ -291,13 +291,15 @@ export default {
 			if (this.dados.possuiVinculoComGea === 'false') {
 
 				return this.dados.formacao !== null
+					&& this.dados.formacao !== ''
 					&& this.dados.conselhoDeClasse !== null
+					&& this.dados.conselhoDeClasse !== ''
 					&& this.dados.registro !== null
+					&& this.dados.registro !== ''
 					&& this.dados.nivelResponsabilidadeTecnica !== null
 					&& this.dados.possuiVinculoComGea !== null
 					&& this.dados.especializacao !== null
 					&& this.files.length > 0;
-
 			}
 
 			return this.dados.formacao !== null
@@ -314,6 +316,18 @@ export default {
 					&& this.dados.outroVinculoEmpregaticio !== "")
 				&& this.dados.especializacao !== null
 				&& this.files.length > 0;
+
+		},
+
+		checkFormReverse() {
+
+			return (this.dados.formacao == null || this.dados.formacao == '')
+				&& (this.dados.conselhoDeClasse == null || this.dados.conselhoDeClasse == '')
+				&& (this.dados.registro == null || this.dados.registro == '')
+				&& this.dados.nivelResponsabilidadeTecnica == null
+				&& this.dados.possuiVinculoComGea == null
+				&& this.dados.especializacao == null
+				&& this.files.length == 0;
 
 		},
 
@@ -414,6 +428,41 @@ export default {
 
 		salvar() {
 
+			let acao = {};
+
+			acao.confirmar = (result) => {
+
+				if (result.value) {
+
+					var that = this;
+
+					that.prepararParaSalvar();
+
+					ResponsavelTecnicoService.salvarSolicitacao(that.dados)
+						.then(() => {
+
+							that.salvarArquivos();
+
+							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+
+							that.$router.push({name: 'Usuario'});
+
+						})
+						.catch(error => {
+							console.error(error);
+							// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+						});
+
+				}
+
+			};
+
+			this.modalSalvar(acao);
+
+		},
+
+		modalSalvar(acao) {
+
 			if (this.checkForm()) {
 
 				this.$fire({
@@ -435,32 +484,7 @@ export default {
 					reverseButtons: true
 
 				}).then((result) => {
-
-					if (result.value) {
-
-						var that = this;
-
-						that.prepararParaSalvar();
-
-						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
-							.then(() => {
-
-								that.salvarArquivos();
-
-								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
-
-								that.$router.push({name: 'Usuario'});
-
-							})
-							.catch(error => {
-
-								console.error(error);
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-
-							});
-
-					}
-
+					acao.confirmar(result);
 				}).catch((error) => {
 					console.error(error);
 				});
@@ -473,7 +497,41 @@ export default {
 		},
 
 		cancelar() {
-			this.$router.push({name: 'Usuario'});
+
+			if (!this.checkFormReverse()) {
+
+				this.$fire({
+
+					title:
+						'<p class="title-modal-confirm">Confirmar cancelamento</p>',
+					html:
+						`<p class="message-modal-confirm">Ao confirmar o cancelamento do cadastro, todas as informações serão perdidas.</p>
+						<p class="message-modal-confirm">
+							<b>Tem certeza que deseja cancelar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão perdidas.</b>
+						</p>`,
+					showCancelButton: true,
+					confirmButtonColor: '#327C32',
+					cancelButtonColor: '#FFF',
+					showCloseButton: true,
+					focusConfirm: false,
+					confirmButtonText: '<i class="mdi mdi-check-bold"></i> Confirmar',
+					cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
+					reverseButtons: true
+
+				}).then((result) => {
+
+					if (result.value) {
+						this.$router.push({name: 'Usuario'});
+					}
+
+				}).catch((error) => {
+					console.error(error);
+				});
+
+			} else {
+				this.$router.push({name: 'Usuario'});
+			}
+
 		},
 
 		prepararContatos() {
