@@ -1,0 +1,8 @@
+const Status = {
+    AGUARDANDO_APROVACAO: 'AGUARDANDO_APROVACAO',
+    APROVADO: 'APROVADO',
+    REPROVADO: 'REPROVADO',
+    VENCIDO: 'VENCIDO'
+};
+
+export default Status;
