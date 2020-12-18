@@ -53,7 +53,7 @@ public class ResponsavelTecnicoController extends DefaultController {
     public ResponseEntity<ResponsavelTecnico> editarSolicitacao(
             HttpServletRequest request, @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
 
-        verificarPermissao(request, Acao.SOLICITAR_CADASTRO);
+        verificarPermissao(request, Acao.EDITAR_CADASTRO);
 
         ResponsavelTecnico responsavelTecnico = responsavelTecnicoService.editar(request, responsavelTecnicoDTO);
 

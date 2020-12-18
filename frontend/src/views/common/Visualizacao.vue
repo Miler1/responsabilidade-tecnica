@@ -2,7 +2,7 @@
 
 	v-container#container-visualizar.pa-12.align-center.justify-center
 
-		h1.mb-12 Visualização do cadastro de responsabilidade técnica ambiental
+		h1.mb-4 {{acao === 'analisar' ? 'Análise' : 'Visualização'}} do cadastro de responsabilidade técnica ambiental
 
 		DadosPessoais(:pessoa="pessoa")
 
@@ -14,17 +14,17 @@
 
 		div
 			v-row
-				v-col(cols="12", md="9")
+				v-col(cols="12", md="3")
 					v-btn#QA-btn-voltar-visualizacao.float-left(@click='voltar', large, color="#327C32", width="145px", outlined)
 						v-icon {{acao === 'analisar' ? "mdi-close" : "mdi-arrow-left"}}
 						span {{acao === 'analisar' ? "Cancelar" : "Voltar"}}
-				v-col.d-flex.flex-row.justify-space-between(v-if="acao === 'analisar'", cols="12", md="3")
+				v-col.d-flex.flex-row-reverse(v-if="acao === 'analisar'", cols="12", md="9")
+					v-btn#QA-btn-aprovar-analise.ml-3(@click='aprovar', large, color="#327C32",  width="145px", dark)
+						v-icon mdi-check-circle-outline
+						span Aprovar
 					v-btn#QA-btn-reprovar-analise(@click='reprovar', large, color="red", width="145px", outlined)
 						v-icon mdi-close-circle-outline
 						span Reprovar
-					v-btn#QA-btn-aprovar-analise(@click='aprovar', large, color="#327C32",  width="145px", dark)
-						v-icon mdi-check-circle-outline
-						span Aprovar
 
 </template>
 
@@ -34,6 +34,7 @@ import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import snackbar from '@/services/snack.service';
+
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
@@ -41,6 +42,7 @@ import DataUtils from '@/utils/dataUtils';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 import { mapGetters } from 'vuex';
+import Status from '@/enums/statusEnum';
 
 import DadosPessoais from '@/views/common/DadosPessoais';
 import Contatos from '@/views/common/Contatos';
@@ -160,9 +162,9 @@ export default {
 
 			acao.confirmar = (result) => {
 
-				if (result) {
+				if (result.value) {
 
-					this.dados.status.codigo = "APROVADO";
+					this.dados.status.codigo = Status.APROVADO;
 					this.dados.pessoaFisica = this.pessoaEU;
 
 					var that = this;
@@ -197,22 +199,18 @@ export default {
 
 					this.dados.justificativa = justificativa.value;
 					this.dados.pessoaFisica = this.pessoaEU;
-					this.dados.status.codigo = "REPROVADO";
+					this.dados.status.codigo = Status.REPROVADO;
 
 					let that = this;
 
 					ResponsavelTecnicoService.editarSolicitacao(this.dados)
 						.then( (response) => {
-
 							// that.handleSuccess(true);
 							that.voltar();
-
 						})
 						.catch(error => {
-
 							console.error(error);
 							// that.handleError(error, true);
-
 						});
 
 				}
@@ -429,11 +427,9 @@ export default {
 		font-size: 16px;
 	}
 
-	span {
-		font-weight: 400;
-		font-size: 16px;
+	table > thead > tr > th {
+		font-size: 14px !important;
 	}
-
 
 	.col-dados-pessoais > .v-label{
 		padding: 10px 0;
@@ -443,11 +439,7 @@ export default {
 		display: none;
 	}
 
-	#QA-btn-cancelar-analise {
-		background-color: white;
-	}
-
-	#QA-btn-reprovar-analise {
+	#QA-btn-voltar-visualizacao, #QA-btn-reprovar-analise {
 		background-color: white;
 	}
 
@@ -464,10 +456,6 @@ export default {
 		}
 	}
 
-}
-
-#QA-btn-voltar-visualizacao {
-	background-color: white;
 }
 
 .theme--light.v-list-item .v-list-item__mask{

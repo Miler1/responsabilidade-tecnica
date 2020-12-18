@@ -53,7 +53,7 @@
 							| mdi-replay
 					span Revalidar cadastro
 
-				v-tooltip(bottom, v-if="perfil === 'Usuario' && item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO'")
+				v-tooltip(bottom, v-if="perfil === 'Usuario' && (item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO')")
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
 							| mdi-pencil
@@ -83,7 +83,7 @@
 								dense,
 								@input="changeValue",
 								v-model="itensPerPage",
-								color="#327C32"
+								item-color="green darken-3"
 							)
 						span.float-right.exibicao-paginas.mt-2.ml-1
 							| Resultados por página

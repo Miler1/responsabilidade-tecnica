@@ -2,7 +2,7 @@
 
 	v-container.py-12.align-center.justify-center
 
-		h1.mb-12 Central do Responsável Técnico Ambiental
+		h1.mb-4 Central do Responsável Técnico Ambiental
 
 		div.d-flex.flex-row-reverse
 			v-btn#QA-btn-cadastro.mb-6(@click='abrirTelaCadastro', large, v-if="dadosListagem.content.length === 0")
@@ -130,7 +130,7 @@ export default {
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
 		font-size: 16px;
-		background: @green-primary;
+		background: @color-primary;
 		color: white;
 	}
 
