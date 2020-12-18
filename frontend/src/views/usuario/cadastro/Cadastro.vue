@@ -138,14 +138,16 @@
 						:removerAnexo="removerAnexo",
 						:downloadAnexo="downloadAnexo"
 					)
-
-		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
-				v-icon mdi-close
-				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
-				v-icon mdi-plus
-				span Cadastrar
+		div
+			v-row
+				v-col(cols="12", md="12")
+					div.d-flex.flex-row.justify-space-between
+						v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
+							v-icon mdi-close
+							span Cancelar
+						v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
+							v-icon mdi-plus
+							span Cadastrar
 
 </template>
 
