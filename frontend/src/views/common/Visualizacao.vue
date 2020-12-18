@@ -2,7 +2,7 @@
 
 	v-container#container-visualizar.pa-12.align-center.justify-center
 
-		h1.mb-4 Análise do cadastro de responsabilidade técnica ambiental
+		h1.mb-4 {{acao === 'analisar' ? 'Análise' : 'Visualização'}} do cadastro de responsabilidade técnica ambiental
 
 		DadosPessoais(:pessoa="pessoa")
 
