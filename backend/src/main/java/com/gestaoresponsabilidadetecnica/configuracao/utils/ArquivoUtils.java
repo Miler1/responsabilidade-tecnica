@@ -76,15 +76,4 @@ public class ArquivoUtils {
 		return bytes;
 	}
 
-	public static File convert(MultipartFile multipartFile) throws IOException {
-
-		File file = new File(multipartFile.getResource().getURI());
-
-		try (OutputStream os = new FileOutputStream(file)) {
-			os.write(multipartFile.getBytes());
-		}
-		return file;
-
-	}
-
 }
