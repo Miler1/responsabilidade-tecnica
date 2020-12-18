@@ -160,7 +160,7 @@ export default {
 
 			acao.confirmar = (result) => {
 
-				if (result) {
+				if (result.value) {
 
 					this.dados.status.codigo = "APROVADO";
 					this.dados.pessoaFisica = this.pessoaEU;
