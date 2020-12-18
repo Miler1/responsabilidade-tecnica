@@ -4,7 +4,7 @@
 	v-app-bar(app, flat, tile, outlined=true)
 		v-row
 			v-col.d-flex.flex-column.align-center(cols="12", md="8")
-				h3.align-self-start Gestão de Responsáveis técnicos
+				v-img.cursor-pointer.align-self-start(contain :src="require('@/assets/img/Logo_GRT_Horizontal.png')" height="40px", width="180px", @click="clickHome")
 			v-col.d-flex.flex-column.align-center(cols="12", md="4")
 				div.align-self-end
 					div#div-toolbar.d-flex.flex-row.justify-center.align-center
@@ -36,6 +36,13 @@ export default {
 
 	name: 'MenuSuperior',
 
+	data: () => {
+
+		return {
+			perfil: null
+		};
+	},
+
 	methods: {
 		logout () {
 			this.$store.dispatch(USUARIO_LOGOUT)
@@ -52,7 +59,22 @@ export default {
 			return this.usuarioLogado == null ? '' : 
 				this.usuarioLogado.principal.authorities.filter(function(e) { return e.authority === 'ADMINISTRADOR'; }).length > 0 ? 'Administrador' : 'Usuário';
 
+		},
+
+		clickHome () {
+			this.$router.push({name: (this.perfil).normalize('NFD').replace(/[\u0300-\u036f]/g, "")});
+		},
+
+		getUsuarioLogado() {
+
+			return this.usuarioLogado == null ? '' :
+				this.usuarioLogado.principal.authorities.filter(function(e) { return e.authority === 'ADMINISTRADOR'; }).length > 0 ? 'Administrador' : 'Usuário';
+
 		}
+	},
+
+	mounted() {
+		this.perfil = this.getUsuarioLogado();
 	},
 
 	computed: {
@@ -78,6 +100,10 @@ export default {
 
 .thin {
 	height: 1px !important;
+}
+
+.cursor-pointer {
+	cursor: pointer;
 }
 
 </style>

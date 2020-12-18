@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @Table(schema = GlobalReferences.ESQUEMA, name = "pessoa")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Pessoa implements Serializable {
 
 //    Foi mapeado somente o id da classe Pessoa para que seja usada no responsável técnico.

@@ -1,5 +1,6 @@
 package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class DocumentoResponsavelTecnico {
 
     @ManyToOne
     @JoinColumn(name = "id_responsavel_tecnico", referencedColumnName = "id")
+    @JsonBackReference
     private ResponsavelTecnico responsavelTecnico;
 
     public DocumentoResponsavelTecnico() {}
