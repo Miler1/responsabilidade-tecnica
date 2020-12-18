@@ -39,7 +39,7 @@
 					span Visualizar anexo {{tituloTooltip}}
 				v-tooltip(bottom, v-if="exibirIconeRemover")
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='removerAnexo(item)', v-on='on', color='#F56C6C')
+						v-icon.mr-2(small @click='removerAnexo(item)', v-on='on', color='#327C32')
 							| mdi-delete
 					span Excluir anexo {{tituloTooltip}}
 

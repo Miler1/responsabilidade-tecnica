@@ -19,7 +19,8 @@
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
 				:perfil="perfil"
-				:visualizarItem="visualizarCadastro"
+				:visualizarItem="visualizarCadastro",
+				:visualizarJustificativa="visualizarJustificativa",
 			)
 
 </template>
@@ -65,6 +66,28 @@ export default {
 
 		},
 
+		visualizarJustificativa(item) {
+
+			this.$fire({
+
+				title:
+					'<p class="title-modal-confirm">Justificativa</p>',
+				html:
+					`<p class="message-modal-confirm">Justificativa:</p>
+					<p class="message-modal-confirm" style="text-align: justify; text-justify: inter-word; padding-bottom: 16px">
+						<b>` + item.justificativa + `</b>
+					</p>`,
+
+				confirmButtonColor: '#327C32',
+				showCloseButton: true,
+				focusConfirm: false,
+				confirmButtonText: '<i class="mdi mdi-close"></i> Fechar',
+				reverseButtons: true,
+
+			});
+
+		},
+
 		updatePagination() {
 
 			ResponsavelTecnicoService.buscarSolicitacao()
@@ -99,7 +122,7 @@ export default {
 	#QA-btn-cadastro {
 	    //padding: 8px 30px;
 		font-size: 16px;
-		background: @blue-primary;
+		background: @green-primary;
 		color: white;
 	}
 

@@ -47,32 +47,30 @@
 					v-row
 						v-col.py-0(cols="12", md="8")
 							v-label Nível de responsabilidade técnica: *
-							div
-								v-radio-group#QA-radio-nivel-responsabilidade-tecnica(
-									v-model="dados.nivelResponsabilidadeTecnica",
-									:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
-									row
-								)
-									v-radio(label='Consultor pessoa física' value='CONSULTORPF')
-									v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
-									v-radio(label='Funcionário' value='FUNCIONARIO')
+							v-radio-group#QA-radio-nivel-responsabilidade-tecnica.d-flex.align-center(
+								v-model="dados.nivelResponsabilidadeTecnica",
+								:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
+								row
+							)
+								v-radio(label='Consultor pessoa física' value='CONSULTORPF')
+								v-radio(label='Empresa consultora' value='EMPRESA_CONSULTORA')
+								v-radio(label='Funcionário' value='FUNCIONARIO')
 						v-col.py-0(cols="12", md="4")
 							v-label Possui vínculo com o GEA: *
-							div
-								v-radio-group#QA-radio-vinculo-gea(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
-									v-radio(label='Sim' value='true')
-									v-radio(label='Não' value='false')
+							v-radio-group#QA-radio-vinculo-gea.d-flex.align-center(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
+								v-radio(label='Sim' value='true')
+								v-radio(label='Não' value='false')
 					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
 						v-col.pt-0.pb-0(cols="12")
 							v-label Vínculo empregatício: *
 							div.d-flex.flex-row
-								v-radio-group#QA-radio-vinculo(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
+								v-radio-group#QA-radio-vinculo.d-flex.align-center(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO')
 									v-radio(label='Contrato' value='CONTRATO')
 									v-radio(label='Cargo comissionado' value='CARGO_COMISSIONADO')
 									v-radio(label='Outro' value='OUTRO')
 
-								v-text-field#QA-input-outro-vinculo(
+								v-text-field.mt-5#QA-input-outro-vinculo(
 									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
 									v-model="dados.outroVinculoEmpregaticio",
 									:errorMessages="errorMessageOutroVinculo(dados.outroVinculoEmpregaticio)",
@@ -85,22 +83,21 @@
 					v-row
 						v-col(cols="12")
 							v-label Área de especialização: *
-							div.d-flex.flex-row
-								v-autocomplete#QA-select-area-especializacao(
-									outlined,
-									dense,
-									:placeholder="placeholderSelect"
-									item-color="grey darken-3",
-									v-model="dados.especializacao",
-									:items="especializacoes",
-									:filter="filtroSelect",
-									item-text="textoExibicao",
-									:error-messages="errorMessage(dados.especializacao)",
-									no-data-text="Nenhuma área de especialização encontrada",
-									@click.native="resetErrorMessage",
-									required,
-									return-object=true
-								)
+							v-autocomplete#QA-select-area-especializacao(
+								outlined,
+								dense,
+								:placeholder="placeholderSelect"
+								item-color="grey darken-3",
+								v-model="dados.especializacao",
+								:items="especializacoes",
+								:filter="filtroSelect",
+								item-text="textoExibicao",
+								:error-messages="errorMessage(dados.especializacao)",
+								no-data-text="Nenhuma área de especialização encontrada",
+								@click.native="resetErrorMessage",
+								required,
+								return-object=true
+							)
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
 
@@ -117,7 +114,7 @@
 						span Adicionar anexo
 					input(
 						ref="uploader",
-						accept="image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
+						accept=filesAccept,
 						class="d-none",
 						type="file",
 						multiple,
@@ -131,7 +128,7 @@
 							| Obrigatório
 					div.message-erro(
 						v-if="excedeuTamanhoMaximoArquivo")
-							| Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
+							| Tamanho de arquivo inválido. O arquivo deve conter menos de 10MB
 
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
@@ -142,10 +139,10 @@
 					)
 
 		div.d-flex.flex-row.justify-space-between
-			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#2196F3", width="145px")
+			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#2196F3", width="145px", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
 				v-icon mdi-plus
 				span Cadastrar
 
@@ -187,6 +184,7 @@ export default {
 			placeholder: "Digite aqui...",
 			placeholderSelect: "Selecione",
 			labelNoData: "Não há nenhum anexo adicionado",
+			filesAccept: "image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 			headerListagem: HEADER,
 			isInclusao: true,
 			errorMessageEmpty: true,
@@ -195,7 +193,7 @@ export default {
 			url: window.location,
 			row: null,
 			excedeuTamanhoMaximoArquivo: false,
-			totalPermitido: 2000000,
+			totalPermitido: 10000000,
 			isHabilitado: false,
 			especializacoes: [],
 			dados: {
@@ -262,6 +260,24 @@ export default {
 		},
 
 		uploadFile(e) {
+			
+			var invalido = false;
+
+			e.target.files.forEach(file => {
+
+				if(file.type == '' || !this.filesAccept.includes(file.type)) {
+					invalido = true;
+				}
+
+			});
+
+			if(invalido) {
+
+				snackbar.alert(ERROR_MESSAGES.tipoInvalido);
+				return;
+
+			}
+
 			this.files = this.files.concat([...e.target.files]);
 			this.checaTamanhoArquivo();
 		},
@@ -288,8 +304,10 @@ export default {
 				&& this.dados.registro !== ''
 				&& this.dados.nivelResponsabilidadeTecnica !== null
 				&& this.dados.possuiVinculoComGea !== null
-				&& (this.dados.vinculoEmpregaticio !== null || this.dados.outroVinculoEmpregaticio !== null)
-				&& (this.dados.vinculoEmpregaticio !== "" || this.dados.outroVinculoEmpregaticio !== "")
+				&& this.dados.vinculoEmpregaticio !== null
+				&& (this.dados.vinculoEmpregaticio !== 'OUTRO' 
+					|| this.dados.outroVinculoEmpregaticio !== null 
+					&& this.dados.outroVinculoEmpregaticio !== "")
 				&& this.dados.especializacao !== null
 				&& this.files.length > 0;
 
@@ -334,7 +352,7 @@ export default {
 				if (value.length == 0) {
 					return 'Obrigatório';
 				}
-				if (value.some(file => file.size > 2e6)) {
+				if (value.some(file => file.size > 1e7)) {
 					return 'Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB.';
 				}
 			}
@@ -423,11 +441,11 @@ export default {
 						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
 							.then(() => {
 
-								this.salvarArquivos();
+								that.salvarArquivos();
 
 								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
 
-								this.$router.push({name: 'Usuario'});
+								that.$router.push({name: 'Usuario'});
 
 							})
 							.catch(error => {
@@ -540,6 +558,7 @@ export default {
 
 		.v-label {
 			font-weight: 400;
+			margin: 0 !important;
 		}
 	}
 

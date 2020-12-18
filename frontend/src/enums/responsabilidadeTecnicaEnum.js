@@ -1,7 +1,7 @@
 const NIVEIS_RT = {
     CONSULTORPF: 'Consultor pessoa física',
-    EMPRESA_CONSULTORA: 'Consultor pessoa física',
-    FUNCIONARIO: 'Consultor pessoa física'
+    EMPRESA_CONSULTORA: 'Empresa consultora',
+    FUNCIONARIO: 'Funcionário'
 };
 
 const VINCULO = {

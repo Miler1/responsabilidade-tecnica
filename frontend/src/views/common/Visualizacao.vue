@@ -15,14 +15,14 @@
 		div
 			v-row
 				v-col(cols="12", md="9")
-					v-btn#QA-btn-voltar-visualizacao.float-left(@click='voltar', large, color="#2196F3", width="145px", outlined)
-						v-icon mdi-close
+					v-btn#QA-btn-voltar-visualizacao.float-left(@click='voltar', large, color="#327C32", width="145px", outlined)
+						v-icon {{acao === 'analisar' ? "mdi-close" : "mdi-arrow-left"}}
 						span {{acao === 'analisar' ? "Cancelar" : "Voltar"}}
 				v-col.d-flex.flex-row.justify-space-between(v-if="acao === 'analisar'", cols="12", md="3")
 					v-btn#QA-btn-reprovar-analise(@click='reprovar', large, color="red", width="145px", outlined)
 						v-icon mdi-close-circle-outline
 						span Reprovar
-					v-btn#QA-btn-aprovar-analise(@click='aprovar', large, color="#2196F3",  width="145px", dark)
+					v-btn#QA-btn-aprovar-analise(@click='aprovar', large, color="#327C32",  width="145px", dark)
 						v-icon mdi-check-circle-outline
 						span Aprovar
 
@@ -235,7 +235,7 @@ export default {
 						<b>Tem certeza que deseja aprovar o cadastro? Esta opção não poderá ser desfeita e o cadastro permanecerá ativo por 1 ano.</b>
 					</p>`,
 				showCancelButton: true,
-				confirmButtonColor: '#2196F3',
+				confirmButtonColor: '#327C32',
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
@@ -284,7 +284,7 @@ export default {
 					</div>
 					`,
 				showCancelButton: true,
-				confirmButtonColor:'#2196F3',
+				confirmButtonColor:'#327C32',
 				cancelButtonColor: '#FFF',
 				showCloseButton: true,
 				focusConfirm: false,
