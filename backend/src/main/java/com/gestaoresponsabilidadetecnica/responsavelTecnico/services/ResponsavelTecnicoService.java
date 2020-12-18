@@ -95,9 +95,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(
                 responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
 
-        String codigoStatus = responsavelTecnicoDTO.getStatus().getCodigo();
-
-        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo(codigoStatus);
+        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
 
         ResponsavelTecnico responsavelTecnico = responsavelTecnicoRespository.findById(responsavelTecnicoDTO.getId()).orElse(null);
 
