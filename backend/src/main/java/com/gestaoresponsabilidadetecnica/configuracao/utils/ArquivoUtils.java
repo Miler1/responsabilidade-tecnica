@@ -4,10 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,6 +74,17 @@ public class ArquivoUtils {
 		is.close();
 
 		return bytes;
+	}
+
+	public static File convert(MultipartFile multipartFile) throws IOException {
+
+		File file = new File(multipartFile.getResource().getURI());
+
+		try (OutputStream os = new FileOutputStream(file)) {
+			os.write(multipartFile.getBytes());
+		}
+		return file;
+
 	}
 
 }

@@ -76,7 +76,7 @@
 								v-text-field.mt-5#QA-input-outro-vinculo(
 									v-if="dados.vinculoEmpregaticio === 'OUTRO'"
 									v-model="dados.outroVinculoEmpregaticio",
-									:errorMessages="errorMessageOutroVinculo(dados.outroVinculoEmpregaticio)",
+									:errorMessages="errorMessage(dados.outroVinculoEmpregaticio)",
 									color="#E0E0E0",
 									:placeholder="placeholder",
 									required,
@@ -145,7 +145,7 @@
 			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark, v-if="isInclusao")
 				v-icon mdi-plus
 				span Cadastrar
 			v-btn#QA-btn-editar-responsabilidade-tecnica(@click='editar', large, color="#2196F3", dark, v-if="!isInclusao")
@@ -196,8 +196,9 @@ export default {
 			errorMessageEmpty: true,
 			isSelecting: false,
 			files: [],
+			fileschange: [],
 			row: null,
-			mimetype: "data:image/data:application;",
+			mimetype: "application/pdf",
 			excedeuTamanhoMaximoArquivo: false,
 			totalPermitido: 10000000,
 			isHabilitado: false,
@@ -210,10 +211,13 @@ export default {
 				possuiVinculoComGea: null,
 				vinculoEmpregaticio: null,
 				outroVinculoEmpregaticio: null,
-				especializacao: null
+				especializacao: null,
+				pessoaFisica: null,
+				documentos: null
 			},
 			contatos: {},
 			pessoa: {},
+			imagemBase64: null
 		};
 	},
 
@@ -222,9 +226,12 @@ export default {
 		downloadAnexo(item) {
 			console.log(item);
 			const link = document.createElement('a');
-			let header = this.mimetype + 'base64,' + item.imagemBase64;
-			let extensao = item.name.split('.');
-			link.href = header;
+			if (this.imagemBase64 != null) {
+				let header = this.mimetype + 'base64,' + this.imagemBase64;
+				link.href = header;
+			} else {
+				link.href = URL.createObjectURL(item);
+			}
 			link.download = item.name;
 			link.target = '_blank';
 			link.click();
@@ -344,12 +351,6 @@ export default {
 
 		},
 
-		errorMessageOutroVinculo(value) {
-			if (this.isHabilitado) {
-				return this.errorMessageEmpty || value ? '' : 'Obrigatório';
-			}
-		},
-
 		permiteOutroVinculo(isChecked) {
 
 			if (!isChecked) {
@@ -391,18 +392,23 @@ export default {
 
 		},
 
-		editarArquivos() {
-			this.files.forEach(file => {
+		editarArquivos(item) {
+			console.log(item);
 
+			this.files.forEach(file => {
+				ResponsavelTecnicoService.apagarArquivos(item)
+					.catch(error => {
+						console.log(error);
+					});
+			});
+
+			this.files.forEach(file => {
 				let formData = new FormData();
 				formData.append('file', file);
-
 				ResponsavelTecnicoService.reupload(formData)
 					.catch(error => {
 
 						console.error(error);
-
-						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 
 					});
 
@@ -499,11 +505,10 @@ export default {
 						var that = this;
 
 						that.prepararParaSalvar();
-
 						ResponsavelTecnicoService.editarSolicitacao(that.dados)
 							.then(() => {
 
-								this.editarArquivos();
+								this.editarArquivos(that.dados);
 
 								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
 
@@ -559,7 +564,6 @@ export default {
 		},
 
 		prepararDadosParaEdicao(informacaoTecnica) {
-
 			this.dados = informacaoTecnica;
 
 			this.$refs.textFieldFormacao.setModel(this.dados.formacao);
@@ -572,12 +576,85 @@ export default {
 				this.dados.especializacao.textoExibicao = this.dados.especializacao.codigo + ' - ' + this.dados.especializacao.nome;
 			}
 
-			this.dados.documentos.forEach(documento => {
-				var file = new File([documento], documento.nome, {type: this.mimetype});
-				file.imagemBase64 = documento.imagemBase64;
-				this.files.push(file);
-			});
+			this.dados.pessoaFisica = JSON.parse(JSON.stringify(informacaoTecnica.pessoa));
+			delete this.dados.pessoa;
+
+			if (this.dados.documentos != null) {
+				this.dados.documentos.forEach(documento => {
+					console.log(documento);
+					let extensao = documento.nome.split('.');
+					console.log(extensao);
+					let tipo = '';
+					if (extensao[1] == 'pdf') {
+						tipo = 'application/pdf';
+
+					} else if (extensao[1] == 'jpg'){
+						tipo = 'image/jpg';
+					}
+					let blob = this.b64toBlob(documento.imagemBase64, this.mimetype);
+					// let blob = this.dataURLToBlob(documento.caminho);
+					// let file = this.blobToFile(blob, documento.nome);
+					console.log(blob);
+					// console.log(file);
+					var file = new File([blob], documento.nome, {type: this.mimetype});
+					// this.imagemBase64 = documento.imagemBase64;
+					this.files.push(file);
+				});
+			};
+
 		},
+
+		b64toBlob(b64Data, contentType) {
+			contentType = contentType || '';
+			var sliceSize = 512;
+			b64Data = b64Data.replace(/^[^,]+,/, '');
+			b64Data = b64Data.replace(/\s/g, '');
+			var byteCharacters = window.atob(b64Data);
+			var byteArrays = [];
+
+			for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+				var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+				var byteNumbers = new Array(slice.length);
+				for (var i = 0; i < slice.length; i++) {
+					byteNumbers[i] = slice.charCodeAt(i);
+				}
+
+				var byteArray = new Uint8Array(byteNumbers);
+
+				byteArrays.push(byteArray);
+			}
+
+			var blob = new Blob(byteArrays, {type: contentType});
+			return blob;
+
+		},
+
+		blobToFile(theBlob, fileName){
+			//A Blob() is almost a File() - it's just missing the two properties below which we will add
+			theBlob.lastModifiedDate = new Date();
+			theBlob.name = fileName;
+			return theBlob;
+		},
+
+		dataURLToBlob: function(dataURL) {
+			var BASE64_MARKER = ';base64,';
+			if (dataURL.indexOf(BASE64_MARKER) == -1) {
+				var parts = dataURL.split(',');
+				var contentType = parts[0].split(':')[1];
+				var raw = decodeURIComponent(parts[1]);
+				return new Blob([raw], {type: contentType});
+			}
+			var parts = dataURL.split(BASE64_MARKER);
+			var contentType = parts[0].split(':')[1];
+			var raw = window.atob(parts[1]);
+			var rawLength = raw.length;
+			var uInt8Array = new Uint8Array(rawLength);
+			for (var i = 0; i < rawLength; ++i) {
+				uInt8Array[i] = raw.charCodeAt(i);
+			}
+			return new Blob([uInt8Array], {type: contentType});
+		}
 
 	},
 
@@ -670,6 +747,16 @@ export default {
 		.v-messages {
 			padding-left: 12px;
 		}
+	}
+
+	.message-erro {
+		flex: 1 1 auto;
+		font-size: 12px;
+		min-height: 14px;
+		min-width: 1px;
+		position: relative;
+		color: #ff5252 !important;
+		caret-color: #ff5252 !important;
 	}
 
 }
