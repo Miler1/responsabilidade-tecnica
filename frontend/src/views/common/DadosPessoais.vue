@@ -34,7 +34,7 @@
 						span &nbsp;{{pessoa.rg && pessoa.rg.orgaoExpedidor ? pessoa.rg.orgaoExpedidor : '-'}}
 					v-col(cols="12")
 						v-label Título eleitoral:
-						span &nbsp;{{pessoa.tituloEleitoral && pessoa.tituloEleitoral.numero ? pessoa.tituloEleitoral.numero : '-'}}
+						span &nbsp;{{pessoa.tituloEleitoral && pessoa.tituloEleitoral.numero ? prepararTitulo(pessoa.tituloEleitoral.numero) : '-'}}
 					v-col(cols="12")
 						v-label Zona eleitoral:
 						span &nbsp;{{pessoa.tituloEleitoral && pessoa.tituloEleitoral.zona ? pessoa.tituloEleitoral.zona : '-'}}
@@ -75,7 +75,17 @@ export default {
 		prepararData(milisegundos) {
 			return DataUtils.formatarData(milisegundos);
 		},
+
+		prepararTitulo(titulo) {
+
+			if (titulo) {
+				return DataUtils.formatarTitulo(titulo);
+			}
+
+		}
+
 	}
+
 };
 
 </script>
