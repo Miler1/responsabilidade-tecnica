@@ -5,6 +5,7 @@ import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbien
 import com.gestaoresponsabilidadetecnica.configuracao.controllers.DefaultController;
 import com.gestaoresponsabilidadetecnica.configuracao.enums.Acao;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,21 @@ public class PessoaController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(pessoa);
+
+    }
+
+    @GetMapping(value = "buscarPessoa/{idPessoa}")
+    public ResponseEntity<Pessoa> buscarPessoa(HttpServletRequest request,
+                                                                                               @PathVariable("idPessoa") Integer idPessoa) throws Exception {
+
+        verificarPermissao(request, Acao.BUSCAR_INFORMACAO_PESSOA);
+
+        Pessoa pessoa = pessoaService.buscarPessoaById(request, idPessoa);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(pessoa);
+
     }
 
 }

@@ -3,10 +3,12 @@ package com.gestaoresponsabilidadetecnica.responsavelTecnico.services;
 import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.ArquivoUtils;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.DateUtil;
+import com.gestaoresponsabilidadetecnica.configuracao.utils.FiltroPesquisa;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.repositories.EspecializacaoTecnicaRepository;
 import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
@@ -19,6 +21,8 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.Respons
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.StatusCadastroResponsavelTecnicoRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.specifications.ResponsavelTecnicoSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
@@ -61,11 +63,9 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
-        Pessoa pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
+        PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
 
         StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
-
-        Date validade = DateUtil.acrescentarUmAno(new Date());
 
         ResponsavelTecnico responsavelTecnico = new ResponsavelTecnico.ResponsavelTecnicoBuilder()
                 .setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse())
@@ -74,16 +74,77 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 .setNivelResponsabilidadeTecnica(responsavelTecnicoDTO.getNivelResponsabilidadeTecnica())
                 .setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio())
                 .setPessoa(pessoa)
+                .setStatus(status)
                 .setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea())
                 .setRegistro(responsavelTecnicoDTO.getRegistro())
-                .setStatus(status)
-                .setValidade(validade)
                 .setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio())
                 .build();
 
         responsavelTecnicoRespository.save(responsavelTecnico);
 
         return responsavelTecnico;
+
+    }
+
+    @Override
+    public ResponsavelTecnico editar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) {
+
+        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(
+                responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
+
+        String codigoStatus = responsavelTecnicoDTO.getStatus().getCodigo();
+
+        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo(codigoStatus);
+
+        ResponsavelTecnico responsavelTecnico = responsavelTecnicoRespository.findById(responsavelTecnicoDTO.getId()).orElse(null);
+
+        if (responsavelTecnico != null) {
+
+            responsavelTecnico.setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse());
+            responsavelTecnico.setEspecializacao(especializacaoTecnica);
+            responsavelTecnico.setFormacao(responsavelTecnicoDTO.getFormacao());
+            responsavelTecnico.setNivelResponsabilidadeTecnica(responsavelTecnicoDTO.getNivelResponsabilidadeTecnica());
+            responsavelTecnico.setOutroVinculoEmpregaticio(responsavelTecnicoDTO.getOutroVinculoEmpregaticio());
+            responsavelTecnico.setPessoa(responsavelTecnicoDTO.getPessoaFisica());
+            responsavelTecnico.setStatus(status);
+            responsavelTecnico.setJustificativa(responsavelTecnicoDTO.getJustificativa());
+            responsavelTecnico.setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea());
+            responsavelTecnico.setRegistro(responsavelTecnicoDTO.getRegistro());
+            responsavelTecnico.setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio());
+
+            if (status.getCodigo().equals("APROVADO")) {
+                responsavelTecnico.setValidade(DateUtil.calcularValidade());
+            }
+
+            responsavelTecnicoRespository.save(responsavelTecnico);
+
+        }
+
+        return responsavelTecnico;
+
+    }
+
+    @Override
+    public Page<ResponsavelTecnico> listar(Pageable pageable, FiltroPesquisa filtro) {
+
+        Specification<ResponsavelTecnico> specification = prepararFiltro(filtro);
+
+        return responsavelTecnicoRespository.findAll(specification, pageable);
+
+    }
+
+    private Specification<ResponsavelTecnico> prepararFiltro(FiltroPesquisa filtro) {
+
+        Specification<ResponsavelTecnico> specification = Specification.where(ResponsavelTecnicoSpecification.padrao());
+
+        if (filtro.getStringPesquisa() != null) {
+
+            specification = specification.and(ResponsavelTecnicoSpecification.nome(filtro.getStringPesquisa())
+                    .or(ResponsavelTecnicoSpecification.status(filtro.getStringPesquisa())));
+
+        }
+
+        return specification;
 
     }
 
@@ -110,30 +171,34 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
-    private ResponsavelTecnico findByPessoaLogada(HttpServletRequest request) {
+    @Override
+    public ResponsavelTecnico findByPessoaLogada(HttpServletRequest request) {
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
         Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
 
-        List<ResponsavelTecnico> responsaveis = findByPessoa(request, pessoa);
+        List<ResponsavelTecnico> responsaveis = new ArrayList<>(findByPessoa(pessoa));
 
-        return responsaveis.get(responsaveis.size() - 1);
+        return responsaveis.isEmpty() ? null : responsaveis.get(0);
 
     }
 
-    @Override
-
-    public List<ResponsavelTecnico> findByPessoa(HttpServletRequest request, Pessoa pessoa) {
+    private List<ResponsavelTecnico> findByPessoa(Pessoa pessoa) {
         return responsavelTecnicoRespository.findByPessoaOrderById(pessoa);
     }
 
     @Override
-    public List<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request, Integer idPessoa) {
+    public ResponsavelTecnico findByID(Integer id) {
+        return responsavelTecnicoRespository.findById(id).orElse(null);
+    }
 
-        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElse(null);
+    @Override
+    public File recuperaArquivo(String hash) {
 
-        return findByPessoa(request, pessoa);
+        DocumentoResponsavelTecnico documentoResponsavelTecnico = documentoResponsavelTecnicoRepository.findByHash(hash);
+
+        return new File(documentoResponsavelTecnico.getCaminho());
 
     }
 
@@ -165,6 +230,23 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
+
+    private StatusCadastroResponsavelTecnico getStatus(ResponsavelTecnicoDTO responsavelTecnicoDTO) {
+
+        StatusCadastroResponsavelTecnico status;
+
+        if (responsavelTecnicoDTO.getJustificativa() != null) {
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("REPROVADO");
+        } else if (responsavelTecnicoDTO.getId() == null) {
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
+        } else {
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("APROVADO");
+        }
+
+        return status;
+
+    }
+
 //    private void validaTipoArquivo(MultipartFile multipartFile) throws Exception {
 //
 //        if(!multipartFile.getOriginalFilename().endsWith(EXTENSAO_ARQUIVO_SINCRONIA)) {
@@ -172,5 +254,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 //        }
 //
 //    }
+
 
 }

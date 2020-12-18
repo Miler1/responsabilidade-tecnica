@@ -4,11 +4,17 @@ const ERROR_MESSAGES = {
 
 	logout: 'Erro ao realizar logout.',
 
+	responsavelTecnico: {
+		listagem: 'Erro ao listar os responsáveis técnicos!'
+	},
+
+	tipoInvalido: 'Erro! esse tipo de arquivo é inválido! O upload aceita somente imagens e PDF!'
+
 };
 
 const SUCCESS_MESSAGES = {
 
-	cadastro: 'Sucesso! As informações foram salvas.',
+	cadastro: 'Sucesso! As informações foram cadastradas e enviadas para análise.',
 
 	// cnae: {
 	// 	ativar: 'Sucesso! O CNAE foi ativado.',

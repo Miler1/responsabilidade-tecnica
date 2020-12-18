@@ -21,37 +21,46 @@
 				@update:options="sortBy"
 			)
 
+			template(v-slot:item.justificativa='{ item }')
+				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
+
 			template(v-slot:item.validade='{ item }')
-				span {{item.status.codigo == 'APROVADO' ? prepararData(item.validade) : " ‒"}}
+				span {{item.validade ? formatarData(item.validade) : " ‒"}}
 
 			template(v-slot:item.actions='{ item }')
 
-				v-tooltip(bottom, v-if="item.status.codigo !='REPROVADO' && item.status.codigo != 'APROVADO'")
+				v-tooltip(bottom)
 					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
-							| mdi-play-circle-outline
-					span Iniciar análise
-
-				v-tooltip(bottom, v-if="item.status.codigo == 'VENCIDO'")
-					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
-							| mdi-replay
-					span Revalidar cadastro
-
-				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
-					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
-							| mdi-chat
-					span Visualizar justificativa
-
-				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO' || item.status.codigo == 'APROVADO'")
-					template(v-slot:activator="{ on, attrs }")
-						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#404040')
+						v-icon.mr-2(small @click='visualizarItem(item)', v-on='on', color='#327C32')
 							| mdi-eye
 					span Visualizar cadastro
 
-			template(v-slot:no-data, v-if="dadosListagem.content.length === 0")
-				span Não existem {{dadosListagem.nomeItem}} a serem exibidas.
+				v-tooltip(bottom, v-if="item.status.codigo == 'REPROVADO'")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='visualizarJustificativa(item)', v-on='on', color='#327C32')
+							| mdi-chat
+					span Visualizar justificativa
+
+				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo ==='AGUARDANDO_ANALISE'")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
+							| mdi-play-circle-outline
+					span Iniciar análise
+
+				v-tooltip(bottom, v-if="perfil === 'Administrador' && item.status.codigo == 'VENCIDO'")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
+							| mdi-replay
+					span Revalidar cadastro
+
+				v-tooltip(bottom, v-if="perfil === 'Usuario' && (item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO')")
+					template(v-slot:activator="{ on, attrs }")
+						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
+							| mdi-pencil
+					span Editar cadastro
+
+			template(v-slot:no-data)
+				span {{dadosListagem.noData}}
 
 			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")
 				v-row
@@ -62,7 +71,7 @@
 								:page="page"
 								:total-visible="totalVisible",
 								@input="input",
-								color="#84A98C"
+								color="#327C32"
 							)
 						span.float-left.exibicao-paginas.mt-4
 							| Exibindo {{dadosListagem.numberOfElements}} de {{dadosListagem.totalElements}} registros
@@ -73,7 +82,8 @@
 								solo,
 								dense,
 								@input="changeValue",
-								v-model="itensPerPage"
+								v-model="itensPerPage",
+								item-color="green darken-3"
 							)
 						span.float-right.exibicao-paginas.mt-2.ml-1
 							| Resultados por página
@@ -114,6 +124,9 @@ export default {
 		editarItem: {
 			type: [Function]
 		},
+		visualizarItem: {
+			type: [Function]
+		},
 		ativarDesativarItem: {
 			type: [Function]
 		},
@@ -131,7 +144,10 @@ export default {
 		},
 		perfil: {
 			type: [String]
-		}
+		},
+		visualizarJustificativa: {
+			type: [Function]
+		},
 
 	},
 
@@ -166,7 +182,7 @@ export default {
 
 	methods: {
 
-		prepararData(data) {
+		formatarData(data) {
 			return DataUtils.formatarData(data);
 		},
 

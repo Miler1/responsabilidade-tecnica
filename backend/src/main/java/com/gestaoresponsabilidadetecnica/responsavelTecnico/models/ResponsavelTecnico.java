@@ -1,8 +1,9 @@
 package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
 import com.gestaoresponsabilidadetecnica.especializacaoTecnica.models.EspecializacaoTecnica;
-import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
+import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -50,8 +52,8 @@ public class ResponsavelTecnico implements Serializable {
     private EspecializacaoTecnica especializacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_pessoa", referencedColumnName = "id")
-    private Pessoa pessoa;
+    @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
+    private PessoaFisica pessoa;
 
     @NotNull(message = "{validacao.notnull}")
     private Date validade;
@@ -59,6 +61,12 @@ public class ResponsavelTecnico implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_status", referencedColumnName = "id")
     private StatusCadastroResponsavelTecnico status;
+
+    @OneToMany(mappedBy="responsavelTecnico")
+    @JsonManagedReference
+    private List<DocumentoResponsavelTecnico> documentos;
+
+    private String justificativa;
 
     public ResponsavelTecnico(ResponsavelTecnicoBuilder responsavelTecnicoBuilder) {
 
@@ -73,6 +81,7 @@ public class ResponsavelTecnico implements Serializable {
         this.pessoa = responsavelTecnicoBuilder.pessoa;
         this.validade = responsavelTecnicoBuilder.validade;
         this.status = responsavelTecnicoBuilder.status;
+        this.justificativa = responsavelTecnicoBuilder.justificativa;
 
     }
 
@@ -86,9 +95,10 @@ public class ResponsavelTecnico implements Serializable {
         String vinculoEmpregaticio;
         String outroVinculoEmpregaticio;
         EspecializacaoTecnica especializacao;
-        Pessoa pessoa;
+        PessoaFisica pessoa;
         Date validade;
         StatusCadastroResponsavelTecnico status;
+        String justificativa;
 
         public ResponsavelTecnicoBuilder() {}
 
@@ -132,7 +142,7 @@ public class ResponsavelTecnico implements Serializable {
             return this;
         }
 
-        public ResponsavelTecnicoBuilder setPessoa(Pessoa pessoa) {
+        public ResponsavelTecnicoBuilder setPessoa(PessoaFisica pessoa) {
             this.pessoa = pessoa;
             return this;
         }
@@ -144,6 +154,11 @@ public class ResponsavelTecnico implements Serializable {
 
         public ResponsavelTecnicoBuilder setStatus(StatusCadastroResponsavelTecnico status) {
             this.status = status;
+            return this;
+        }
+
+        public ResponsavelTecnicoBuilder setJustificativa(String justificativa) {
+            this.justificativa = justificativa;
             return this;
         }
 

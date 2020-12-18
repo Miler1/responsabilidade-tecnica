@@ -1,4 +1,4 @@
-const DateUtil = {
+const DataUtil = {
 
     formatarData:(date) => {
         return new Date(date).toLocaleDateString();
@@ -12,7 +12,8 @@ const DateUtil = {
         return cep.replace(/^([\d]{2})\.?([\d]{3})\-?([\d]{3})/, "$1.$2-$3");
     },
 
-    formatarTituloEleitor: function(titulo) {
+    formatarTitulo: function(titulo) {
+        return titulo.replace(/(\d{4})(\d{4})(\d{4})/g,"\$1.\$2.\$3");
     },
 
     formatarTelefone: (num) => {
@@ -27,4 +28,4 @@ const DateUtil = {
 
 };
 
-export default DateUtil;
+export default DataUtil;

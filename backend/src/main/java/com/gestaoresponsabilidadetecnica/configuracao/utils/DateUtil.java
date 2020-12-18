@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 
 public class DateUtil {
 
+	DateUtil(){};
+
 	public static Date setHours(Date date, int horas, int minutos, int segundos, int milisegundos) {
 
 		Date data = DateUtils.setHours(date, horas);
@@ -39,6 +41,16 @@ public class DateUtil {
 
 	public static String formataBrSimples(Date data){
 		return new SimpleDateFormat(Constants.DATA_FORMATO_BR_SIMPLES).format(data);
+	}
+
+	public static Date calcularValidade() {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.YEAR, 1);
+
+		return cal.getTime();
+
 	}
 
 }

@@ -22,34 +22,33 @@ const routes = [
 			title: 'Gestão de Responsabilidade Técnica Ambiental'
 		},
 
-		component: () => import('../views/User.vue'),
+		component: () => import('@/views/usuario/User.vue'),
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'USUARIO');
 		},
 
-		// children: [
-		// 	// CADASTRO
-		// 	{
-		// 		path: 'cadastro',
-		// 		name: 'Cadastro',
-		// 		component: () => import('../views/cadastro/Cadastro.vue')
-		// 	},
-
-		// ],
-	},
-	{
-		path: '/user/cadastro',
-		name: 'Cadastro',
-		meta: {
-			title: 'Gestão de Responsabilidade Técnica'
+		redirect: to => {
+			return '/user/home';
 		},
 
-		component: () => import('../views/cadastro/Cadastro.vue'),
-
-		beforeEnter: (to, from, next) => {
-			ValidarRota(next, 'USUARIO');
-		},
+		children: [
+			{
+				path: 'home',
+				name: 'Home',
+				component: () => import('@/views/usuario/listagem/Listagem.vue')
+			},
+			{
+				path: 'cadastro',
+				name: 'Cadastro',
+				component: () => import('@/views/usuario/cadastro/Cadastro.vue')
+			},
+			{
+				path: 'visualizar/:id',
+				name: 'VisualizarCadastroUsuario',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+		],
 	},
 	{
 		path: '/admin',
@@ -58,11 +57,35 @@ const routes = [
 			title: 'Gestão de Responsabilidade Técnica Ambiental'
 		},
 
-		component: () => import('../views/Admin.vue'),
+		component: () => import('@/views/administrador/Admin.vue'),
 
 		beforeEnter: (to, from, next) => {
 			ValidarRota(next, 'ADMINISTRADOR');
-		}
+		},
+
+		redirect: to => {
+			return '/admin/home';
+		},
+
+		children: [
+			// CADASTRO
+			{
+				path: 'home',
+				name: 'Home',
+				component: () => import('@/views/administrador/listagem/Listagem.vue')
+			},
+			{
+				path: 'analisar/:id',
+				name: 'AnalisarRelatorio',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+			{
+				path: 'visualizar/:id',
+				name: 'VisualizarCadastroAdministrador',
+				component: () => import('@/views/common/Visualizacao.vue')
+			},
+
+		],
 	},
 	{
 		path:'*',
