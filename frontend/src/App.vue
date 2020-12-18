@@ -7,7 +7,7 @@
 
 			v-container
 				router-view
-			
+
 				//- Elemento para exibir mensagens de alertas globais
 				v-snackbar(v-for='(snackbar, index) in snackbars.filter(s => s.showing)'
 							:key='snackbar.text + Math.random()'
@@ -52,11 +52,17 @@ export default {
 
 <style lang="less">
 
+@import "assets/css/variaveis.less";
+
 html {
 	overflow-y: auto !important;
 
 	body {
 		margin: 0;
+
+		h1, h2 {
+			color: @color-primary;
+		}
 
 		#app {
 			font-family: Roboto, sans-serif;

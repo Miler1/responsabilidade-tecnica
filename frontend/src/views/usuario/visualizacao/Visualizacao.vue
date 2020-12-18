@@ -586,10 +586,12 @@ export default {
 
 <style lang="less">
 
+@import "../../../assets/css/variaveis.less";
+
 #container-cadastro {
 
 	.v-label {
-		color: #333;
+		color: @text-color;
 		font-weight: bold;
 		font-size: 16px;
 	}
@@ -608,7 +610,7 @@ export default {
 	}
 
 	#QA-btn-cancelar-cadastro {
-		color: #327C32;
+		color: @color-primary;
 		background-color: white;
 		width: 145px;
 	}
@@ -623,7 +625,7 @@ export default {
 
 .theme--light.v-list-item .v-list-item__mask{
 	color:white;
-	background: #65afef;
+	background: @color-secondary;
 }
 
 </style>
