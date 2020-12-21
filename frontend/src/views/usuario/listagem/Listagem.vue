@@ -120,6 +120,20 @@ export default {
 		}
 	},
 
+	created() {
+		this.updatePagination();
+	},
+
+	beforeRouteLeave(to, from, next) {
+
+		if (to.name === 'Cadastro' && this.dadosListagem.content.length > 0) {
+			this.$router.push({ name: 'Usuario' });
+		} else {
+			next();
+		}
+
+	}
+
 };
 </script>
 
