@@ -129,7 +129,7 @@
 							| Obrigatório
 					div.message-erro(
 						v-if="excedeuTamanhoMaximoArquivo")
-							| Tamanho de arquivo inválido. O arquivo deve conter menos de 10MB
+							| Erro! Tamanho de arquivo inválido. O arquivo deve conter menos de 10MB
 
 					GridListagemInclusao.mt-12.mb-4(
 						:headers="headerListagem",
