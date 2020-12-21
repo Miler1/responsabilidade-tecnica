@@ -126,10 +126,10 @@ export default {
 
 	beforeRouteLeave(to, from, next) {
 
-		if (to.name === 'Cadastro' && this.dadosListagem.content.length == 0) {
-			next();
-		} else {
+		if (to.name === 'Cadastro' && this.dadosListagem.content.length > 0) {
 			this.$router.push({ name: 'Usuario' });
+		} else {
+			next();
 		}
 
 	}
