@@ -10,7 +10,6 @@ import com.gestaoresponsabilidadetecnica.pessoa.interfaces.IPessoaService;
 import com.gestaoresponsabilidadetecnica.pessoa.models.Pessoa;
 import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
-import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.DocumentoResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
@@ -21,7 +20,6 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.Documen
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.ResponsavelTecnicoRespository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.repositories.StatusCadastroResponsavelTecnicoRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.specifications.ResponsavelTecnicoSpecification;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -186,8 +184,10 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
                     try {
                         File file = recuperaArquivo(documentoResponsavelTecnico.getHash());
-                        String stringao = ArquivoUtils.codificaParaBase64(file);
-                        documentoResponsavelTecnico.imagemBase64 = stringao;
+                        if (file != null) {
+                            String stringao = ArquivoUtils.codificaParaBase64(file);
+                            documentoResponsavelTecnico.imagemBase64 = stringao;
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -222,32 +222,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         File file = salvaArquivoDiretorio(multipartFile);
 
-        DocumentoResponsavelTecnico documentoResponsavelTecnico = new DocumentoResponsavelTecnico(file, findByPessoaLogada(request));
-
-        documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
-
-        return new RetornoUploadArquivoDTO(documentoResponsavelTecnico);
-
-    }
-
-    @Override
-    public RetornoUploadArquivoDTO editarAnexo(HttpServletRequest request, MultipartFile multipartFile) throws Exception {
-
-        br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
-
-        Pessoa pessoa = pessoaService.transformPessoaEUByPessoa(pessoaEU);
-
-        Optional<ResponsavelTecnico> responsavelTecnicoSalvo = responsavelTecnicoRespository.findById(pessoa.getId());
-
-        ResponsavelTecnico responsavelTecnico = new ResponsavelTecnico();
-
-        if (responsavelTecnicoSalvo.isPresent()) {
-            responsavelTecnico = responsavelTecnicoSalvo.get();
-        }
-
-        File file = salvaArquivoDiretorio(multipartFile);
-
-        DocumentoResponsavelTecnico documentoResponsavelTecnico = new DocumentoResponsavelTecnico(file, multipartFile.getOriginalFilename(), responsavelTecnico);
+        DocumentoResponsavelTecnico documentoResponsavelTecnico = new DocumentoResponsavelTecnico(file, multipartFile.getOriginalFilename(), findByPessoaLogada(request));
 
         documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
 
@@ -260,8 +235,31 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         List<ResponsavelTecnico> responsavelTecnicoSalvo = responsavelTecnicoRespository.findByPessoaOrderById(responsavelTecnicoDTO.getPessoaFisica());
 
-        responsavelTecnicoSalvo.get(0).getDocumentos().forEach(documentoResponsavelTecnico -> {
-            documentoResponsavelTecnicoRepository.delete(documentoResponsavelTecnico);
+        responsavelTecnicoSalvo.forEach(responsavelTecnico -> {
+            responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
+                boolean encontrouDocumentoIgual = responsavelTecnicoDTO.getDocumentos().stream().noneMatch(documentoResponsavelTecnicoDTO ->
+                        documentoResponsavelTecnico.getNome().equals(documentoResponsavelTecnicoDTO.getNome()));
+
+                if (!encontrouDocumentoIgual) {
+                    try {
+                        removeArquivoDiretorio(documentoResponsavelTecnico.getCaminho());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+
+        });
+
+        responsavelTecnicoSalvo.forEach(responsavelTecnico -> {
+            responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
+                try {
+                    documentoResponsavelTecnicoRepository.delete(documentoResponsavelTecnico);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         });
 
         return null;
@@ -282,6 +280,11 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
+    private boolean removeArquivoDiretorio(String pathDeletarArquivo) throws Exception {
+
+        return ArquivoUtils.removeArquivoDiretorio(pathDeletarArquivo);
+
+    }
 
     private StatusCadastroResponsavelTecnico getStatus(ResponsavelTecnicoDTO responsavelTecnicoDTO) {
 

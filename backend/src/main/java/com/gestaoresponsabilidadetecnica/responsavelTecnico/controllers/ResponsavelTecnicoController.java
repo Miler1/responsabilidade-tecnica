@@ -91,18 +91,6 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     }
 
-    @PostMapping(value = "reuploadFile")
-    public ResponseEntity<RetornoUploadArquivoDTO> reuploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
-
-        verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
-
-        RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.editarAnexo(request, file);
-
-        return ResponseEntity.ok()
-                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
-                .body(retornoUploadArquivoDTO);
-    }
-
     @PostMapping(value = "removerArquivos")
     public ResponseEntity<RetornoUploadArquivoDTO> removerArquivos(HttpServletRequest request, @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
 
