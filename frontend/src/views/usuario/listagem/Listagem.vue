@@ -18,8 +18,9 @@
 				:dadosListagem="dadosListagem",
 				:updatePagination="updatePagination",
 				:parametrosFiltro="parametrosFiltro",
-				:perfil="perfil"
 				:visualizarItem="visualizarCadastro",
+				:editarItem="editarCadastro"
+				:perfil="perfil"
 				:visualizarJustificativa="visualizarJustificativa",
 			)
 
@@ -90,23 +91,33 @@ export default {
 
 		updatePagination() {
 
-			ResponsavelTecnicoService.buscarSolicitacao()
-				.then( (result) => {
+			PessoaService.buscarPessoalogada()
+				.then((response) => {
 
-					this.dadosListagem.content = result.data === "" ? [] : [result.data];
-					this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
+					let pessoa = response.data;
 
+					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
+						.then( (result) => {
+							this.dadosListagem.content = result.data === "" ? [] : [result.data];
+							this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
+
+						})
+						.catch( error => {
+							console.error(error);
+						});
 				})
-				.catch( error => {
-					console.error(error);
+				.catch(error => {
+					console.error(error.message);
 				});
-
 		},
 
 		abrirTelaCadastro() {
 			this.$router.push({ name: 'Cadastro' });
 		},
 
+		editarCadastro(item) {
+			this.$router.push({ name: 'Editar', params: { id : item.id } });
+		}
 	},
 
 	created() {

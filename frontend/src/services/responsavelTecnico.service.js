@@ -6,6 +6,8 @@ export default {
 
     editarSolicitacao: async (informacoes) => ApiService.post('/responsavelTecnico/editarSolicitacao', informacoes),
 
+    apagarArquivos: async (informacoes) => ApiService.post('/responsavelTecnico/removerArquivos', informacoes),
+
 	listar: async (parametrosFiltro) => {
 
 		if (parametrosFiltro) {
