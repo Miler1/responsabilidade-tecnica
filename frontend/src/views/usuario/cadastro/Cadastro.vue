@@ -199,7 +199,7 @@ export default {
 			isSelecting: false,
 			files: [],
 			row: null,
-			mimetype: "application/pdf",
+			mimetype: null,
 			excedeuTamanhoMaximoArquivo: false,
 			totalPermitido: 10000000,
 			isHabilitado: false,
@@ -217,8 +217,7 @@ export default {
 				documentos: null
 			},
 			contatos: {},
-			pessoa: {},
-			imagemBase64: null
+			pessoa: {}
 		};
 	},
 
@@ -226,12 +225,7 @@ export default {
 
 		downloadAnexo(item) {
 			const link = document.createElement('a');
-			if (this.imagemBase64 != null) {
-				let header = this.mimetype + 'base64,' + this.imagemBase64;
-				link.href = header;
-			} else {
-				link.href = URL.createObjectURL(item);
-			}
+			link.href = URL.createObjectURL(item);
 			link.download = item.name;
 			link.target = '_blank';
 			link.click();
@@ -420,17 +414,15 @@ export default {
 
 		editarArquivos(item) {
 
-			this.files.forEach(file => {
-				ResponsavelTecnicoService.apagarArquivos(item)
-					.catch(error => {
-						console.log(error);
-					});
-			});
+			ResponsavelTecnicoService.apagarArquivos(item)
+				.catch(error => {
+					console.log(error);
+				});
 
 			this.files.forEach(file => {
 				let formData = new FormData();
 				formData.append('file', file);
-				ResponsavelTecnicoService.reupload(formData)
+				ResponsavelTecnicoService.upload(formData)
 					.catch(error => {
 
 						console.error(error);
@@ -654,6 +646,20 @@ export default {
 
 			if (this.dados.documentos != null) {
 				this.dados.documentos.forEach(documento => {
+					let extensao = documento.nome.split('.');
+					if (extensao[1] == 'pdf') {
+						this.mimetype = 'application/pdf';
+					} else if (extensao[1] == 'jpg') {
+						this.mimetype = 'image/jpg';
+					} else if (extensao[1] == 'jpeg') {
+						this.mimetype = 'image/jpeg';
+					} else if (extensao[1] == 'tif') {
+						this.mimetype = 'image/tif';
+					} else if (extensao[1] == 'bmp') {
+						this.mimetype = 'image/bmp';
+					} else if (extensao[1] == 'png') {
+						this.mimetype = 'image/png';
+					}
 					let blob = this.b64toBlob(documento.imagemBase64, this.mimetype);
 					var file = new File([blob], documento.nome, {type: this.mimetype});
 					this.files.push(file);
@@ -688,13 +694,6 @@ export default {
 
 		},
 
-		blobToFile(theBlob, fileName){
-			//A Blob() is almost a File() - it's just missing the two properties below which we will add
-			theBlob.lastModifiedDate = new Date();
-			theBlob.name = fileName;
-			return theBlob;
-		}
-
 	},
 
 	mounted() {
@@ -717,9 +716,7 @@ export default {
 
 				ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
 					.then( (result) => {
-
 						this.prepararDadosParaEdicao(result.data);
-
 					})
 					.catch( error => {
 						console.error(error);
