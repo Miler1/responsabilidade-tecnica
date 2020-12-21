@@ -59,7 +59,11 @@ export default {
 		},
 
 		clickHome () {
-			this.$router.push(this.usuarioLogado.role.perfilSelecionado.url);
+
+			if(this.$router.history.current.path !== this.usuarioLogado.role.perfilSelecionado.url + "/home"){
+				this.$router.push(this.usuarioLogado.role.perfilSelecionado.url);
+			}
+
 		}
 	},
 
