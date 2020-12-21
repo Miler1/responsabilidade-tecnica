@@ -17,7 +17,7 @@
 						v-col(cols="12", md="6")
 							TextField(
 								v-model="dados.formacao",
-								labelOption = "Formação: *",
+								labelOption = "Formação:",
 								id = "QA-input-formacao",
 								@changeModel="dados.formacao = $event",
 								placeholder="Digite aqui",
@@ -27,7 +27,7 @@
 						v-col(cols="12", md="3")
 							TextField(
 								v-model="dados.conselhoDeClasse",
-								labelOption = "Conselho de classe: *",
+								labelOption = "Conselho de classe:",
 								id = "QA-input-conselho-classe",
 								@changeModel="dados.conselhoDeClasse = $event",
 								placeholder="Digite aqui",
@@ -37,7 +37,7 @@
 						v-col(cols="12", md="3")
 							TextField(
 								v-model="dados.registro",
-								labelOption = "Registro: *",
+								labelOption = "Registro:",
 								id = "QA-input-registro",
 								@changeModel="dados.registro = $event",
 								placeholder="Digite aqui",
@@ -46,7 +46,7 @@
 							)
 					v-row
 						v-col.py-0(cols="12", md="8")
-							v-label Nível de responsabilidade técnica: *
+							v-label Nível de responsabilidade técnica:
 							v-radio-group#QA-radio-nivel-responsabilidade-tecnica.d-flex.align-center(
 								v-model="dados.nivelResponsabilidadeTecnica",
 								:errorMessages="errorMessage(dados.nivelResponsabilidadeTecnica)",
@@ -56,13 +56,13 @@
 								v-radio(label='Empresa consultora', value='EMPRESA_CONSULTORA', color="#327C32")
 								v-radio(label='Funcionário', value='FUNCIONARIO', color="#327C32")
 						v-col.py-0(cols="12", md="4")
-							v-label Possui vínculo com o GEA: *
+							v-label Possui vínculo com o GEA:
 							v-radio-group#QA-radio-vinculo-gea.d-flex.align-center(v-model="dados.possuiVinculoComGea", :errorMessages="errorMessage(dados.possuiVinculoComGea)", row)
 								v-radio(label='Sim' value='true', color="#327C32")
 								v-radio(label='Não' value='false', color="#327C32")
 					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
 						v-col.pt-0.pb-0(cols="12")
-							v-label Vínculo empregatício: *
+							v-label Vínculo empregatício:
 							div.d-flex.flex-row
 								v-radio-group#QA-radio-vinculo.d-flex.align-center(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
 									v-radio(label='Efetivo' value='EFETIVO', color="#327C32")
@@ -82,7 +82,7 @@
 								)
 					v-row
 						v-col(cols="12")
-							v-label Área de especialização: *
+							v-label Área de especialização:
 							v-autocomplete#QA-select-area-especializacao(
 								outlined,
 								dense,
