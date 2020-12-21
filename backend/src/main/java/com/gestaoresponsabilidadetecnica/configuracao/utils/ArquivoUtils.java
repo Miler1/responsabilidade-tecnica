@@ -1,16 +1,18 @@
 package com.gestaoresponsabilidadetecnica.configuracao.utils;
 
+import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class ArquivoUtils {
 
@@ -27,6 +29,28 @@ public class ArquivoUtils {
 		FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), arquivoRetorno);
 
 		return arquivoRetorno;
+
+	}
+
+	public static boolean removeArquivoDiretorio(String diretorio) throws Exception {
+
+		try {
+			// create a stream
+			Stream<Path> files = Files.walk(Paths.get(diretorio));
+
+			// delete directory including files and sub-folders
+			files.sorted(Comparator.reverseOrder())
+					.map(Path::toFile)
+					.forEach(File::delete);
+
+			// close the stream
+			files.close();
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		return true;
 
 	}
 

@@ -37,12 +37,24 @@ public class DocumentoResponsavelTecnico {
     @JsonBackReference
     private ResponsavelTecnico responsavelTecnico;
 
+    @Transient
+    public String imagemBase64;
+
     public DocumentoResponsavelTecnico() {}
 
     public DocumentoResponsavelTecnico(File file, ResponsavelTecnico responsavelTecnico) {
 
         this.caminho = file.getAbsolutePath();
         this.nome = file.getName();
+        this.responsavelTecnico = responsavelTecnico;
+        this.hash = UUID.randomUUID().toString();
+
+    }
+
+    public DocumentoResponsavelTecnico(File file, String originalName, ResponsavelTecnico responsavelTecnico) {
+
+        this.caminho = file.getAbsolutePath();
+        this.nome = originalName;
         this.responsavelTecnico = responsavelTecnico;
         this.hash = UUID.randomUUID().toString();
 

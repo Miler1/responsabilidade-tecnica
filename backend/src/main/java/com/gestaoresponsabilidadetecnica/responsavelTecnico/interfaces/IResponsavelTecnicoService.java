@@ -21,6 +21,8 @@ public interface IResponsavelTecnicoService {
 
     RetornoUploadArquivoDTO salvarAnexo(HttpServletRequest request, MultipartFile file) throws Exception;
 
+    RetornoUploadArquivoDTO removerAnexo(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception;
+
     ResponsavelTecnico findByPessoaLogada(HttpServletRequest request);
 
     ResponsavelTecnico findByID(Integer id);
