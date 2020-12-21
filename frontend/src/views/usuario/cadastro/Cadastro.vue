@@ -629,6 +629,7 @@ export default {
 		},
 
 		prepararDadosParaEdicao(informacaoTecnica) {
+
 			this.dados = informacaoTecnica;
 
 			this.$refs.textFieldFormacao.setModel(this.dados.formacao);
@@ -714,13 +715,17 @@ export default {
 				this.pessoa = result.data;
 				this.prepararContatos();
 
-				ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
-					.then( (result) => {
-						this.prepararDadosParaEdicao(result.data);
-					})
-					.catch( error => {
-						console.error(error);
-					});
+				if(this.$route.params.id){
+
+					ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
+						.then( (result) => {
+							this.prepararDadosParaEdicao(result.data);
+						})
+						.catch( error => {
+							console.error(error);
+						});
+
+				}
 
 			})
 			.catch(error => {
