@@ -55,26 +55,12 @@ export default {
 		},
 
 		getPerfilUsuario () {
-
-			return this.usuarioLogado == null ? '' : 
-				this.usuarioLogado.principal.authorities.filter(function(e) { return e.authority === 'ADMINISTRADOR'; }).length > 0 ? 'Administrador' : 'Usuário';
-
+			return this.usuarioLogado == null ? '' : this.usuarioLogado.role.perfilSelecionado.role;
 		},
 
 		clickHome () {
-			this.$router.push({name: (this.perfil).normalize('NFD').replace(/[\u0300-\u036f]/g, "")});
-		},
-
-		getUsuarioLogado() {
-
-			return this.usuarioLogado == null ? '' :
-				this.usuarioLogado.principal.authorities.filter(function(e) { return e.authority === 'ADMINISTRADOR'; }).length > 0 ? 'Administrador' : 'Usuário';
-
+			this.$router.push(this.usuarioLogado.role.perfilSelecionado.url);
 		}
-	},
-
-	mounted() {
-		this.perfil = this.getUsuarioLogado();
 	},
 
 	computed: {

@@ -2,7 +2,7 @@
 
 	v-container#container-visualizar.pa-12.align-center.justify-center
 
-		h1.mb-4 Análise do cadastro de responsabilidade técnica ambiental
+		h1.mb-4 {{acao === 'analisar' ? 'Análise' : 'Visualização'}} do cadastro de responsabilidade técnica ambiental
 
 		DadosPessoais(:pessoa="pessoa")
 
@@ -34,6 +34,7 @@ import PessoaService from '@/services/pessoa.service';
 import EspecializacaoTecnicaService from '@/services/especializacaoTecnica.service';
 import ResponsavelTecnicoService from '@/services/responsavelTecnico.service';
 import snackbar from '@/services/snack.service';
+
 import ExpansivePanel from '@/components/ExpansivePanel';
 import GridListagemInclusao from '@/components/GridListagemInclusao';
 import TextField from '@/components/TextField';
@@ -41,6 +42,7 @@ import DataUtils from '@/utils/dataUtils';
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
 import { mapGetters } from 'vuex';
+import Status from '@/enums/statusEnum';
 
 import DadosPessoais from '@/views/common/DadosPessoais';
 import Contatos from '@/views/common/Contatos';
@@ -162,7 +164,7 @@ export default {
 
 				if (result.value) {
 
-					this.dados.status.codigo = "APROVADO";
+					this.dados.status.codigo = Status.APROVADO;
 					this.dados.pessoaFisica = this.pessoaEU;
 
 					var that = this;
@@ -197,22 +199,18 @@ export default {
 
 					this.dados.justificativa = justificativa.value;
 					this.dados.pessoaFisica = this.pessoaEU;
-					this.dados.status.codigo = "REPROVADO";
+					this.dados.status.codigo = Status.REPROVADO;
 
 					let that = this;
 
 					ResponsavelTecnicoService.editarSolicitacao(this.dados)
 						.then( (response) => {
-
 							// that.handleSuccess(true);
 							that.voltar();
-
 						})
 						.catch(error => {
-
 							console.error(error);
 							// that.handleError(error, true);
-
 						});
 
 				}
