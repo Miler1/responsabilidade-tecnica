@@ -414,12 +414,10 @@ export default {
 
 		editarArquivos(item) {
 
-			this.files.forEach(file => {
-				ResponsavelTecnicoService.apagarArquivos(item)
-					.catch(error => {
-						console.log(error);
-					});
-			});
+			ResponsavelTecnicoService.apagarArquivos(item)
+				.catch(error => {
+					console.log(error);
+				});
 
 			this.files.forEach(file => {
 				let formData = new FormData();
@@ -718,9 +716,7 @@ export default {
 
 				ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
 					.then( (result) => {
-
 						this.prepararDadosParaEdicao(result.data);
-
 					})
 					.catch( error => {
 						console.error(error);

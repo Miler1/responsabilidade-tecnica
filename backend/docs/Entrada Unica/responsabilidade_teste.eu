@@ -47,8 +47,8 @@
         },
         {
 
-            "codigo": "SALVAR_ARQUIVOS",
-            "nome": "Salvar arquivos",
+            "codigo": "GERENCIAR_ARQUIVOS",
+            "nome": "Gerenciar arquivos",
             "perfis": [
                 {
                     "codigo": "USUARIO",
