@@ -13,7 +13,7 @@ const DataUtil = {
     },
 
     formatarTitulo: function(titulo) {
-        return titulo.replace(/(\d{4})(\d{4})(\d{4})/g,"\$1.\$2.\$3");
+        return titulo.replace(/(\d{4})(\d{4})(\d{4})/g,"\$1 \$2 \$3");
     },
 
     formatarTelefone: (num) => {
