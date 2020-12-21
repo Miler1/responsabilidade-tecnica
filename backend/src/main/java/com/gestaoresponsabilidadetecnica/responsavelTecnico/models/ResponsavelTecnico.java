@@ -82,6 +82,7 @@ public class ResponsavelTecnico implements Serializable {
         this.validade = responsavelTecnicoBuilder.validade;
         this.status = responsavelTecnicoBuilder.status;
         this.justificativa = responsavelTecnicoBuilder.justificativa;
+        this.documentos = responsavelTecnicoBuilder.documentos;
 
     }
 
@@ -99,6 +100,7 @@ public class ResponsavelTecnico implements Serializable {
         Date validade;
         StatusCadastroResponsavelTecnico status;
         String justificativa;
+        List<DocumentoResponsavelTecnico> documentos;
 
         public ResponsavelTecnicoBuilder() {}
 
@@ -154,6 +156,11 @@ public class ResponsavelTecnico implements Serializable {
 
         public ResponsavelTecnicoBuilder setStatus(StatusCadastroResponsavelTecnico status) {
             this.status = status;
+            return this;
+        }
+
+        public ResponsavelTecnicoBuilder setDocumentos(List<DocumentoResponsavelTecnico> documentos) {
+            this.documentos = documentos;
             return this;
         }
 

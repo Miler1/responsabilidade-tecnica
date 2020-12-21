@@ -6,6 +6,8 @@ import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.StatusCadastroResponsavelTecnico;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponsavelTecnicoDTO {
@@ -33,5 +35,7 @@ public class ResponsavelTecnicoDTO {
     private StatusCadastroResponsavelTecnico status;
 
     private PessoaFisica pessoaFisica;
+
+    private List<DocumentoResponsavelTecnicoDTO> documentos;
 
 }

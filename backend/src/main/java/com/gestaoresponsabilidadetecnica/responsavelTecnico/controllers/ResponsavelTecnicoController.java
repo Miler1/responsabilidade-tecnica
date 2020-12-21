@@ -60,7 +60,6 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(responsavelTecnico);
-
     }
 
     @PostMapping(value = "listar")
@@ -82,7 +81,7 @@ public class ResponsavelTecnicoController extends DefaultController {
     public ResponseEntity<RetornoUploadArquivoDTO> uploadFile(HttpServletRequest request,
                                                               @RequestParam("file") MultipartFile file) throws Exception {
 
-        verificarPermissao(request, Acao.SALVAR_ARQUIVOS);
+        verificarPermissao(request, Acao.GERENCIAR_ARQUIVOS);
 
         RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.salvarAnexo(request, file);
 
@@ -90,6 +89,18 @@ public class ResponsavelTecnicoController extends DefaultController {
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(retornoUploadArquivoDTO);
 
+    }
+
+    @PostMapping(value = "removerArquivos")
+    public ResponseEntity<RetornoUploadArquivoDTO> removerArquivos(HttpServletRequest request, @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
+
+        verificarPermissao(request, Acao.GERENCIAR_ARQUIVOS);
+
+        RetornoUploadArquivoDTO retornoUploadArquivoDTO = responsavelTecnicoService.removerAnexo(request, responsavelTecnicoDTO);
+
+        return ResponseEntity.ok()
+                .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
+                .body(retornoUploadArquivoDTO);
     }
 
     @GetMapping(value = "downloadFile/{hash}")
@@ -105,7 +116,7 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @GetMapping(value = "buscarSolicitacao")
-    public ResponseEntity<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request) throws Exception{
+    public ResponseEntity<ResponsavelTecnico> buscarSolicitacao(HttpServletRequest request) throws Exception {
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
@@ -119,7 +130,7 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     @GetMapping(value = "buscarSolicitacaoById/{id}")
     public ResponseEntity<ResponsavelTecnico> buscarSolicitacaoById(HttpServletRequest request,
-                                                                    @PathVariable("id") Integer id) throws Exception{
+                                                                    @PathVariable("id") Integer id) throws Exception {
 
         verificarPermissao(request, Acao.LISTAR_SOLICITACOES);
 
