@@ -201,7 +201,7 @@ export default {
 			row: null,
 			mimetype: null,
 			excedeuTamanhoMaximoArquivo: false,
-			totalPermitido: 1000000,
+			totalPermitido: 10000000,
 			isHabilitado: false,
 			especializacoes: [],
 			dados: {
