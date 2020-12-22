@@ -1,0 +1,1 @@
+ALTER TABLE cadastro_unificado.responsavel_tecnico DROP COLUMN justificativa;
