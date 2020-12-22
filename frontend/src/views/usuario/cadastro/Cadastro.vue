@@ -105,7 +105,7 @@
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
 
-				div.px-3.pt-7
+				div.px-3.py-7
 					v-btn#QA-btn-adicionar-anexo.float-right(
 						color="#327C32",
 						class="text-none",
@@ -134,7 +134,7 @@
 						v-if="excedeuTamanhoMaximoArquivo")
 							| Erro! Tamanho do arquivo inválido. O arquivo deve conter menos de 10MB
 
-					GridListagemInclusao.mt-12.mb-4(
+					GridListagemInclusao.mt-12(
 						:headers="headerListagem",
 						:dadosListagem="files",
 						:labelNoData="labelNoData",
@@ -463,7 +463,7 @@ export default {
 							.then(() => {
 
 								that.salvarArquivos();
-								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+								snackbar.alert(SUCCESS_MESSAGES.responsavelTecnico.cadastro, snackbar.type.SUCCESS);
 								that.$router.push({name: 'Usuario'});
 
 							})
@@ -479,13 +479,12 @@ export default {
 							.then(() => {
 
 								that.editarArquivos(that.dados);
-								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
+								snackbar.alert(SUCCESS_MESSAGES.responsavelTecnico.edicao, snackbar.type.SUCCESS);
 								that.$router.push({name: 'Usuario'});
 
 							})
 							.catch(error => {
 								console.error(error);
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 							});
 
 					}
@@ -542,9 +541,11 @@ export default {
 					title:
 						'<p class="title-modal-confirm">Confirmar cancelamento</p>',
 					html:
-						`<p class="message-modal-confirm">Ao confirmar o cancelamento ` + (this.isInclusao ? ' do cadastro' : ' da edição') + `, todas as informações serão perdidas.</p>
+						`<p class="message-modal-confirm">Ao confirmar o cancelamento ` + (this.isInclusao ? 'do cadastro' : 'da edição') +
+						`, todas as informações ` + (this.isInclusao ? ' inseridas' : ' editadas') + ` serão perdidas.</p>
 						<p class="message-modal-confirm">
-							<b>Tem certeza que deseja cancelar` + (this.isInclusao ? ' o cadastro' : ' a edição') + `? Esta opção não poderá ser desfeita e todas as informações serão perdidas.</b>
+							<b>Tem certeza que deseja cancelar` + (this.isInclusao ? ' o cadastro' : ' a edição') +
+						`? Esta opção não poderá ser desfeita e todas as informações ` + (this.isInclusao ? ' inseridas' : ' editadas') + ` serão perdidas.</b>
 						</p>`,
 					showCancelButton: true,
 					confirmButtonColor: '#327C32',
@@ -686,15 +687,10 @@ export default {
 	.v-label {
 		color: #333;
 		font-weight: bold;
-		font-size: 16px;
 	}
 
 	.v-input--selection-controls__ripple{
 		color: @color-secondary;
-	}
-
-	.col-dados-pessoais > .v-label{
-		padding: 10px 0;
 	}
 
 	.v-data-footer {

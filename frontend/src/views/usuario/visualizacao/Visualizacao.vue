@@ -596,10 +596,6 @@ export default {
 		font-size: 16px;
 	}
 
-	.col-dados-pessoais > .v-label{
-		padding: 10px 0;
-	}
-
 	.v-data-footer {
 		display: none;
 	}

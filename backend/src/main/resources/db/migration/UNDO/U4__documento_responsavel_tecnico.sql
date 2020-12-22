@@ -1,0 +1,3 @@
+DROP SEQUENCE cadastro_unificado.documento_responsavel_tecnico_id_seq;
+
+DROP TABLE cadastro_unificado.documento_responsavel_tecnico;
