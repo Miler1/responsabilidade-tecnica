@@ -2,7 +2,7 @@
 
 #grid-listagem
 
-	v-row(v-if="perfil !== 'Usuario' && dadosListagem.numberOfElements > 0")
+	v-row(v-if="perfil !== 'Usuario' && (dadosListagem.numberOfElements > 0 || (parametrosFiltro.stringPesquisa != ''))")
 		v-col(cols='12' md='6')
 			v-text-field#QA-input-pesquisar(
 				v-model="parametrosFiltro.stringPesquisa"
@@ -16,12 +16,12 @@
 
 	template
 		v-data-table(
-				:headers="headers",
-				:items="dadosListagem.content",
-				hide-default-footer,
-				:items-per-page="itensPerPage",
-				@update:options="sortBy"
-			)
+			:headers="headers",
+			:items="dadosListagem.content",
+			hide-default-footer,
+			:items-per-page="itensPerPage",
+			@update:options="sortBy"
+		)
 
 			template(v-slot:item.justificativa='{ item }')
 				span {{item.justificativa != null ? item.justificativa : ' ‒'}}
@@ -61,35 +61,38 @@
 							| mdi-pencil
 					span Editar cadastro
 
+						//texto para listagem vazia, ambos usuarios
 			template(v-slot:no-data)
-				div#div-no-data.d-flex.align-center.justify-center.flex-column
+				div#div-no-data.d-flex.align-center.justify-center.flex-column(v-if='parametrosFiltro.stringPesquisa === ""')
 					v-icon.mt-8.mb-1(color="#969696", size="40px")
 						| mdi-alert
-					span.mb-8 {{noDataText}}
+					span.mb-8 {{textNoDataList}}
+				div#div-no-data.d-flex.align-center.justify-center.flex-column(v-if="perfil !== 'Usuario' && parametrosFiltro.stringPesquisa != ''")
+					span.my-8 {{textNoDataSearch}}
 
-			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")
+			template(v-slot:footer, v-if='dadosListagem.numberOfElements > 0')
 				v-row
 					v-col(cols='12' md='8')
 						v-pagination.float-left(
-								v-model="page"
-								:length="dadosListagem.totalPages"
-								:page="page"
-								:total-visible="totalVisible",
-								@input="input",
-								color="#327C32"
-							)
+							v-model="page"
+							:length="dadosListagem.totalPages"
+							:page="page"
+							:total-visible="totalVisible",
+							@input="input",
+							color="#327C32"
+						)
 						span.float-left.exibicao-paginas.mt-4
 							| Exibindo {{dadosListagem.numberOfElements}} de {{dadosListagem.totalElements}} registros
 
 					v-col.flex-row.mt-3(cols='12' md='4')
 						v-select.float-right.d-inline-flex.mx-4.w-80(
-								:items="itensPerPages",
-								solo,
-								dense,
-								@input="changeValue",
-								v-model="itensPerPage",
-								item-color="green darken-3"
-							)
+							:items="itensPerPages",
+							solo,
+							dense,
+							@input="changeValue",
+							v-model="itensPerPage",
+							item-color="green darken-3"
+						)
 						span.float-right.exibicao-paginas.mt-2.ml-1
 							| Resultados por página
 
@@ -153,7 +156,10 @@ export default {
 		visualizarJustificativa: {
 			type: [Function]
 		},
-		noDataText: {
+		textNoDataList: {
+			type: [String]
+		},
+		textNoDataSearch: {
 			type: [String]
 		}
 
@@ -176,13 +182,13 @@ export default {
 				this.page = this.dadosListagem.pageable.pageNumber + 1;
 			}
 
-			// if (this.dadosListagem.content) {
+			if (this.dadosListagem.content) {
 
-			// 	this.dadosListagem.content.forEach((item) => {
-			// 		item.model = false;
-			// 	});
+				this.dadosListagem.content.forEach((item) => {
+					item.model = false;
+				});
 
-			// }
+			}
 
 		}
 
@@ -235,6 +241,7 @@ export default {
 			} else {
 				this.parametrosFiltro.tipoOrdenacao = null;
 			}
+
 			this.updatePagination(this.parametrosFiltro);
 
 		},
@@ -249,11 +256,12 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 
 @import "../assets/css/variaveis.less";
 
-thead tr th {
+
+tr th span {
 	font-size: 14px !important;
 }
 
@@ -288,10 +296,6 @@ tbody tr:nth-of-type(odd) {
 
 .v-btn {
 	text-transform: none !important;
-}
-
-.font-cadastrar{
-	font-size:16px;
 }
 
 .v-text-field {
