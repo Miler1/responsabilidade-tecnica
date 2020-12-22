@@ -12,6 +12,7 @@ import com.gestaoresponsabilidadetecnica.pessoa.models.PessoaFisica;
 import com.gestaoresponsabilidadetecnica.pessoa.repositories.PessoaRepository;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.ResponsavelTecnicoDTO;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadArquivoDTO;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.enums.StatusSolicitacao;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.DocumentoResponsavelTecnico;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.ResponsavelTecnico;
@@ -113,8 +114,10 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
             responsavelTecnico.setRegistro(responsavelTecnicoDTO.getRegistro());
             responsavelTecnico.setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio());
 
-            if (status.getCodigo().equals("APROVADO")) {
+            if (status.is(StatusSolicitacao.APROVADO)) {
                 responsavelTecnico.setValidade(DateUtil.calcularValidade());
+            } else if (status.is(StatusSolicitacao.REPROVADO)) {
+                responsavelTecnico.setValidade(null);
             }
 
             responsavelTecnicoRespository.save(responsavelTecnico);

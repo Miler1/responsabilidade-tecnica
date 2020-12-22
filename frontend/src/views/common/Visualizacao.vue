@@ -202,6 +202,7 @@ export default {
 					this.dados.justificativa = justificativa.value;
 					this.dados.pessoaFisica = this.pessoaEU;
 					this.dados.status.codigo = Status.REPROVADO;
+					this.dados.validade = null;
 
 					let that = this;
 

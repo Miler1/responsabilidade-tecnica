@@ -401,6 +401,8 @@ export default {
 
 		prepararParaSalvar() {
 
+			this.dados.justificativa = null;
+			this.dados.status.codigo = Status.AGUARDANDO_ANALISE;
 			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea === 'true' ? true : false;
 			delete this.dados.especializacao.textoExibicao;
 
@@ -471,9 +473,8 @@ export default {
 								console.error(error);
 								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 							});
-					} else {
 
-						that.dados.status.codigo = Status.AGUARDANDO_ANALISE;
+					} else {
 
 						ResponsavelTecnicoService.editarSolicitacao(that.dados)
 							.then(() => {

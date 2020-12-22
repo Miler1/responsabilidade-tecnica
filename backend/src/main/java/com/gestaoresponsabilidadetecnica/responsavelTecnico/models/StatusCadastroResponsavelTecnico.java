@@ -1,6 +1,7 @@
 package com.gestaoresponsabilidadetecnica.responsavelTecnico.models;
 
 import com.gestaoresponsabilidadetecnica.configuracao.utils.GlobalReferences;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.enums.StatusSolicitacao;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,5 +26,9 @@ public class StatusCadastroResponsavelTecnico implements Serializable {
 
     @NotNull(message = "{validacao.notnull}")
     private String codigo;
+
+    public boolean is(StatusSolicitacao status) {
+        return status.getCodigo().equals(this.codigo);
+    }
 
 }
