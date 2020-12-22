@@ -171,8 +171,10 @@ export default {
 
 					ResponsavelTecnicoService.editarSolicitacao(that.dados)
 						.then(() => {
-							// this.handleSuccess(true);
+
 							that.voltar();
+							snackbar.alert(SUCCESS_MESSAGES.administrador.aprovar, snackbar.type.SUCCESS);
+
 						})
 						.catch(error => {
 
@@ -205,12 +207,15 @@ export default {
 
 					ResponsavelTecnicoService.editarSolicitacao(this.dados)
 						.then( (response) => {
-							// that.handleSuccess(true);
+
+							snackbar.alert(SUCCESS_MESSAGES.administrador.reprovar, snackbar.type.SUCCESS);
 							that.voltar();
+
 						})
 						.catch(error => {
 							console.error(error);
 							// that.handleError(error, true);
+
 						});
 
 				}
@@ -402,7 +407,6 @@ export default {
 					.catch(error => {
 
 						console.error(error);
-
 						snackbar.alert(ERROR_MESSAGES.responsavelTecnico.listagem);
 
 					});
@@ -424,15 +428,10 @@ export default {
 	.v-label {
 		color: #333;
 		font-weight: bold;
-		font-size: 16px;
 	}
 
 	table > thead > tr > th {
 		font-size: 14px !important;
-	}
-
-	.col-dados-pessoais > .v-label{
-		padding: 10px 0;
 	}
 
 	.v-data-footer {
