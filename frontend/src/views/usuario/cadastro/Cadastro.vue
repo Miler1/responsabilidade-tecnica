@@ -105,7 +105,7 @@
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
 
-				div.px-3.pt-7
+				div.px-3.py-7
 					v-btn#QA-btn-adicionar-anexo.float-right(
 						color="#327C32",
 						class="text-none",
@@ -134,7 +134,7 @@
 						v-if="excedeuTamanhoMaximoArquivo")
 							| Erro! Tamanho do arquivo inválido. O arquivo deve conter menos de 10MB
 
-					GridListagemInclusao.mt-12.mb-4(
+					GridListagemInclusao.mt-12(
 						:headers="headerListagem",
 						:dadosListagem="files",
 						:labelNoData="labelNoData",
@@ -541,9 +541,11 @@ export default {
 					title:
 						'<p class="title-modal-confirm">Confirmar cancelamento</p>',
 					html:
-						`<p class="message-modal-confirm">Ao confirmar o cancelamento ` + (this.isInclusao ? ' do cadastro' : ' da edição') + `, todas as informações serão perdidas.</p>
+						`<p class="message-modal-confirm">Ao confirmar o cancelamento ` + (this.isInclusao ? 'do cadastro' : 'da edição') +
+						`, todas as informações ` + (this.isInclusao ? ' inseridas' : ' editadas') + ` serão perdidas.</p>
 						<p class="message-modal-confirm">
-							<b>Tem certeza que deseja cancelar` + (this.isInclusao ? ' o cadastro' : ' a edição') + `? Esta opção não poderá ser desfeita e todas as informações serão perdidas.</b>
+							<b>Tem certeza que deseja cancelar` + (this.isInclusao ? ' o cadastro' : ' a edição') +
+						`? Esta opção não poderá ser desfeita e todas as informações ` + (this.isInclusao ? ' inseridas' : ' editadas') + ` serão perdidas.</b>
 						</p>`,
 					showCancelButton: true,
 					confirmButtonColor: '#327C32',
