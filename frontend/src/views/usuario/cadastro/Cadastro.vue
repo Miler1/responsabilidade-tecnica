@@ -257,27 +257,27 @@ export default {
 
 		},
 
-		checaTamanhoArquivo() {
+		checaTamanhoArquivo(item) {
 
-			if (this.files.some(file => file.size > this.totalPermitido)) {
-				this.files.splice(0,this.files.length);
-				this.excedeuTamanhoMaximoArquivo = true;
-			} else {
-				this.excedeuTamanhoMaximoArquivo = false;
+			if (item.size > this.totalPermitido) {
+				return true;
 			}
-
-			return this.excedeuTamanhoMaximoArquivo;
 
 		},
 
 		uploadFile(e) {
 
 			var invalido = false;
+			var tamanhoinvalido = false;
 
 			e.target.files.forEach(file => {
 
 				if (file.type == '' || !this.filesAccept.includes(file.type)) {
 					invalido = true;
+				}
+
+				if (this.checaTamanhoArquivo(file)) {
+					tamanhoinvalido = true;
 				}
 
 			});
@@ -289,8 +289,17 @@ export default {
 
 			}
 
+			if (tamanhoinvalido) {
+
+				this.excedeuTamanhoMaximoArquivo = true;
+				return;
+
+			} else {
+				this.excedeuTamanhoMaximoArquivo = false;
+			}
+
 			this.files = this.files.concat([...e.target.files]);
-			this.checaTamanhoArquivo();
+
 		},
 
 		checkForm() {
