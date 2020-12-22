@@ -2,7 +2,7 @@
 
 #grid-listagem
 
-	template
+	template(v-if="dadosListagem.length > 0")
 
 		v-row
 			v-col.pb-3(cols='12', md='12')
@@ -46,8 +46,14 @@
 			template(#footer.page-text="props")
 				span Exibindo {{props.pageStart}}-{{props.pageStop}} de {{props.itemsLength}} registros
 
-			template(v-slot:no-data)
-				span {{labelNoData}}
+			//- template(v-slot:no-data)
+			//- 	span {{labelNoData}}
+
+	template(v-if="dadosListagem.length <= 0")
+		div#div-no-data.d-flex.align-center.justify-center.flex-column
+			v-icon.pt-5.pb-2(color="#969696", size="40px")
+				| mdi-alert
+			span.pb-5 {{labelNoData}}
 
 </template>
 
@@ -202,6 +208,15 @@ tbody tr:nth-of-type(odd) {
 
 .v-simple-checkbox--disabled{
 	cursor: not-allowed !important;
+}
+
+#div-no-data {
+	background-color: #f2f2f2;
+	color: #969696;
+
+	span {
+		font-size: 14px;
+	}
 }
 
 </style>

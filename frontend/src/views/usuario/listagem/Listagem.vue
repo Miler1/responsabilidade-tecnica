@@ -10,7 +10,7 @@
 				span Cadastrar
 
 		Panel(titulo = 'Situação do cadastro:')
-			GridListagem.pa-7(
+			GridListagem.pa-4(
 				:tituloAba="tituloAba",
 				:tituloListagem="tituloListagem",
 				:placeholderPesquisa="placeholderPesquisa",
@@ -22,6 +22,7 @@
 				:editarItem="editarCadastro"
 				:perfil="perfil"
 				:visualizarJustificativa="visualizarJustificativa",
+				:noDataText="noDataText"
 			)
 
 </template>
@@ -48,10 +49,11 @@ export default {
 			tituloAba: "responsabilidade técnica",
 			tituloListagem: "Status solicitação",
 			placeholderPesquisa: "",
-			headerListagem: HEADER,
+			headerListagem: [],
 			dadosListagem: {content:[]},
 			parametrosFiltro: {},
-			perfil: 'Usuario'
+			perfil: 'Usuario',
+			noDataText: 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".'
 		};
 	},
 
@@ -98,8 +100,15 @@ export default {
 
 					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
 						.then( (result) => {
-							this.dadosListagem.content = result.data === "" ? [] : [result.data];
-							this.dadosListagem.noData = 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".';
+
+							if (result.data === "") {
+								this.dadosListagem.content = this.headerListagem = [];
+							} else {
+
+								this.dadosListagem.content = [result.data];
+								this.headerListagem = HEADER;
+
+							}
 
 						})
 						.catch( error => {

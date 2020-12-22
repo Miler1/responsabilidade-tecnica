@@ -92,7 +92,8 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @PostMapping(value = "removerArquivos")
-    public ResponseEntity<RetornoUploadArquivoDTO> removerArquivos(HttpServletRequest request, @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
+    public ResponseEntity<RetornoUploadArquivoDTO> removerArquivos(HttpServletRequest request,
+                                                                   @Valid @RequestBody ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
 
         verificarPermissao(request, Acao.GERENCIAR_ARQUIVOS);
 
@@ -101,6 +102,7 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(retornoUploadArquivoDTO);
+
     }
 
     @GetMapping(value = "downloadFile/{hash}")
