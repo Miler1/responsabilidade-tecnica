@@ -192,7 +192,7 @@ export default {
 		return {
 			placeholder: "Digite aqui...",
 			placeholderSelect: "Selecione",
-			labelNoData: "Não existem anexos adicionados. Realize a inclusão através do botão "Adicionar anexo".",
+			labelNoData: "Não existem anexos adicionados. Realize a inclusão através do botão \"Adicionar anexo\".",
 			filesAccept: "image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 			headerListagem: HEADER,
 			isInclusao: true,
