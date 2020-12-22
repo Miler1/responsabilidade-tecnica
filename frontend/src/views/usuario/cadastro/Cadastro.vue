@@ -2,7 +2,7 @@
 
 	v-container#container-cadastro.pa-12.align-center.justify-center
 
-		h1.mb-4 Cadastro de Responsabilidade Técnica Ambiental
+		h1.mb-4 {{isInclusao ? 'Cadastro' : 'Edição'}} de Responsabilidade Técnica Ambiental
 
 		DadosPessoais(:pessoa="pessoa")
 
@@ -146,10 +146,10 @@
 			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(@click='salvar', large, color="#327C32", width="145px", dark, v-if="isInclusao")
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(v-if="isInclusao", @click='salvar', large, color="#327C32", width="145px", dark)
 				v-icon mdi-plus
 				span Cadastrar
-			v-btn#QA-btn-editar-responsabilidade-tecnica(@click='editar', large, color="#2196F3", dark, v-if="!isInclusao")
+			v-btn#QA-btn-editar-responsabilidade-tecnica(v-if="!isInclusao", @click='salvar', large, color="#327C32", dark)
 				v-icon mdi-check
 				span Salvar e enviar
 
@@ -170,6 +170,7 @@ import TextField from '@/components/TextField';
 import DadosPessoais from '@/views/common/DadosPessoais';
 import Contatos from '@/views/common/Contatos';
 import Endereco from '@/views/common/Endereco';
+import Status from '@/enums/statusEnum';
 
 import { HEADER } from '@/utils/dadosHeader/ListagemAnexoInclusao';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/utils/helpers/messages-utils';
@@ -224,11 +225,14 @@ export default {
 	methods: {
 
 		downloadAnexo(item) {
+
 			const link = document.createElement('a');
+
 			link.href = URL.createObjectURL(item);
 			link.download = item.name;
 			link.target = '_blank';
 			link.click();
+
 			URL.revokeObjectURL(link.href);
 
 		},
@@ -253,26 +257,27 @@ export default {
 
 		},
 
-		checaTamanhoArquivo() {
-			if (this.files.some(file => file.size > this.totalPermitido)) {
-				this.files.splice(0,this.files.length);
-				this.excedeuTamanhoMaximoArquivo = true;
-			} else {
-				this.excedeuTamanhoMaximoArquivo = false;
-			}
+		checaTamanhoArquivo(item) {
 
-			return this.excedeuTamanhoMaximoArquivo;
+			if (item.size > this.totalPermitido) {
+				return true;
+			}
 
 		},
 
 		uploadFile(e) {
 
 			var invalido = false;
+			var tamanhoinvalido = false;
 
 			e.target.files.forEach(file => {
 
 				if (file.type == '' || !this.filesAccept.includes(file.type)) {
 					invalido = true;
+				}
+
+				if (this.checaTamanhoArquivo(file)) {
+					tamanhoinvalido = true;
 				}
 
 			});
@@ -284,8 +289,17 @@ export default {
 
 			}
 
+			if (tamanhoinvalido) {
+
+				this.excedeuTamanhoMaximoArquivo = true;
+				return;
+
+			} else {
+				this.excedeuTamanhoMaximoArquivo = false;
+			}
+
 			this.files = this.files.concat([...e.target.files]);
-			this.checaTamanhoArquivo();
+
 		},
 
 		checkForm() {
@@ -401,11 +415,8 @@ export default {
 
 				ResponsavelTecnicoService.upload(formData)
 					.catch(error => {
-
 						console.error(error);
-
 						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-
 					});
 
 			});
@@ -420,13 +431,14 @@ export default {
 				});
 
 			this.files.forEach(file => {
+
 				let formData = new FormData();
+
 				formData.append('file', file);
+
 				ResponsavelTecnicoService.upload(formData)
 					.catch(error => {
-
 						console.error(error);
-
 					});
 
 			});
@@ -445,20 +457,38 @@ export default {
 
 					that.prepararParaSalvar();
 
-					ResponsavelTecnicoService.salvarSolicitacao(that.dados)
-						.then(() => {
+					if (this.isInclusao) {
 
-							that.salvarArquivos();
+						ResponsavelTecnicoService.salvarSolicitacao(that.dados)
+							.then(() => {
 
-							snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+								that.salvarArquivos();
+								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+								that.$router.push({name: 'Usuario'});
 
-							that.$router.push({name: 'Usuario'});
+							})
+							.catch(error => {
+								console.error(error);
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+							});
+					} else {
 
-						})
-						.catch(error => {
-							console.error(error);
-							// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-						});
+						that.dados.status.codigo = Status.AGUARDANDO_ANALISE;
+
+						ResponsavelTecnicoService.editarSolicitacao(that.dados)
+							.then(() => {
+
+								that.editarArquivos(that.dados);
+								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
+								that.$router.push({name: 'Usuario'});
+
+							})
+							.catch(error => {
+								console.error(error);
+								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
+							});
+
+					}
 
 				}
 
@@ -475,11 +505,11 @@ export default {
 				this.$fire({
 
 					title:
-						'<p class="title-modal-confirm">Confirmar cadastro</p>',
+						`<p class="title-modal-confirm">Confirmar ` + (this.isInclusao ? 'cadastro' : 'edição') + `</p>`,
 					html:
-						`<p class="message-modal-confirm">Ao confirmar o cadastro, todas as informações serão salvas e enviadas para análise.</p>
+						`<p class="message-modal-confirm">Ao confirmar ` + (this.isInclusao ? ' o cadastro' : ' a edição') + `, todas as informações serão salvas e enviadas para análise.</p>
 						<p class="message-modal-confirm">
-							<b>Tem certeza que deseja confirmar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
+							<b>Tem certeza que deseja confirmar ` + (this.isInclusao ? 'o cadastro' : 'a edição') + `? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
 						</p>`,
 					showCancelButton: true,
 					confirmButtonColor: '#327C32',
@@ -512,9 +542,9 @@ export default {
 					title:
 						'<p class="title-modal-confirm">Confirmar cancelamento</p>',
 					html:
-						`<p class="message-modal-confirm">Ao confirmar o cancelamento do cadastro, todas as informações serão perdidas.</p>
+						`<p class="message-modal-confirm">Ao confirmar o cancelamento ` + (this.isInclusao ? ' do cadastro' : ' da edição') + `, todas as informações serão perdidas.</p>
 						<p class="message-modal-confirm">
-							<b>Tem certeza que deseja cancelar o cadastro? Esta opção não poderá ser desfeita e todas as informações serão perdidas.</b>
+							<b>Tem certeza que deseja cancelar` + (this.isInclusao ? ' o cadastro' : ' a edição') + `? Esta opção não poderá ser desfeita e todas as informações serão perdidas.</b>
 						</p>`,
 					showCancelButton: true,
 					confirmButtonColor: '#327C32',
@@ -539,69 +569,6 @@ export default {
 				this.$router.push({name: 'Usuario'});
 			}
 
-		},
-
-		editar() {
-
-			if (this.checkForm()) {
-
-				this.$fire({
-
-					title:
-						'<p class="title-modal-confirm">Confirmar edição</p>',
-					html:
-						`<p class="message-modal-confirm">Ao confirmar a edição, todas as informações serão salvas e enviadas para análise.</p>
-						<p class="message-modal-confirm">
-							<b>Tem certeza que deseja confirmar a edição? Esta opção não poderá ser desfeita e todas as informações serão salvas e enviadas para análise.</b>
-						</p>`,
-					showCancelButton: true,
-					confirmButtonColor: '#2196F3',
-					cancelButtonColor: '#FFF',
-					showCloseButton: true,
-					focusConfirm: false,
-					confirmButtonText: '<i class="mdi mdi-check-bold"></i> Confirmar',
-					cancelButtonText: '<i class="mdi mdi-close"></i> Cancelar',
-					reverseButtons: true
-
-				}).then((result) => {
-
-					if (result.value) {
-
-						var that = this;
-
-						that.prepararParaSalvar();
-						ResponsavelTecnicoService.editarSolicitacao(that.dados)
-							.then(() => {
-
-								this.editarArquivos(that.dados);
-
-								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
-
-								this.$router.push({name: 'Usuario'});
-
-							})
-							.catch(error => {
-
-								console.error(error);
-
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
-
-							});
-
-					}
-
-				}).catch((error) => {
-					console.error(error);
-				});
-
-			} else {
-				window.scrollTo(0, 0);
-				this.errorMessageEmpty = false;
-			}
-		},
-
-		cancelar() {
-			this.$router.push({name: 'Usuario'});
 		},
 
 		prepararContatos() {
@@ -646,8 +613,11 @@ export default {
 			delete this.dados.pessoa;
 
 			if (this.dados.documentos != null) {
+
 				this.dados.documentos.forEach(documento => {
+
 					let extensao = documento.nome.split('.');
+
 					if (extensao[1] == 'pdf') {
 						this.mimetype = 'application/pdf';
 					} else if (extensao[1] == 'jpg') {
@@ -661,26 +631,34 @@ export default {
 					} else if (extensao[1] == 'png') {
 						this.mimetype = 'image/png';
 					}
-					let blob = this.b64toBlob(documento.imagemBase64, this.mimetype);
+
+					let blob = this.b64ToBlob(documento.imagemBase64, this.mimetype);
 					var file = new File([blob], documento.nome, {type: this.mimetype});
+
 					this.files.push(file);
+
 				});
 			};
 
 		},
 
-		b64toBlob(b64Data, contentType) {
+		b64ToBlob(b64Data, contentType) {
+
 			contentType = contentType || '';
+
 			var sliceSize = 512;
+
 			b64Data = b64Data.replace(/^[^,]+,/, '');
 			b64Data = b64Data.replace(/\s/g, '');
+
 			var byteCharacters = window.atob(b64Data);
 			var byteArrays = [];
 
 			for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-				var slice = byteCharacters.slice(offset, offset + sliceSize);
 
+				var slice = byteCharacters.slice(offset, offset + sliceSize);
 				var byteNumbers = new Array(slice.length);
+
 				for (var i = 0; i < slice.length; i++) {
 					byteNumbers[i] = slice.charCodeAt(i);
 				}
@@ -688,6 +666,7 @@ export default {
 				var byteArray = new Uint8Array(byteNumbers);
 
 				byteArrays.push(byteArray);
+
 			}
 
 			var blob = new Blob(byteArrays, {type: contentType});
@@ -715,7 +694,7 @@ export default {
 				this.pessoa = result.data;
 				this.prepararContatos();
 
-				if(this.$route.params.id){
+				if (this.$route.params.id) {
 
 					ResponsavelTecnicoService.buscarSolicitacao(this.pessoa.id)
 						.then( (result) => {

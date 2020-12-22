@@ -1,8 +1,9 @@
 <template lang="pug">
 
 #grid-listagem
-	v-row
-		v-col(v-if="perfil !== 'Usuario'", cols='12' md='6')
+
+	v-row(v-if="perfil !== 'Usuario' && dadosListagem.numberOfElements > 0")
+		v-col(cols='12' md='6')
 			v-text-field#QA-input-pesquisar(
 				v-model="parametrosFiltro.stringPesquisa"
 				:placeholder="placeholderPesquisa",
@@ -12,6 +13,7 @@
 				dense,
 				@input='inputPesquisa'
 			)
+
 	template
 		v-data-table(
 				:headers="headers",
@@ -51,7 +53,7 @@
 					template(v-slot:activator="{ on, attrs }")
 						v-icon.mr-2(small @click='editarItem(item)', v-on='on', color='#327C32')
 							| mdi-replay
-					span Revalidar cadastro
+					span Revalidar análise
 
 				v-tooltip(bottom, v-if="perfil === 'Usuario' && (item.status.codigo == 'VENCIDO' || item.status.codigo == 'REPROVADO')")
 					template(v-slot:activator="{ on, attrs }")
@@ -60,7 +62,10 @@
 					span Editar cadastro
 
 			template(v-slot:no-data)
-				span {{dadosListagem.noData}}
+				div#div-no-data.d-flex.align-center.justify-center.flex-column
+					v-icon.mt-8.mb-1(color="#969696", size="40px")
+						| mdi-alert
+					span.mb-8 {{noDataText}}
 
 			template(v-slot:footer, v-if="dadosListagem.numberOfElements > 0")
 				v-row
@@ -148,6 +153,9 @@ export default {
 		visualizarJustificativa: {
 			type: [Function]
 		},
+		noDataText: {
+			type: [String]
+		}
 
 	},
 
@@ -288,15 +296,24 @@ tbody tr:nth-of-type(odd) {
 
 .v-text-field {
 	padding-top: 2px !important;
-    margin-top: 0 !important;
+	margin-top: 0 !important;
 }
 
 .v-label {
 	display: inline-block;
-    max-width: 100%;
-    margin-bottom: 5px;
-    font-weight: bold;
-    font-size: 14px !important;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: bold;
+	font-size: 14px !important;
+}
+
+#div-no-data {
+	background-color: #f2f2f2;
+	color: #969696;
+
+	span {
+		font-size: 14px;
+	}
 }
 
 </style>

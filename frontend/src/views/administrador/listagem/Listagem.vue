@@ -1,11 +1,11 @@
 <template lang='pug'>
 
-	v-container.pa-12.align-center.justify-center
+	v-container.py-12.align-center.justify-center
 
 		h1.mb-4 Gestão de Responsabilidade Técnica Ambiental
 
 		Panel(titulo = 'Listagem de responsáveis técnicos cadastrados')
-			GridListagem(
+			GridListagem.pa-4(
 				:headers="headerListagem",
 				:dadosListagem="dadosListagem",
 				:placeholderPesquisa="placeholderPesquisa",
@@ -14,7 +14,8 @@
 				:parametrosFiltro="parametrosFiltro",
 				:perfil="perfil",
 				:visualizarItem="visualizarCadastro"
-				:visualizarJustificativa="visualizarJustificativa"
+				:visualizarJustificativa="visualizarJustificativa",
+				:noDataText="noDataText"
 
 			)
 
@@ -41,8 +42,7 @@ export default {
 
 		return {
 			placeholderPesquisa: "Pesquisar pelo nome do responsável ou status",
-			headerListagem: HEADER,
-
+			headerListagem: [],
 			dadosListagem: {},
 			parametrosFiltro: {
 				pagina: 0,
@@ -50,7 +50,8 @@ export default {
 				tipoOrdenacao: 'id,asc',
 				stringPesquisa: ''
 			},
-			perfil: 'Administrador'
+			perfil: 'Administrador',
+			noDataText: 'Não existem responsáveis técnicos ambientais cadastrados.'
 		};
 	},
 
@@ -63,8 +64,7 @@ export default {
 				title:
 					'<p class="title-modal-confirm">Justificativa</p>',
 				html:
-					`<p class="message-modal-confirm">Justificativa:</p>
-					<p class="message-modal-confirm" style="text-align: justify; text-justify: inter-word; padding-bottom: 16px">
+					`<p class="message-modal-confirm" style="text-align: justify; text-justify: inter-word; padding-bottom: 16px">
 						<b>` + item.justificativa + `</b>
 					</p>`,
 
@@ -83,14 +83,22 @@ export default {
 			ResponsavelTecnicoService.listar(parametrosFiltro)
 				.then((response) => {
 
-					this.dadosListagem = response.data;
-					this.dadosListagem.nomeItem = "responsáveis técnicos";
+					if (response.data.empty) {
+
+						this.dadosListagem.content = this.headerListagem = [];
+
+
+					} else {
+
+						this.dadosListagem = response.data;
+						this.headerListagem = HEADER;
+
+					}
 
 				})
 				.catch(erro => {
 
 					console.error(erro);
-
 					snackbar.alert(ERROR_MESSAGES.responsavelTecnico.listagem);
 
 				});
