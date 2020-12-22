@@ -74,7 +74,7 @@ export default {
 			this.$fire({
 
 				title:
-					'<p class="title-modal-confirm">Justificativa</p>',
+					'<p class="title-modal-confirm">Justificativa da reprovação</p>',
 				html:
 					`<p class="message-modal-confirm" style="text-align: justify; text-justify: inter-word; padding-bottom: 16px">
 						${item.justificativa}
