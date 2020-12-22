@@ -711,6 +711,7 @@ export default {
 		.v-label {
 			font-weight: 400;
 			margin: 0 !important;
+			font-size: 14px;
 		}
 	}
 
@@ -736,6 +737,7 @@ export default {
 	}
 
 	table > tbody > tr > td {
+		font-size: 14px !important;
 
 		button {
 			margin-right: 8px !important;

@@ -213,6 +213,7 @@ tbody tr:nth-of-type(odd) {
 #div-no-data {
 	background-color: #f2f2f2;
 	color: #969696;
+	text-align: center;
 
 	span {
 		font-size: 14px;

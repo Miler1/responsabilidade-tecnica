@@ -190,8 +190,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                     try {
                         File file = recuperaArquivo(documentoResponsavelTecnico.getHash());
                         if (file != null) {
-                            String stringBase64 = ArquivoUtils.codificaParaBase64(file);
-                            documentoResponsavelTecnico.imagemBase64 = stringBase64;
+                            documentoResponsavelTecnico.imagemBase64 = ArquivoUtils.codificaParaBase64(file);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

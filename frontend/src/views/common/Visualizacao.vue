@@ -429,6 +429,7 @@ export default {
 	.v-label {
 		color: #333;
 		font-weight: bold;
+		font-size: 14px !important;
 	}
 
 	table > thead > tr > th {
@@ -446,6 +447,7 @@ export default {
 	.v-radio {
 		.v-label {
 			font-weight: 400;
+			font-size: 14px !important;
 		}
 	}
 
