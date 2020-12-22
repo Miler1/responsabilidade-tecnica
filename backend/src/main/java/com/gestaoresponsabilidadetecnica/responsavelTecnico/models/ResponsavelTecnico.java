@@ -55,7 +55,6 @@ public class ResponsavelTecnico implements Serializable {
     @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
     private PessoaFisica pessoa;
 
-    @NotNull(message = "{validacao.notnull}")
     private Date validade;
 
     @ManyToOne

@@ -219,6 +219,7 @@
 							| Tamanho de arquivo inválido. O arquivo deve conter menos de 2MB
 
 					GridListagemInclusao.mt-12.mb-4(
+						v-if="dadosListagem"
 						:headers="headerListagem",
 						:dadosListagem="files",
 						:hideFooter="false",
