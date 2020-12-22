@@ -463,7 +463,7 @@ export default {
 							.then(() => {
 
 								that.salvarArquivos();
-								snackbar.alert(SUCCESS_MESSAGES.cadastro, snackbar.type.SUCCESS);
+								snackbar.alert(SUCCESS_MESSAGES.responsavelTecnico.cadastro, snackbar.type.SUCCESS);
 								that.$router.push({name: 'Usuario'});
 
 							})
@@ -479,13 +479,12 @@ export default {
 							.then(() => {
 
 								that.editarArquivos(that.dados);
-								snackbar.alert(SUCCESS_MESSAGES.edicao, snackbar.type.SUCCESS);
+								snackbar.alert(SUCCESS_MESSAGES.responsavelTecnico.edicao, snackbar.type.SUCCESS);
 								that.$router.push({name: 'Usuario'});
 
 							})
 							.catch(error => {
 								console.error(error);
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 							});
 
 					}
@@ -735,15 +734,10 @@ export default {
 	.v-label {
 		color: #333;
 		font-weight: bold;
-		font-size: 16px;
 	}
 
 	.v-input--selection-controls__ripple{
 		color: @color-secondary;
-	}
-
-	.col-dados-pessoais > .v-label{
-		padding: 10px 0;
 	}
 
 	.v-data-footer {

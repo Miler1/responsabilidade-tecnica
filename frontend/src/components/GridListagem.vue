@@ -249,7 +249,7 @@ export default {
 
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 
 @import "../assets/css/variaveis.less";
 
@@ -297,14 +297,6 @@ tbody tr:nth-of-type(odd) {
 .v-text-field {
 	padding-top: 2px !important;
 	margin-top: 0 !important;
-}
-
-.v-label {
-	display: inline-block;
-	max-width: 100%;
-	margin-bottom: 5px;
-	font-weight: bold;
-	font-size: 14px !important;
 }
 
 #div-no-data {
