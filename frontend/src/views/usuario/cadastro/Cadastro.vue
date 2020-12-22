@@ -402,7 +402,11 @@ export default {
 		prepararParaSalvar() {
 
 			this.dados.justificativa = null;
-			this.dados.status.codigo = Status.AGUARDANDO_ANALISE;
+
+			if (!this.isInclusao) {
+				this.dados.status.codigo = Status.AGUARDANDO_ANALISE;
+			}
+
 			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea === 'true' ? true : false;
 			delete this.dados.especializacao.textoExibicao;
 
