@@ -2,7 +2,7 @@
 
 #grid-listagem
 
-	template(v-if="dadosListagem.length > 0")
+	template(v-if="dadosListagem && dadosListagem.length > 0")
 
 		v-row
 			v-col.pb-3(cols='12', md='12')
@@ -49,7 +49,7 @@
 			//- template(v-slot:no-data)
 			//- 	span {{labelNoData}}
 
-	template(v-if="dadosListagem.length <= 0")
+	template(v-if="dadosListagem && dadosListagem.length <= 0")
 		div#div-no-data.d-flex.align-center.justify-center.flex-column
 			v-icon.pt-5.pb-2(color="#969696", size="40px")
 				| mdi-alert
