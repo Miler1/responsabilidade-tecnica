@@ -260,14 +260,8 @@ export default {
 
 @import "../assets/css/variaveis.less";
 
-span{
-	font-size: 14px !important;
-}
-tr th span {
-	font-size: 14px !important;
-}
 
-table > tbody > tr > td {
+tr th span {
 	font-size: 14px !important;
 }
 
