@@ -2,13 +2,13 @@ const ER_BASE = 'Erro! Não foi possível ';
 
 const ERROR_MESSAGES = {
 
-	logout: 'Erro ao realizar logout.',
+	logout: 'Erro ao realizar logout do sistema.',
 
 	responsavelTecnico: {
-		listagem: 'Erro ao listar os responsáveis técnicos!'
+		listagem: 'Erro ao listar os responsáveis técnicos ambientais!'
 	},
 
-	tipoInvalido: 'Erro! esse tipo de arquivo é inválido! O upload aceita somente imagens e PDF!'
+	tipoInvalido: 'Erro! Tipo de arquivo inválido. O arquivo deve ser dos seguintes formatos: .pdf, .png, .jpeg, .jpg, tiff ou .bmp.'
 
 };
 
