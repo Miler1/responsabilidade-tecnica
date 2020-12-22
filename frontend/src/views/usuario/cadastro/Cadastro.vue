@@ -114,7 +114,7 @@
 						:loading="isSelecting",
 						@click="onButtonClick"
 					)
-						v-icon mdi-plus-circle-outline
+						v-icon mdi-plus
 						span Adicionar anexo
 					input(
 						ref="uploader",
@@ -192,7 +192,7 @@ export default {
 		return {
 			placeholder: "Digite aqui...",
 			placeholderSelect: "Selecione",
-			labelNoData: "Não há nenhum anexo adicionado",
+			labelNoData: "Não existem anexos adicionados. Realize a inclusão através do botão "Adicionar anexo".",
 			filesAccept: "image/jpg, image/jpeg, image/bmp, image/tiff, image/png, application/pdf",
 			headerListagem: HEADER,
 			isInclusao: true,
