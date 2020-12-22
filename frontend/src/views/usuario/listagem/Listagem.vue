@@ -53,7 +53,7 @@ export default {
 			dadosListagem: {content:[]},
 			parametrosFiltro: {},
 			perfil: 'Usuario',
-			noDataText: 'Você ainda não possui cadastro como responsável técnico ambiental. Realize seu cadastro através do botão "Cadastrar".'
+			noDataText: 'Você não possui cadastro como responsável técnico ambiental. Realize o cadastro através do botão "Cadastrar".'
 		};
 	},
 
