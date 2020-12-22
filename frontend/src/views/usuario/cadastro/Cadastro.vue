@@ -615,62 +615,13 @@ export default {
 			if (this.dados.documentos != null) {
 
 				this.dados.documentos.forEach(documento => {
-
-					let extensao = documento.nome.split('.');
-
-					if (extensao[1] == 'pdf') {
-						this.mimetype = 'application/pdf';
-					} else if (extensao[1] == 'jpg') {
-						this.mimetype = 'image/jpg';
-					} else if (extensao[1] == 'jpeg') {
-						this.mimetype = 'image/jpeg';
-					} else if (extensao[1] == 'tif') {
-						this.mimetype = 'image/tif';
-					} else if (extensao[1] == 'bmp') {
-						this.mimetype = 'image/bmp';
-					} else if (extensao[1] == 'png') {
-						this.mimetype = 'image/png';
-					}
-
-					let blob = this.b64ToBlob(documento.imagemBase64, this.mimetype);
-					var file = new File([blob], documento.nome, {type: this.mimetype});
-
+					let mimetype = DataUtils.formatarArquivo(documento);
+					let blob = DataUtils.b64ToBlob(documento.imagemBase64, mimetype);
+					var file = new File([blob], documento.nome, {type: mimetype});
 					this.files.push(file);
-
 				});
+
 			};
-
-		},
-
-		b64ToBlob(b64Data, contentType) {
-
-			contentType = contentType || '';
-
-			var sliceSize = 512;
-
-			b64Data = b64Data.replace(/^[^,]+,/, '');
-			b64Data = b64Data.replace(/\s/g, '');
-
-			var byteCharacters = window.atob(b64Data);
-			var byteArrays = [];
-
-			for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-
-				var slice = byteCharacters.slice(offset, offset + sliceSize);
-				var byteNumbers = new Array(slice.length);
-
-				for (var i = 0; i < slice.length; i++) {
-					byteNumbers[i] = slice.charCodeAt(i);
-				}
-
-				var byteArray = new Uint8Array(byteNumbers);
-
-				byteArrays.push(byteArray);
-
-			}
-
-			var blob = new Blob(byteArrays, {type: contentType});
-			return blob;
 
 		},
 
