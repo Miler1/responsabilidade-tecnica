@@ -3,6 +3,7 @@ package com.gestaoresponsabilidadetecnica.configuracao.controllers;
 import com.gestaoresponsabilidadetecnica.configuracao.enums.Acao;
 import com.gestaoresponsabilidadetecnica.configuracao.exceptions.PermissionException;
 import com.gestaoresponsabilidadetecnica.configuracao.interfaces.IDefaultService;
+import com.gestaoresponsabilidadetecnica.responsavelTecnico.enums.ExtensaoArquivo;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -44,7 +45,7 @@ public class DefaultController {
 
 		//Setting Headers
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
+		httpHeaders.setContentType(MediaType.parseMediaType(ExtensionResolver(nomeDocumento)));
 		httpHeaders.setContentDispositionFormData("attachment", nomeDocumento);
 		httpHeaders.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		httpHeaders.setContentLength(encodedBytes.length);
@@ -59,6 +60,44 @@ public class DefaultController {
 
 		if(!permitido) {
 			throw new PermissionException("Usuário sem permissão para realizar a ação!");
+		}
+
+	}
+
+	protected String ExtensionResolver(String fileName) {
+
+		String[] extensao = fileName.split("\\.");
+
+		switch (extensao[1]) {
+
+			case "pdf" -> {
+				return ExtensaoArquivo.PDF.getCodigo();
+			}
+
+			case "jpg" -> {
+				return ExtensaoArquivo.JPG.getCodigo();
+			}
+
+			case "jpeg" -> {
+				return ExtensaoArquivo.JPEG.getCodigo();
+			}
+
+			case "tif" -> {
+				return ExtensaoArquivo.TIF.getCodigo();
+			}
+
+			case "bmp" -> {
+				return ExtensaoArquivo.BMP.getCodigo();
+			}
+
+			case "png" -> {
+				return ExtensaoArquivo.PNG.getCodigo();
+			}
+
+			default -> {
+				return "application/octet-stream";
+			}
+
 		}
 
 	}
