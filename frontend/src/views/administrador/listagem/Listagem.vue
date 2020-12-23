@@ -17,7 +17,6 @@
 				:visualizarJustificativa="visualizarJustificativa",
 				:textNoDataList="textNoDataList",
 				:textNoDataSearch="textNoDataSearch"
-
 			)
 
 </template>
@@ -86,18 +85,9 @@ export default {
 				.then((response) => {
 
 					this.dadosListagem = response.data;
+					this.headerListagem = response.data.empty ? [] : HEADER;
 
-					if (response.data.empty) {
-						this.headerListagem = [];
-					} else {
-
-
-						this.headerListagem = HEADER;
-
-					}
-
-				})
-				.catch(erro => {
+				}).catch(erro => {
 
 					console.error(erro);
 					snackbar.alert(ERROR_MESSAGES.responsavelTecnico.listagem);

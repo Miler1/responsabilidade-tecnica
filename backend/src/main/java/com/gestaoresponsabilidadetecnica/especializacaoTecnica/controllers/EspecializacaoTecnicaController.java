@@ -1,6 +1,5 @@
 package com.gestaoresponsabilidadetecnica.especializacaoTecnica.controllers;
 
-import br.ufla.lemaf.beans.pessoa.Pessoa;
 import com.gestaoresponsabilidadetecnica.configuracao.components.VariaveisAmbientes;
 import com.gestaoresponsabilidadetecnica.configuracao.controllers.DefaultController;
 import com.gestaoresponsabilidadetecnica.configuracao.enums.Acao;
@@ -35,4 +34,5 @@ public class EspecializacaoTecnicaController extends DefaultController {
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(especializacoesTecnicas);
     }
+
 }

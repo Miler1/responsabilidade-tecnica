@@ -18,4 +18,5 @@ public class EspecializacaoTecnicaService implements IEspecializacaoTecnicaServi
     public List<EspecializacaoTecnica> findEspecializacoesTecnicas() {
         return especializacaoTecnicaRepository.findAll();
     }
+
 }

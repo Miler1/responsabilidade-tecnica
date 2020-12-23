@@ -40,10 +40,10 @@ public class DefaultService implements IDefaultService {
             permitido = permitido || (usuarioSessao != null && hasPermissao(authoritys, acao.getCodigo()));
 
         return permitido;
+
     }
 
     private boolean hasPermissao(List<GrantedAuthority> authoritys, String codigoAcao) {
-
         return authoritys.stream().anyMatch(authority -> authority.getAuthority().equals(codigoAcao));
     }
 

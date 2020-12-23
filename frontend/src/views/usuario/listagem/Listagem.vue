@@ -99,7 +99,6 @@ export default {
 
 					ResponsavelTecnicoService.buscarSolicitacao(pessoa.id)
 						.then( (result) => {
-							console.log(this.parametrosFiltro);
 
 							if (result.data === "") {
 								this.dadosListagem.content = this.headerListagem = [];
@@ -110,10 +109,10 @@ export default {
 
 							}
 
-						})
-						.catch( error => {
+						}).catch( error => {
 							console.error(error);
 						});
+
 				})
 				.catch(error => {
 					console.error(error.message);

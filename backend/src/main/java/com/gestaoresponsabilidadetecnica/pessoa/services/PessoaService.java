@@ -36,6 +36,7 @@ public class PessoaService implements IPessoaService {
        PessoaFisica pessoaFisica =  pessoaRepository.findById(idPessoa).orElse(null);
 
        return EntradaUnicaWS.ws.buscarPessoaFisicaPeloCpf(pessoaFisica.getCpf());
+
     }
 
 }
