@@ -609,7 +609,7 @@ export default {
 			this.$refs.textFieldConcelhoDeClasse.setModel(this.dados.conselhoDeClasse);
 			this.$refs.textFieldRegistro.setModel(this.dados.registro);
 
-			this.dados.possuiVinculoComGea ? this.dados.possuiVinculoComGea = 'true' : this.dados.possuiVinculoComGea = 'false';
+			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea ? 'true' : 'false';
 
 			if (this.dados.especializacao != null) {
 				this.dados.especializacao.textoExibicao = this.dados.especializacao.codigo + ' - ' + this.dados.especializacao.nome;
@@ -621,10 +621,13 @@ export default {
 			if (this.dados.documentos != null) {
 
 				this.dados.documentos.forEach(documento => {
+
 					let mimetype = DataUtils.formatarArquivo(documento);
 					let blob = DataUtils.b64ToBlob(documento.imagemBase64, mimetype);
-					var file = new File([blob], documento.nome, {type: mimetype});
+					let file = new File([blob], documento.nome, {type: mimetype});
+
 					this.files.push(file);
+
 				});
 
 			};

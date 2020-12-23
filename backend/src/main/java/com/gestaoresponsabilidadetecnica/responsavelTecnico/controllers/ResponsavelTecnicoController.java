@@ -60,6 +60,7 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(responsavelTecnico);
+
     }
 
     @PostMapping(value = "listar")
