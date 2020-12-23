@@ -226,14 +226,27 @@ export default {
 
 		downloadAnexo(item) {
 
-			const link = document.createElement('a');
+			if (item.hash != null) {
+				ResponsavelTecnicoService.download(item.hash)
+					.then((result) => {
+						let blob = DataUtils.b64ToBlob(result.data, result.headers['content-type']);
+						const link = document.createElement('a');
+						link.href = URL.createObjectURL(blob);
+						link.download = item.name;
+						link.target = '_blank';
+						link.click();
+						URL.revokeObjectURL(link.href);
+					});
+			} else {
 
-			link.href = URL.createObjectURL(item);
-			link.download = item.name;
-			link.target = '_blank';
-			link.click();
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(item);
+				link.download = item.name;
+				link.target = '_blank';
+				link.click();
+				URL.revokeObjectURL(link.href);
 
-			URL.revokeObjectURL(link.href);
+			}
 
 		},
 
@@ -624,8 +637,8 @@ export default {
 
 					let mimetype = DataUtils.formatarArquivo(documento);
 					let blob = DataUtils.b64ToBlob(documento.imagemBase64, mimetype);
-					let file = new File([blob], documento.nome, {type: mimetype});
-
+					var file = new File([blob], documento.nome, {type: mimetype});
+					file.hash = documento.hash;
 					this.files.push(file);
 
 				});
