@@ -69,7 +69,7 @@
 				div#div-no-data.d-flex.align-center.justify-center.flex-column(v-if="perfil !== 'Usuario' && parametrosFiltro.stringPesquisa != ''")
 					v-icon.mt-8.mb-1(color="#969696", size="40px")
 						| mdi-alert
-					span.my-8 {{textNoDataSearch}}
+					span.mb-8 {{textNoDataSearch}}
 
 			template(v-slot:footer, v-if='dadosListagem.numberOfElements > 0')
 				v-row
