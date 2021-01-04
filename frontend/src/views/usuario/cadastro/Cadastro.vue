@@ -147,8 +147,8 @@
 				v-icon mdi-close
 				span Cancelar
 			v-btn#QA-btn-cadastro-responsabilidade-tecnica(v-if="isInclusao", @click='salvar', large, color="#327C32", width="145px", dark)
-				v-icon mdi-plus
-				span Cadastrar
+				v-icon mdi-check
+				span Finalizar e enviar
 			v-btn#QA-btn-editar-responsabilidade-tecnica(v-if="!isInclusao", @click='salvar', large, color="#327C32", dark)
 				v-icon mdi-floppy
 				span Salvar e enviar
