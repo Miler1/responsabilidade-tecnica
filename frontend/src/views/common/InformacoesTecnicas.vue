@@ -83,15 +83,16 @@ export default {
 
 		downloadAnexo(item) {
 
-			let mimetype = DataUtils.formatarArquivo(item);
-			let blob = DataUtils.b64ToBlob(item.imagemBase64, mimetype);
-			var file = new File([blob], item.nome, {type: mimetype});
-			const link = document.createElement('a');
-			link.href = URL.createObjectURL(file);
-			link.download = item.nome;
-			link.target = '_blank';
-			link.click();
-			URL.revokeObjectURL(link.href);
+			ResponsavelTecnicoService.download(item.hash)
+				.then((result) => {
+					let blob = DataUtils.b64ToBlob(result.data, result.headers['content-type']);
+					const link = document.createElement('a');
+					link.href = URL.createObjectURL(blob);
+					link.download = item.nome;
+					link.target = '_blank';
+					link.click();
+					URL.revokeObjectURL(link.href);
+				});
 
 		},
 

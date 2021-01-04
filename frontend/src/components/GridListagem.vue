@@ -2,7 +2,7 @@
 
 #grid-listagem
 
-	v-row(v-if="perfil !== 'Usuario' && (dadosListagem.numberOfElements > 0 || (parametrosFiltro.stringPesquisa != ''))")
+	v-row(v-if="perfil !== 'Usuario' && (dadosListagem.numberOfElements > 0 || parametrosFiltro.stringPesquisa != '')")
 		v-col(cols='12' md='6')
 			v-text-field#QA-input-pesquisar(
 				v-model="parametrosFiltro.stringPesquisa"
@@ -61,7 +61,6 @@
 							| mdi-pencil
 					span Editar cadastro
 
-						//texto para listagem vazia, ambos usuarios
 			template(v-slot:no-data)
 				div#div-no-data.d-flex.align-center.justify-center.flex-column(v-if='parametrosFiltro.stringPesquisa === ""')
 					v-icon.mt-8.mb-1(color="#969696", size="40px")

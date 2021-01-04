@@ -39,6 +39,7 @@ import java.util.*;
 public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     private static final String DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA = "responsavel-tecnico";
+    private static final DateTimeFormatter FORMATO_DATA_MES_ANO = DateTimeFormatter.ofPattern("MM-YYYY");
 
     @Autowired
     EspecializacaoTecnicaRepository especializacaoTecnicaRepository;
@@ -61,13 +62,15 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
     @Override
     public ResponsavelTecnico salvar(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) {
 
-        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
+        EspecializacaoTecnica especializacaoTecnica = especializacaoTecnicaRepository.findById(
+                responsavelTecnicoDTO.getEspecializacao().getId()).orElse(null);
 
         br.ufla.lemaf.beans.pessoa.Pessoa pessoaEU = pessoaService.getPessoaLogada(request);
 
         PessoaFisica pessoa = pessoaRepository.findById(pessoaEU.id).orElse(null);
 
-        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
+        StatusCadastroResponsavelTecnico status = statusCadastroResponsavelTecnicoRepository.findByCodigo(
+                StatusSolicitacao.AGUARDANDO_ANALISE.getCodigo());
 
         ResponsavelTecnico responsavelTecnico = new ResponsavelTecnico.ResponsavelTecnicoBuilder()
                 .setConselhoDeClasse(responsavelTecnicoDTO.getConselhoDeClasse())
@@ -185,18 +188,27 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         List<ResponsavelTecnico> responsaveis = findByPessoa(pessoa);
 
         responsaveis.forEach(responsavelTecnico -> {
+
             if (!responsavelTecnico.getDocumentos().isEmpty()) {
+
                 responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
+
                     try {
+
                         File file = recuperaArquivo(documentoResponsavelTecnico.getHash());
+
                         if (file != null) {
                             documentoResponsavelTecnico.imagemBase64 = ArquivoUtils.codificaParaBase64(file);
                         }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
                 });
+
             }
+
         });
 
         return responsaveis.isEmpty() ? null : responsaveis.get(0);
@@ -226,7 +238,8 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
         File file = salvaArquivoDiretorio(multipartFile);
 
-        DocumentoResponsavelTecnico documentoResponsavelTecnico = new DocumentoResponsavelTecnico(file, multipartFile.getOriginalFilename(), findByPessoaLogada(request));
+        DocumentoResponsavelTecnico documentoResponsavelTecnico =
+                new DocumentoResponsavelTecnico(file, multipartFile.getOriginalFilename(), findByPessoaLogada(request));
 
         documentoResponsavelTecnicoRepository.save(documentoResponsavelTecnico);
 
@@ -237,19 +250,24 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
     @Override
     public RetornoUploadArquivoDTO removerAnexo(HttpServletRequest request, ResponsavelTecnicoDTO responsavelTecnicoDTO) throws Exception {
 
-        List<ResponsavelTecnico> responsavelTecnicoSalvo = responsavelTecnicoRespository.findByPessoaOrderById(responsavelTecnicoDTO.getPessoaFisica());
+        List<ResponsavelTecnico> responsavelTecnicoSalvo =
+                responsavelTecnicoRespository.findByPessoaOrderById(responsavelTecnicoDTO.getPessoaFisica());
 
         responsavelTecnicoSalvo.forEach(responsavelTecnico -> {
+
             responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
+
                 boolean encontrouDocumentoIgual = responsavelTecnicoDTO.getDocumentos().stream().noneMatch(documentoResponsavelTecnicoDTO ->
                         documentoResponsavelTecnico.getNome().equals(documentoResponsavelTecnicoDTO.getNome()));
 
                 if (!encontrouDocumentoIgual) {
+
                     try {
                         removeArquivoDiretorio(documentoResponsavelTecnico.getCaminho());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
                 }
 
             });
@@ -257,23 +275,26 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         });
 
         responsavelTecnicoSalvo.forEach(responsavelTecnico -> {
+
             responsavelTecnico.getDocumentos().forEach(documentoResponsavelTecnico -> {
+
                 try {
                     documentoResponsavelTecnicoRepository.delete(documentoResponsavelTecnico);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
             });
+
         });
 
         return null;
+
     }
 
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
 
 //        validaTipoArquivo(multipartFile);
-
-        final DateTimeFormatter FORMATO_DATA_MES_ANO = DateTimeFormatter.ofPattern("MM-YYYY");
 
         String pathSalvarArquivo = VariaveisAmbientes.pathSalvarArquivos() +
                 File.separator + DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA +
@@ -295,11 +316,11 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
         StatusCadastroResponsavelTecnico status;
 
         if (responsavelTecnicoDTO.getJustificativa() != null) {
-            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("REPROVADO");
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo(StatusSolicitacao.REPROVADO.getCodigo());
         } else if (responsavelTecnicoDTO.getId() == null) {
-            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("AGUARDANDO_ANALISE");
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo(StatusSolicitacao.AGUARDANDO_ANALISE.getCodigo());
         } else {
-            status = statusCadastroResponsavelTecnicoRepository.findByCodigo("APROVADO");
+            status = statusCadastroResponsavelTecnicoRepository.findByCodigo(StatusSolicitacao.APROVADO.getCodigo());
         }
 
         return status;

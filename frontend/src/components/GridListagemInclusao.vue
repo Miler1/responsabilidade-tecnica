@@ -7,15 +7,6 @@
 		v-row
 			v-col.pb-3(cols='12', md='12')
 				b.titulo-listagem {{ tituloListagem }}
-			//- v-col.pt-0(v-if="inputPesquisa", cols='12', md='6')
-			//- 	v-text-field#QA-input-inclusao-pesquisar(
-			//- 		outlined,
-			//- 		v-model='stringPesquisa'
-			//- 		:placeholder='placeholderPesquisa',
-			//- 		prepend-inner-icon="mdi-magnify",
-			//- 		color="#E0E0E0",
-			//- 		dense
-			//- 	)
 
 		v-data-table.elevation-1(
 				:headers="headers",
@@ -45,9 +36,6 @@
 
 			template(#footer.page-text="props")
 				span Exibindo {{props.pageStart}}-{{props.pageStop}} de {{props.itemsLength}} registros
-
-			//- template(v-slot:no-data)
-			//- 	span {{labelNoData}}
 
 	template(v-if="dadosListagem && dadosListagem.length <= 0")
 		div#div-no-data.d-flex.align-center.justify-center.flex-column
@@ -87,6 +75,7 @@ export default {
 				&& value !== 'true'
 				&& value !== 'false'
 				&& value.toString().indexOf(search) !== -1; //Faz o matching da pesquisa dentro do valor
+
 		},
 
 		normalizer(string) {
