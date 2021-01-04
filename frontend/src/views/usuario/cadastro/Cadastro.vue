@@ -150,7 +150,7 @@
 				v-icon mdi-plus
 				span Cadastrar
 			v-btn#QA-btn-editar-responsabilidade-tecnica(v-if="!isInclusao", @click='salvar', large, color="#327C32", dark)
-				v-icon mdi-check
+				v-icon mdi-floppy
 				span Salvar e enviar
 
 </template>
