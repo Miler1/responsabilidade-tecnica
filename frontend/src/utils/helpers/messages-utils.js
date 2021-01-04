@@ -8,7 +8,7 @@ const ERROR_MESSAGES = {
 		listagem: 'Erro ao listar os responsáveis técnicos ambientais!'
 	},
 
-	tipoInvalido: 'Erro! Tipo de arquivo inválido. O arquivo deve ser dos seguintes formatos: .pdf, .png, .jpeg, .jpg, tiff ou .bmp.'
+	tipoInvalido: 'Erro! Formato de arquivo inválido. O arquivo deve ser de um dos seguintes formatos: PDF, PNG, JPEG, JPG, TIFF ou BMP.'
 
 };
 
