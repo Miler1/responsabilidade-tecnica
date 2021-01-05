@@ -16,7 +16,7 @@
 							span {{usuarioLogado && usuarioLogado.name}}
 						v-tooltip(bottom)
 							template(v-slot:activator="{ on, attrs }")
-								v-btn(icon, @click='logout', v-on="on")
+								v-btn(icon, @click='logout', v-on="on", color="#327C32")
 									v-icon mdi-logout
 							span Sair do sistema
 					v-toolbar-title.text-caption.text-center
