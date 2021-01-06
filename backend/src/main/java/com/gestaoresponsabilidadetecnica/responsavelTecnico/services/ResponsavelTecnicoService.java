@@ -83,6 +83,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
                 .setPossuiVinculoComGea(responsavelTecnicoDTO.getPossuiVinculoComGea())
                 .setRegistro(responsavelTecnicoDTO.getRegistro())
                 .setVinculoEmpregaticio(responsavelTecnicoDTO.getVinculoEmpregaticio())
+                .setValidade(null)
                 .build();
 
         responsavelTecnicoRespository.save(responsavelTecnico);
