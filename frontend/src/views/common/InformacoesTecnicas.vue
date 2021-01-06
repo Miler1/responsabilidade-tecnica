@@ -3,42 +3,47 @@
 #informacoes-tecnicas
 	div.mb-6
 		ExpansivePanel(titulo = 'Informações técnicas')
-			div.pa-2
-				v-row
-					v-col(cols="12", md="6")
+			v-row
+				v-col(cols="12", md="6")
+					v-col(cols="12")
 						v-label Formação:
 						span &nbsp;{{this.dados.formacao}}
-					v-col(cols="12", md="6")
-						v-label Conselho de classe:
-						span &nbsp;{{this.dados.conselhoDeClasse}}
-				v-row
-					v-col(cols="12", md="6")
+					v-col(cols="12")
 						v-label Registro:
 						span &nbsp;{{this.dados.registro}}
-					v-col(cols="12", md="6")
-						v-label Nível de responsabilidade técnica:
-						span &nbsp;{{this.niveisRT[this.dados.nivelResponsabilidadeTecnica]}}
-				v-row
-					v-col(cols="12", md="6")
+					v-col(cols="12")
 						v-label Possui vínculo com o GEA:
 						span &nbsp;{{this.dados.possuiVinculoComGea ? 'Sim' : 'Não'}}
-					v-col(v-if="this.dados.possuiVinculoComGea", cols="12", md="6")
+
+				v-col(cols="12", md="6")
+					v-col(cols="12")
+						v-label Conselho de classe:
+						span &nbsp;{{this.dados.conselhoDeClasse}}
+					v-col(cols="12")
+						v-label Nível de responsabilidade técnica:
+						span &nbsp;{{this.niveisRT[this.dados.nivelResponsabilidadeTecnica]}}
+					v-col(v-if="this.dados.possuiVinculoComGea", cols="12")
 						v-label Vinculo empregatício:
 						span(v-if="this.dados.vinculoEmpregaticio === 'OUTRO'") &nbsp; Outro - {{this.dados.outroVinculoEmpregaticio}}
 						span(v-else) &nbsp;{{this.vinculo[this.dados.vinculoEmpregaticio]}}
-				v-row
-					v-col(cols="12")
+					v-col(v-else, cols="12")
+						v-label Área de especialização:
+						span &nbsp;{{this.dados.especializacao ? this.dados.especializacao.codigo : ''}}
+							|- {{this.dados.especializacao ? this.dados.especializacao.nome : ''}}
+
+				v-col.py-0(v-if="this.dados.possuiVinculoComGea", cols="12")
+					v-col.pt-0.pb-6(cols="12")
 						v-label Área de especialização:
 						span &nbsp;{{this.dados.especializacao ? this.dados.especializacao.codigo : ''}}
 							|- {{this.dados.especializacao ? this.dados.especializacao.nome : ''}}
 
 	div.mb-6
 		ExpansivePanel(titulo = 'Anexos')
-			v-row
+			v-row.pa-3
 				v-col(cols="12")
-					GridListagemInclusao.mb-4(
+					GridListagemInclusao(
 						:headers="headerListagem",
-						:dadosListagem="this.dados.documentos",
+						:dadosListagem="dados.documentos",
 						:labelNoData="labelNoData",
 						:downloadAnexo="downloadAnexo",
 						:exibirIconeRemover='false',
@@ -103,7 +108,7 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 
 	.v-col {
 

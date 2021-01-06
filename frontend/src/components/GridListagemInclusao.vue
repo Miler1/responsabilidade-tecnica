@@ -4,10 +4,6 @@
 
 	template(v-if="dadosListagem && dadosListagem.length > 0")
 
-		v-row
-			v-col.pb-3(cols='12', md='12')
-				b.titulo-listagem {{ tituloListagem }}
-
 		v-data-table.elevation-1(
 				:headers="headers",
 				:items='dadosListagem',
