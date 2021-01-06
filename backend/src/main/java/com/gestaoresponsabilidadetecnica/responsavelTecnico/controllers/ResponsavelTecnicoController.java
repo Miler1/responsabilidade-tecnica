@@ -60,6 +60,7 @@ public class ResponsavelTecnicoController extends DefaultController {
         return ResponseEntity.ok()
                 .header(HEADER_CORS, VariaveisAmbientes.baseUrlFrontend())
                 .body(responsavelTecnico);
+
     }
 
     @PostMapping(value = "listar")
@@ -106,14 +107,14 @@ public class ResponsavelTecnicoController extends DefaultController {
     }
 
     @GetMapping(value = "downloadFile/{hash}")
-    public ResponseEntity<InputStreamResource> download(HttpServletRequest request,
+    public ResponseEntity<byte[]> download(HttpServletRequest request,
                                                         @NotNull @PathVariable("hash") String hash) throws Exception {
 
         verificarPermissao(request, Acao.BAIXAR_ARQUIVOS);
 
         File file = responsavelTecnicoService.recuperaArquivo(hash);
 
-        return downloadDocumento(file, file.getName());
+        return downloadFile(file, file.getName());
 
     }
 

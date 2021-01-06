@@ -15,8 +15,8 @@
 				:perfil="perfil",
 				:visualizarItem="visualizarCadastro"
 				:visualizarJustificativa="visualizarJustificativa",
-				:noDataText="noDataText"
-
+				:textNoDataList="textNoDataList",
+				:textNoDataSearch="textNoDataSearch"
 			)
 
 </template>
@@ -47,11 +47,12 @@ export default {
 			parametrosFiltro: {
 				pagina: 0,
 				itemsPorPagina: 10,
-				tipoOrdenacao: 'id,asc',
+				tipoOrdenacao: 'id,desc',
 				stringPesquisa: ''
 			},
 			perfil: 'Administrador',
-			noDataText: 'Não existem responsáveis técnicos ambientais cadastrados.'
+			textNoDataList: 'Não existem responsáveis técnicos ambientais cadastrados.',
+			textNoDataSearch: 'Não existem responsáveis técnicos ambientais encontrados com a pesquisa informada.'
 		};
 	},
 
@@ -83,20 +84,10 @@ export default {
 			ResponsavelTecnicoService.listar(parametrosFiltro)
 				.then((response) => {
 
-					if (response.data.empty) {
+					this.dadosListagem = response.data;
+					this.headerListagem = response.data.empty ? [] : HEADER;
 
-						this.dadosListagem.content = this.headerListagem = [];
-
-
-					} else {
-
-						this.dadosListagem = response.data;
-						this.headerListagem = HEADER;
-
-					}
-
-				})
-				.catch(erro => {
+				}).catch(erro => {
 
 					console.error(erro);
 					snackbar.alert(ERROR_MESSAGES.responsavelTecnico.listagem);

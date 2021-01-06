@@ -146,11 +146,11 @@
 			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
 				v-icon mdi-close
 				span Cancelar
-			v-btn#QA-btn-cadastro-responsabilidade-tecnica(v-if="isInclusao", @click='salvar', large, color="#327C32", width="145px", dark)
-				v-icon mdi-plus
-				span Cadastrar
-			v-btn#QA-btn-editar-responsabilidade-tecnica(v-if="!isInclusao", @click='salvar', large, color="#327C32", dark)
+			v-btn#QA-btn-cadastro-responsabilidade-tecnica(v-if="isInclusao", @click='salvar', large, color="#327C32", dark)
 				v-icon mdi-check
+				span Finalizar e enviar
+			v-btn#QA-btn-editar-responsabilidade-tecnica(v-if="!isInclusao", @click='salvar', large, color="#327C32", dark)
+				v-icon mdi-floppy
 				span Salvar e enviar
 
 </template>
@@ -226,14 +226,27 @@ export default {
 
 		downloadAnexo(item) {
 
-			const link = document.createElement('a');
+			if (item.hash != null) {
+				ResponsavelTecnicoService.download(item.hash)
+					.then((result) => {
+						let blob = DataUtils.b64ToBlob(result.data, result.headers['content-type']);
+						const link = document.createElement('a');
+						link.href = URL.createObjectURL(blob);
+						link.download = item.name;
+						link.target = '_blank';
+						link.click();
+						URL.revokeObjectURL(link.href);
+					});
+			} else {
 
-			link.href = URL.createObjectURL(item);
-			link.download = item.name;
-			link.target = '_blank';
-			link.click();
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(item);
+				link.download = item.name;
+				link.target = '_blank';
+				link.click();
+				URL.revokeObjectURL(link.href);
 
-			URL.revokeObjectURL(link.href);
+			}
 
 		},
 
@@ -609,7 +622,7 @@ export default {
 			this.$refs.textFieldConcelhoDeClasse.setModel(this.dados.conselhoDeClasse);
 			this.$refs.textFieldRegistro.setModel(this.dados.registro);
 
-			this.dados.possuiVinculoComGea ? this.dados.possuiVinculoComGea = 'true' : this.dados.possuiVinculoComGea = 'false';
+			this.dados.possuiVinculoComGea = this.dados.possuiVinculoComGea ? 'true' : 'false';
 
 			if (this.dados.especializacao != null) {
 				this.dados.especializacao.textoExibicao = this.dados.especializacao.codigo + ' - ' + this.dados.especializacao.nome;
@@ -621,10 +634,13 @@ export default {
 			if (this.dados.documentos != null) {
 
 				this.dados.documentos.forEach(documento => {
+
 					let mimetype = DataUtils.formatarArquivo(documento);
 					let blob = DataUtils.b64ToBlob(documento.imagemBase64, mimetype);
 					var file = new File([blob], documento.nome, {type: mimetype});
+					file.hash = documento.hash;
 					this.files.push(file);
+
 				});
 
 			};
@@ -711,6 +727,7 @@ export default {
 		.v-label {
 			font-weight: 400;
 			margin: 0 !important;
+			font-size: 14px;
 		}
 	}
 
@@ -736,6 +753,7 @@ export default {
 	}
 
 	table > tbody > tr > td {
+		font-size: 14px !important;
 
 		button {
 			margin-right: 8px !important;

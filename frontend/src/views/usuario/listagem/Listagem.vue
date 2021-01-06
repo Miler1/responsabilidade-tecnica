@@ -22,7 +22,7 @@
 				:editarItem="editarCadastro"
 				:perfil="perfil"
 				:visualizarJustificativa="visualizarJustificativa",
-				:noDataText="noDataText"
+				:textNoDataList="textNoDataList"
 			)
 
 </template>
@@ -51,9 +51,9 @@ export default {
 			placeholderPesquisa: "",
 			headerListagem: [],
 			dadosListagem: {content:[]},
-			parametrosFiltro: {},
+			parametrosFiltro: {stringPesquisa: ''},
 			perfil: 'Usuario',
-			noDataText: 'Você não possui cadastro como responsável técnico ambiental. Realize o cadastro através do botão "Cadastrar".'
+			textNoDataList: 'Você não possui cadastro como responsável técnico ambiental. Realize o cadastro através do botão "Cadastrar".'
 		};
 	},
 
@@ -109,10 +109,10 @@ export default {
 
 							}
 
-						})
-						.catch( error => {
+						}).catch( error => {
 							console.error(error);
 						});
+
 				})
 				.catch(error => {
 					console.error(error.message);

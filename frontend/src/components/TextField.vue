@@ -69,12 +69,12 @@ export default {
 	.v-label {
 		color: #333;
 		font-weight: bold;
-		font-size: 16px;
+		font-size: 14px !important;
 	}
 
 	span {
 		font-weight: 400;
-		font-size: 16px;
+		font-size: 14px !important;
 	}
 
 }

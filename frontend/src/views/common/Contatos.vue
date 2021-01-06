@@ -56,7 +56,11 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+
+.v-label, span {
+	font-size: 14px;
+}
 
 .spacer {
 	padding-bottom: 1%;
