@@ -26,7 +26,8 @@
 						v-label Vinculo empregatício:
 						span(v-if="this.dados.vinculoEmpregaticio === 'OUTRO'") &nbsp; Outro - {{this.dados.outroVinculoEmpregaticio}}
 						span(v-else) &nbsp;{{this.vinculo[this.dados.vinculoEmpregaticio]}}
-					v-col(cols="12", md="6")
+				v-row
+					v-col(cols="12")
 						v-label Área de especialização:
 						span &nbsp;{{this.dados.especializacao ? this.dados.especializacao.codigo : ''}}
 							|- {{this.dados.especializacao ? this.dados.especializacao.nome : ''}}
