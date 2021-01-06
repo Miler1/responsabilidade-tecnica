@@ -18,12 +18,12 @@
 					v-icon {{acao === 'analisar' ? "mdi-close" : "mdi-arrow-left"}}
 					span {{acao === 'analisar' ? "Cancelar" : "Voltar"}}
 			div(v-if="acao === 'analisar'")
-				v-btn#QA-btn-aprovar-analise.ml-3(@click='aprovar', large, color="#327C32",  width="145px", dark)
-					v-icon mdi-check-circle-outline
-					span Aprovar
 				v-btn#QA-btn-reprovar-analise(@click='reprovar', large, color="red", width="145px", outlined)
 					v-icon mdi-close-circle-outline
 					span Reprovar
+				v-btn#QA-btn-aprovar-analise.ml-3(@click='aprovar', large, color="#327C32",  width="145px", dark)
+					v-icon mdi-check-circle-outline
+					span Aprovar
 
 </template>
 
