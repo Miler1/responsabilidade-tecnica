@@ -4,8 +4,9 @@
 		v-expansion-panel
 			v-expansion-panel-header
 				span {{titulo}}
-			v-divider
-			v-expansion-panel-content
+			div
+				v-divider
+			v-expansion-panel-content.pt-2
 				slot
 
 </template>
