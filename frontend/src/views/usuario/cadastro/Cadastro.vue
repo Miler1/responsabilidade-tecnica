@@ -12,14 +12,14 @@
 
 		div.mb-6
 			ExpansivePanel(titulo = 'Informações técnicas')
-				v-form.px-2(ref="cadastro")
+				v-form.pa-2(ref="cadastro")
 					v-row
 						v-col(cols="12", md="6")
 							TextField(
 								ref="textFieldFormacao",
 								v-model="dados.formacao",
-								labelOption = "Formação:",
-								id = "QA-input-formacao",
+								labelOption="Formação:",
+								id="QA-input-formacao",
 								@changeModel="dados.formacao = $event",
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage",
@@ -29,8 +29,8 @@
 							TextField(
 								ref="textFieldConcelhoDeClasse",
 								v-model="dados.conselhoDeClasse",
-								labelOption = "Conselho de classe:",
-								id = "QA-input-conselho-classe",
+								labelOption="Conselho de classe:",
+								id="QA-input-conselho-classe",
 								@changeModel="dados.conselhoDeClasse = $event",
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage",
@@ -40,8 +40,8 @@
 							TextField(
 								ref="textFieldRegistro",
 								v-model="dados.registro",
-								labelOption = "Registro:",
-								id = "QA-input-registro",
+								labelOption="Registro:",
+								id="QA-input-registro",
 								@changeModel="dados.registro = $event",
 								placeholder="Digite aqui",
 								:errorMessages="errorMessage",
@@ -64,7 +64,7 @@
 								v-radio(label='Sim' value='true', color="#327C32")
 								v-radio(label='Não' value='false', color="#327C32")
 					v-row(v-if="dados.possuiVinculoComGea != null && dados.possuiVinculoComGea === 'true'")
-						v-col.pt-0.pb-0(cols="12")
+						v-col.pb-0(cols="12")
 							v-label Vínculo empregatício:
 							div.d-flex.flex-row
 								v-radio-group#QA-radio-vinculo.d-flex.align-center(v-model="dados.vinculoEmpregaticio", @change="permiteOutroVinculo()", :errorMessages="errorMessage(dados.vinculoEmpregaticio)", row)
@@ -105,42 +105,44 @@
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
 
-				div.px-3.py-7
-					v-btn#QA-btn-adicionar-anexo.float-right(
-						color="#327C32",
-						class="text-none",
-						depressed,
-						outlined,
-						:loading="isSelecting",
-						@click="onButtonClick"
-					)
-						v-icon mdi-plus
-						span Adicionar anexo
-					input(
-						ref="uploader",
-						accept=filesAccept,
-						class="d-none",
-						type="file",
-						multiple,
-						required,
-						:error-messages="errorMessage(files)",
-						@change="uploadFile"
-					)
+				v-row
+					v-col(cols="12")
+						v-btn#QA-btn-adicionar-anexo.float-right(
+							color="#327C32",
+							class="text-none",
+							depressed,
+							outlined,
+							:loading="isSelecting",
+							@click="onButtonClick"
+						)
+							v-icon mdi-plus
+							span Adicionar anexo
+						input(
+							ref="uploader",
+							accept=filesAccept,
+							class="d-none",
+							type="file",
+							multiple,
+							required,
+							:error-messages="errorMessage(files)",
+							@change="uploadFile"
+						)
 
-					div.message-erro(
-						v-if="files.length == 0 && !errorMessageEmpty")
-							| Obrigatório
-					div.message-erro(
-						v-if="excedeuTamanhoMaximoArquivo")
-							| Erro! Tamanho do arquivo inválido. O arquivo deve conter menos de 10MB
+						div.message-erro(
+							v-if="files.length == 0 && !errorMessageEmpty")
+								| Obrigatório
+						div.message-erro(
+							v-if="excedeuTamanhoMaximoArquivo")
+								| Erro! Tamanho do arquivo inválido. O arquivo deve conter menos de 10MB
 
-					GridListagemInclusao.mt-12(
-						:headers="headerListagem",
-						:dadosListagem="files",
-						:labelNoData="labelNoData",
-						:removerAnexo="removerAnexo",
-						:downloadAnexo="downloadAnexo"
-					)
+					v-col(cols="12")
+						GridListagemInclusao(
+							:headers="headerListagem",
+							:dadosListagem="files",
+							:labelNoData="labelNoData",
+							:removerAnexo="removerAnexo",
+							:downloadAnexo="downloadAnexo"
+						)
 
 		div.d-flex.flex-row.justify-space-between
 			v-btn#QA-btn-cancelar-cadastro(@click='cancelar', large, outlined, color="#327C32", width="145px")
@@ -393,9 +395,7 @@ export default {
 		},
 
 		errorMessage(value) {
-
 			return this.errorMessageEmpty || value ? '' : 'Obrigatório';
-
 		},
 
 		permiteOutroVinculo(isChecked) {
@@ -408,8 +408,8 @@ export default {
 
 		},
 
-		handleError(erro) {
-			console.log(erro);
+		handleError(error) {
+			console.error(error);
 		},
 
 		prepararParaSalvar() {
@@ -435,7 +435,6 @@ export default {
 				ResponsavelTecnicoService.upload(formData)
 					.catch(error => {
 						console.error(error);
-						// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 					});
 
 			});
@@ -488,7 +487,6 @@ export default {
 							})
 							.catch(error => {
 								console.error(error);
-								// snackbar.alert(ERROR_MESSAGES.atividadeDispensavel.desativar);
 							});
 
 					} else {
@@ -637,8 +635,10 @@ export default {
 
 					let mimetype = DataUtils.formatarArquivo(documento);
 					let blob = DataUtils.b64ToBlob(documento.imagemBase64, mimetype);
-					var file = new File([blob], documento.nome, {type: mimetype});
+					let file = new File([blob], documento.nome, {type: mimetype});
+
 					file.hash = documento.hash;
+
 					this.files.push(file);
 
 				});
