@@ -105,12 +105,11 @@
 		div.mb-6
 			ExpansivePanel(titulo = 'Anexos')
 
-				v-row
+				v-row.pa-3
 					v-col(cols="12")
 						v-btn#QA-btn-adicionar-anexo.float-right(
 							color="#327C32",
 							class="text-none",
-							depressed,
 							outlined,
 							:loading="isSelecting",
 							@click="onButtonClick"
