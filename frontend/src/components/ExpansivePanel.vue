@@ -1,12 +1,12 @@
 <template lang="pug">
 
-	v-expansion-panels(multiple, v-model="panel")
+	v-expansion-panels.teste(multiple, v-model="panel")
 		v-expansion-panel
 			v-expansion-panel-header
 				span {{titulo}}
 			div
 				v-divider
-			v-expansion-panel-content.pt-2
+			v-expansion-panel-content
 				slot
 
 </template>
@@ -32,7 +32,7 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 
 @import "../assets/css/variaveis.less";
 
@@ -47,6 +47,12 @@ export default {
 
 	span {
 		font-size: 24px !important;
+	}
+}
+
+.v-expansion-panel-content {
+	.v-expansion-panel-content__wrap {
+		padding: 0 24px 0px 24px !important;
 	}
 }
 

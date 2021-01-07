@@ -64,7 +64,7 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 
 .spacer {
 	padding-bottom: 1%;
