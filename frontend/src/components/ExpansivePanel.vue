@@ -52,7 +52,7 @@ export default {
 
 .v-expansion-panel-content {
 	.v-expansion-panel-content__wrap {
-		padding: 0 24px 0px 24px !important;
+		padding: 12px 24px !important;
 	}
 }
 
