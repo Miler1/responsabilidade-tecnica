@@ -10,7 +10,6 @@ import com.gestaoresponsabilidadetecnica.responsavelTecnico.dtos.RetornoUploadAr
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.interfaces.IResponsavelTecnicoService;
 import com.gestaoresponsabilidadetecnica.responsavelTecnico.models.ResponsavelTecnico;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -108,7 +107,7 @@ public class ResponsavelTecnicoController extends DefaultController {
 
     @GetMapping(value = "downloadFile/{hash}")
     public ResponseEntity<byte[]> download(HttpServletRequest request,
-                                                        @NotNull @PathVariable("hash") String hash) throws Exception {
+                                           @NotNull @PathVariable("hash") String hash) throws Exception {
 
         verificarPermissao(request, Acao.BAIXAR_ARQUIVOS);
 
