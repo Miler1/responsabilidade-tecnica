@@ -120,7 +120,7 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
             if (status.is(StatusSolicitacao.APROVADO)) {
                 responsavelTecnico.setValidade(DateUtil.calcularValidade());
-            } else if (status.is(StatusSolicitacao.REPROVADO)) {
+            } else if (status.is(StatusSolicitacao.REPROVADO) || status.is(StatusSolicitacao.AGUARDANDO_ANALISE)) {
                 responsavelTecnico.setValidade(null);
             }
 
@@ -295,8 +295,6 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     private File salvaArquivoDiretorio(MultipartFile multipartFile) throws Exception {
 
-//        validaTipoArquivo(multipartFile);
-
         String pathSalvarArquivo = VariaveisAmbientes.pathSalvarArquivos() +
                 File.separator + DIR_ARQUIVOS_RESPONSABILIDADE_TECNICA +
                 File.separator + LocalDate.now().format(FORMATO_DATA_MES_ANO) +
@@ -306,35 +304,8 @@ public class ResponsavelTecnicoService implements IResponsavelTecnicoService {
 
     }
 
-    private boolean removeArquivoDiretorio(String pathDeletarArquivo) throws Exception {
-
-        return ArquivoUtils.removeArquivoDiretorio(pathDeletarArquivo);
-
+    private void removeArquivoDiretorio(String pathDeletarArquivo) throws Exception {
+        ArquivoUtils.removeArquivoDiretorio(pathDeletarArquivo);
     }
-
-    private StatusCadastroResponsavelTecnico getStatus(ResponsavelTecnicoDTO responsavelTecnicoDTO) {
-
-        StatusCadastroResponsavelTecnico status;
-
-        if (responsavelTecnicoDTO.getJustificativa() != null) {
-            status = statusCadastroResponsavelTecnicoRepository.findByCodigo(StatusSolicitacao.REPROVADO.getCodigo());
-        } else if (responsavelTecnicoDTO.getId() == null) {
-            status = statusCadastroResponsavelTecnicoRepository.findByCodigo(StatusSolicitacao.AGUARDANDO_ANALISE.getCodigo());
-        } else {
-            status = statusCadastroResponsavelTecnicoRepository.findByCodigo(StatusSolicitacao.APROVADO.getCodigo());
-        }
-
-        return status;
-
-    }
-
-//    private void validaTipoArquivo(MultipartFile multipartFile) throws Exception {
-//
-//        if(!multipartFile.getOriginalFilename().endsWith(EXTENSAO_ARQUIVO_SINCRONIA)) {
-//            throw new Exception("A extensão do arquivo informado deve ser " + EXTENSAO_ARQUIVO_SINCRONIA);
-//        }
-//
-//    }
-
 
 }
