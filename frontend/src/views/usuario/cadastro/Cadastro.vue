@@ -554,7 +554,7 @@ export default {
 				this.$fire({
 
 					title:
-						'<p class="title-modal-confirm">Confirmar cancelamento ` + (this.isInclusao ? 'do cadastro' : 'da edição')`</p>',
+						`<p class="title-modal-confirm">Confirmar cancelamento ` + (this.isInclusao ? 'do cadastro' : 'da edição')`</p>`,
 					html:
 						`<p class="message-modal-confirm">Ao confirmar o cancelamento ` + (this.isInclusao ? 'do cadastro' : 'da edição') +
 						`, todas as informações ` + (this.isInclusao ? ' inseridas' : ' editadas') + ` serão perdidas.</p>
