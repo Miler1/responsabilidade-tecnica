@@ -15,7 +15,7 @@
 						span &nbsp; {{prepararData(pessoa.dataNascimento)}}
 					v-col(cols="12")
 						v-label Sexo:
-						span &nbsp;{{pessoa.sexo == 0 ? "Masculino" : "Feminino"}}
+						span &nbsp;{{pessoa.sexo.codigo == 0 ? "Masculino" : "Feminino"}}
 					v-col(cols="12")
 						v-label Nome da mãe:
 						span &nbsp;{{pessoa.nomeMae}}
