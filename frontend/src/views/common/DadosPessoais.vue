@@ -15,7 +15,7 @@
 						span &nbsp; {{prepararData(pessoa.dataNascimento)}}
 					v-col(cols="12")
 						v-label Sexo:
-						span &nbsp;{{pessoa.sexo.codigo == 0 ? "Masculino" : "Feminino"}}
+						span &nbsp; {{retornarSexo()}}
 					v-col(cols="12")
 						v-label Nome da mãe:
 						span &nbsp;{{pessoa.nomeMae}}
@@ -82,6 +82,10 @@ export default {
 				return DataUtils.formatarTitulo(titulo);
 			}
 
+		},
+		
+		retornarSexo() {
+			return this.pessoa.sexo != undefined && this.pessoa.sexo.codigo == 0 ? "Masculino" : "Feminino";
 		}
 
 	}
