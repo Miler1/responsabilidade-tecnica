@@ -235,7 +235,7 @@ export default {
 				html:
 					`<p class="message-modal-confirm">Ao confirmar a aprovação, a análise será finalizada.</p>
 					<p class="message-modal-confirm">
-						<b>Tem certeza que deseja aprovar o cadastro? Esta opção não poderá ser desfeita e o cadastro permanecerá ativo por 1 ano.</b>
+						<b>Tem certeza que deseja aprovar o cadastro? Esta opção não poderá ser desfeita e o cadastro permanecerá aprovado por 1 ano.</b>
 					</p>`,
 				showCancelButton: true,
 				confirmButtonColor: '#327C32',
